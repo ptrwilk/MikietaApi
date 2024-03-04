@@ -64,7 +64,7 @@ app.MapGet("/drink", (string type) =>
     return Results.NotFound();
 });
 
-app.MapGet("/snack", (string type) =>
+app.MapGet("/snack", () =>
 {
     return Results.Ok(new[]
     {
@@ -77,7 +77,7 @@ app.MapGet("/snack", (string type) =>
     });
 });
 
-app.MapGet("/sauce", (string type) =>
+app.MapGet("/sauce", () =>
 {
     return Results.Ok(new[]
     {
