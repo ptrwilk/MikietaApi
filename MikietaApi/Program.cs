@@ -39,15 +39,15 @@ app.MapGet("/drink", (string type) =>
 {
     if (type == "beer")
     {
-        return Results.Ok(new[] { new DrinkModel("Kozel Lezak", 10), new DrinkModel("Żywiec Klasyk", 11) });
+        return Results.Ok(new[] { CreateDrink("Kozel Lezak", 10), CreateDrink("Żywiec Klasyk", 11) });
     }
 
     if (type == "mulled-wine")
     {
         return Results.Ok(new[]
         {
-            new DrinkModel("Grzaniec XXL 0.5L", 19), new DrinkModel("Grzaniec Duży", 14),
-            new DrinkModel("Grzaniec Mały", 10)
+            CreateDrink("Grzaniec XXL 0.5L", 19), CreateDrink("Grzaniec Duży", 14),
+            CreateDrink("Grzaniec Mały", 10)
         });
     }
 
@@ -55,9 +55,9 @@ app.MapGet("/drink", (string type) =>
     {
         return Results.Ok(new[]
         {
-            new DrinkModel("Wino Czerwone", 15, new[] { "Kieliszek" }),
-            new DrinkModel("Wino Białe", 15, new[] { "Kieliszek" }), new DrinkModel("Kawa Czarna", 8),
-            new DrinkModel("Herbata", 5, new[] { "Filiżanka" }), new DrinkModel("Herbata", 9, new[] { "Dzbanek" })
+            CreateDrink("Wino Czerwone", 15, new[] { "Kieliszek" }),
+            CreateDrink("Wino Białe", 15, new[] { "Kieliszek" }), CreateDrink("Kawa Czarna", 8),
+            CreateDrink("Herbata", 5, new[] { "Filiżanka" }), CreateDrink("Herbata", 9, new[] { "Dzbanek" })
         });
     }
 
@@ -69,11 +69,11 @@ app.MapGet("/snack", () =>
     return Results.Ok(new[]
     {
         //TODO: Extend filter to support this case
-        new PizzaModel("CALZONE pieróg z nadzieniem", new []{"w każdym pierożku, ser, sos czosnkowy + 4 dowolne składniki do wyboru"}, 27),
-        new PizzaModel("Frytki Cieńkie Małe", new []{"Porcja chrupiących frytek, ketchup"}, 8),
-        new PizzaModel("Frytki Cieńkie Duże", new []{"Porcja chrupiących frytek, ketchup"}, 10),
-        new PizzaModel("Frytki Belgijskie Małe", new []{"Porcja chrupiących frytek, ketchup"}, 8),
-        new PizzaModel("Frytki Belgijskie Duże", new []{"Porcja chrupiących frytek, ketchup"}, 10)
+        new ProductModel("CALZONE pieróg z nadzieniem", new []{"w każdym pierożku, ser, sos czosnkowy + 4 dowolne składniki do wyboru"}, 27),
+        new ProductModel("Frytki Cieńkie Małe", new []{"Porcja chrupiących frytek, ketchup"}, 8),
+        new ProductModel("Frytki Cieńkie Duże", new []{"Porcja chrupiących frytek, ketchup"}, 10),
+        new ProductModel("Frytki Belgijskie Małe", new []{"Porcja chrupiących frytek, ketchup"}, 8),
+        new ProductModel("Frytki Belgijskie Duże", new []{"Porcja chrupiących frytek, ketchup"}, 10)
     });
 });
 
@@ -82,27 +82,42 @@ app.MapGet("/sauce", () =>
     return Results.Ok(new[]
     {
         //TODO: Extend filter to support this case
-        new PizzaModel("Czosnkowy", new []{"firmowy sos XXX idealnie komponujący się ze smakiem każdej naszej pizzy"}, 4),
-        new PizzaModel("Czosnkowo-szczypiorkowy", new []{"firmowy sos XXX, ketchup"}, 4),
-        new PizzaModel("Pomidorowy łagodny", new []{""}, 4)
+        new ProductModel("Czosnkowy", new []{"firmowy sos XXX idealnie komponujący się ze smakiem każdej naszej pizzy"}, 4),
+        new ProductModel("Czosnkowo-szczypiorkowy", new []{"firmowy sos XXX, ketchup"}, 4),
+        new ProductModel("Pomidorowy łagodny", new []{""}, 4)
     });
 });
 
 app.Run();
 
-static PizzaModel Margherita(double price) => new PizzaModel("Margherita", new[] { "ser", "sos pomidorowy" }, price);
+static ProductModel Margherita(double price) => new ProductModel("Margherita", new[] { "ser", "sos pomidorowy" }, price);
 
-static PizzaModel Cipolla(double price) =>
-    new PizzaModel("Cipolla", new[] { "ser", "sos pomidorowy", "cebula" }, price);
+static ProductModel Cipolla(double price) =>
+    new ProductModel("Cipolla", new[] { "ser", "sos pomidorowy", "cebula" }, price);
 
-static PizzaModel Funghi(double price) =>
-    new PizzaModel("Funghi", new[] { "ser", "sos pomidorowy", "pieczarki" }, price);
+static ProductModel Funghi(double price) =>
+    new ProductModel("Funghi", new[] { "ser", "sos pomidorowy", "pieczarki" }, price);
 
-static PizzaModel Salami(double price) => new PizzaModel("Salami", new[] { "ser", "sos pomidorowy", "salami" }, price);
+static ProductModel Salami(double price) => new ProductModel("Salami", new[] { "ser", "sos pomidorowy", "salami" }, price);
 
-static PizzaModel FunghiEProsciutto(double price) => new PizzaModel("Funghi e Prosciutto",
+static ProductModel FunghiEProsciutto(double price) => new ProductModel("Funghi e Prosciutto",
     new[] { "ser", "sos pomidorowy", "szynka", "pieczarki" }, price);
 
-record PizzaModel(string Name, string[] Ingredients, double Price);
+ProductModel CreateDrink(string name, double price, string[]? ingredients = null) =>
+    new ProductModel(name, ingredients ?? Array.Empty<string>(), price);
 
-record DrinkModel(string Name, double Price, string[]? Ingredients = null);
+class ProductModel
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; }
+    public string[] Ingredients { get; set; }
+    public double Price { get; set; }
+
+    public ProductModel(string name, string[] ingredients, double price)
+    {
+        Name = name;
+        Ingredients = ingredients;
+        Price = price;
+        Id = Guid.NewGuid();
+    }
+}
