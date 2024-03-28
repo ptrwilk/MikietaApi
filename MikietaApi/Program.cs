@@ -88,6 +88,13 @@ app.MapGet("/sauce", () =>
     });
 });
 
+app.MapPost("/payment", (PaymentModel model) => Results.Ok(Guid.NewGuid()));
+
+app.MapGet("/delivery/{deliveryId}", (Guid deliveryId) =>
+{
+    return Results.Ok($"Test {deliveryId}");
+});
+
 app.Run();
 
 static ProductModel Margherita(double price) => new ProductModel("Margherita", new[] { "ser", "sos pomidorowy" }, price);
@@ -120,4 +127,15 @@ class ProductModel
         Price = price;
         Id = Guid.NewGuid();
     }
+}
+
+class PaymentModel
+{
+    public ProductModel[] Products { get; set; }
+    public AddressModel Address { get; set; }
+}
+
+class AddressModel
+{
+    public string Address { get; set; }
 }
