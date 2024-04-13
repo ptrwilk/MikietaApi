@@ -42,3 +42,5 @@ msbuild.wrn
 appsettings.Development.json
 docker-compose.yml
 NuGet.Config
+
+database.db
