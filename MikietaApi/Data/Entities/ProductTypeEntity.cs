@@ -1,6 +1,6 @@
-﻿namespace MikietaApi.Daos;
+﻿namespace MikietaApi.Data.Entities;
 
-public enum ProductDaoType
+public enum ProductTypeEntity
 {
     PizzaSmall,
     PizzaMedium,
