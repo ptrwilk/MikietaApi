@@ -1,5 +1,4 @@
 ﻿using MikietaApi.Models;
-using MikietaApi.Repositories;
 
 namespace MikietaApi.Services;
 
@@ -10,13 +9,6 @@ public interface IProductsService
 
 public class ProductsService : IProductsService
 {
-    private readonly IProductsRepository _repository;
-
-    public ProductsService(IProductsRepository repository)
-    {
-        _repository = repository;
-    }
-
     public ProductModel[] Get()
     {
         return new[]

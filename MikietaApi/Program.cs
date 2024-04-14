@@ -1,7 +1,6 @@
-using System.Data;
-using System.Data.SQLite;
+using Microsoft.EntityFrameworkCore;
 using MikietaApi;
-using MikietaApi.Repositories;
+using MikietaApi.Data;
 using MikietaApi.Routes;
 using MikietaApi.Services;
 
@@ -10,9 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IDbConnection>(_ => new SQLiteConnection(builder.Configuration["ConnectionStrings:Database"]));
-builder.Services.AddScoped<IProductsRepository, ProductsRepository>();
-builder.Services.AddScoped<IIngredientsRepository, IngredientsRepository>();
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseSqlite(builder.Configuration["ConnectionStrings:Database"]));
 builder.Services.AddScoped<IProductsService, ProductsService>();
 builder.Services.AddScoped<DbSeeder, DbSeeder>();
 
