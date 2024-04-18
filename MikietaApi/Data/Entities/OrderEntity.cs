@@ -18,6 +18,11 @@ public class OrderEntity
     public string Phone { get; set; } = null!;
     public string Email { get; set; } = null!;
     public string? Nip { get; set; }
+    public string? Street { get; set; }
+    public string? HomeNumber { get; set; }
+    public string? City { get; set; }
+    public string? FlatNumber { get; set; }
+    public string? Floor { get; set; }
     public bool? ProcessingPersonalDataByEmail { get; set; }
     public bool? ProcessingPersonalDataBySms { get; set; }
 }
