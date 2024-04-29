@@ -6,7 +6,7 @@ namespace MikietaApi.Services;
 
 public interface IOrderService
 {
-    void Order(OrderModel model);
+    int Order(OrderModel model);
 }
 
 public class OrderService : IOrderService
@@ -18,7 +18,7 @@ public class OrderService : IOrderService
         _context = context;
     }
     
-    public void Order(OrderModel model)
+    public int Order(OrderModel model)
     {
         var products = _context.Products.Where(x => model.ProductIds.Any(z => x.Id == z)).ToArray();
         
@@ -48,5 +48,7 @@ public class OrderService : IOrderService
         _context.Orders.Add(entity);
         
         _context.SaveChanges();
+
+        return entity.Number;
     }
 }

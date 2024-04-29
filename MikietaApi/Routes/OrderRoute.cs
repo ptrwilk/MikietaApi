@@ -21,7 +21,6 @@ public static class OrderRoute
             return Results.ValidationProblem(validation.ToDictionary());
         }
         
-        service.Order(model);
-        return Results.Ok();
+        return Results.Ok(service.Order(model));
     }
 }
