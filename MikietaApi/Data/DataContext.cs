@@ -8,6 +8,7 @@ public class DataContext : DbContext
     public DbSet<IngredientEntity> Ingredients { get; set; }
     public DbSet<ProductEntity> Products { get; set; }
     public DbSet<OrderEntity> Orders { get; set; }
+    public DbSet<ReservationEntity> Reservations { get; set; }
     
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {

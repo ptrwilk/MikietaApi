@@ -16,8 +16,10 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlite(builder.Configuration["ConnectionStrings:Database"]));
 builder.Services.AddScoped<IProductsService, ProductsService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<DbSeeder, DbSeeder>();
 builder.Services.AddScoped<IValidator<OrderModel>, OrderModelValidator>();
+builder.Services.AddScoped<IValidator<ReservationModel>, ReservationModelValidator>();
 
 builder.Services.AddCors(options =>
     options.AddPolicy("MyPolicy",
@@ -34,6 +36,7 @@ app.UseCors("MyPolicy");
 
 ProductsRoute.RegisterEndpoints(app);
 OrderRoute.RegisterEndpoints(app);
+ReservationRoute.RegisterEndpoints(app);
 
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetService<DbSeeder>();
