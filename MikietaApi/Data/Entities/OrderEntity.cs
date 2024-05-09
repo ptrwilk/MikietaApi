@@ -25,4 +25,6 @@ public class OrderEntity
     public string? Floor { get; set; }
     public bool? ProcessingPersonalDataByEmail { get; set; }
     public bool? ProcessingPersonalDataBySms { get; set; }
+    public bool Paid { get; set; }
+    public string? SessionId { get; set; }
 }
