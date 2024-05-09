@@ -7,7 +7,8 @@ public class OrderModelValidator : AbstractValidator<OrderModel>
 {
     public OrderModelValidator()
     {
-        RuleFor(x => x.ProductIds).NotEmpty();
+        RuleFor(x => x.ProductQuantities).NotEmpty();
+        RuleForEach(x => x.ProductQuantities).SetValidator(new ProductQuantityModelValidator());
         RuleFor(x => x).Must(x => x.DeliveryTiming != null || x.DeliveryRightAway == true).WithMessage(
             $"Either {nameof(OrderModel.DeliveryTiming)} or {nameof(OrderModel.DeliveryRightAway)} must have a value.");
         RuleFor(x => x.DeliveryMethod).NotNull();

@@ -8,6 +8,7 @@ public class DataContext : DbContext
     public DbSet<IngredientEntity> Ingredients { get; set; }
     public DbSet<ProductEntity> Products { get; set; }
     public DbSet<OrderEntity> Orders { get; set; }
+    public DbSet<OrderProductEntity> OrderProducts { get; set; }
     public DbSet<ReservationEntity> Reservations { get; set; }
     
     public DataContext(DbContextOptions<DataContext> options) : base(options)
@@ -30,15 +31,22 @@ public class DataContext : DbContext
             .IsUnicode()
             .ValueGeneratedOnAdd();
         modelBuilder.Entity<OrderEntity>()
-            .HasMany(x => x.Products)
-            .WithMany(x => x.Orders)
-            .UsingEntity(x => x.ToTable("OrderProduct"));
-        modelBuilder.Entity<OrderEntity>()
             .Property(x => x.DeliveryMethod)
             .HasConversion<string>();
         modelBuilder.Entity<OrderEntity>()
             .Property(x => x.PaymentMethod)
             .HasConversion<string>();
+        
+        modelBuilder.Entity<OrderProductEntity>()
+            .HasKey(op => new { op.OrderId, op.ProductId });
+        modelBuilder.Entity<OrderProductEntity>()
+            .HasOne(op => op.Order)
+            .WithMany(o => o.OrderProducts)
+            .HasForeignKey(op => op.OrderId);
+        modelBuilder.Entity<OrderProductEntity>()
+            .HasOne(op => op.Product)
+            .WithMany(p => p.OrderProducts)
+            .HasForeignKey(op => op.ProductId);
     }
 
     public override int SaveChanges()
