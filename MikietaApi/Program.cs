@@ -1,11 +1,15 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using MikietaApi;
+using MikietaApi.Converters;
 using MikietaApi.Data;
+using MikietaApi.Data.Entities;
 using MikietaApi.Models;
 using MikietaApi.Routes;
 using MikietaApi.Services;
+using MikietaApi.Stripe;
 using MikietaApi.Validators;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +25,20 @@ builder.Services.AddScoped<DbSeeder, DbSeeder>();
 builder.Services.AddScoped<IValidator<OrderModel>, OrderModelValidator>();
 builder.Services.AddScoped<IValidator<ReservationModel>, ReservationModelValidator>();
 
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<IConverter<OrderProductEntity, StripeRequestModel>, StripeRequestConverter>();
+builder.Services.AddScoped<StripeFacade, StripeFacade>(x =>
+{
+    var context = x.GetRequiredService<IHttpContextAccessor>().HttpContext!;
+    
+    var url = $"{context.Request.Scheme}://{context.Request.Host}";
+    var successUrl = $"{url}/order/success?sessionId={{CHECKOUT_SESSION_ID}}";
+    var cancelUrl = $"{url}/order/cancel";
+    
+    return new StripeFacade(successUrl, cancelUrl);
+});
+
 builder.Services.AddCors(options =>
     options.AddPolicy("MyPolicy",
         b => { b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); }
@@ -31,6 +49,8 @@ var app = builder.Build();
 
 app.MapSwagger();
 app.UseSwaggerUI();
+
+StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
 app.UseCors("MyPolicy");
 
