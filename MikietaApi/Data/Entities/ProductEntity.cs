@@ -11,5 +11,5 @@ public class ProductEntity
     public double Price { get; set; }
     public ProductTypeEntity ProductType { get; set; }
     public string? Description { get; set; }
-    public ICollection<OrderEntity>? Orders { get; set; }
+    public ICollection<OrderProductEntity> OrderProducts { get; set; }
 }

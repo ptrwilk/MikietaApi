@@ -6,9 +6,15 @@ public class ProcessingPersonalData
     public bool? Sms { get; set; }
 }
 
+public class ProductQuantityModel
+{
+    public int ProductId { get; set; }
+    public int Quantity { get; set; }
+}
+
 public class OrderModel
 {
-    public int[] ProductIds { get; set; } = null!;
+    public ProductQuantityModel[] ProductQuantities { get; set; } = null!;
     public DateTime? DeliveryTiming { get; set; }
     public bool? DeliveryRightAway { get; set; }
     public DeliveryMethodType DeliveryMethod { get; set; }

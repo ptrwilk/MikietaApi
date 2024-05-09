@@ -20,13 +20,12 @@ public class OrderService : IOrderService
     
     public int Order(OrderModel model)
     {
-        var products = _context.Products.Where(x => model.ProductIds.Any(z => x.Id == z)).ToArray();
+        var products = _context.Products.Where(x => model.ProductQuantities.Select(g => g.ProductId).Any(z => x.Id == z)).ToArray();
         
         //TODO: napisać validację sprawdzająca czy każdy productId znajduje sie w Products
         
         var entity = new OrderEntity
         {
-            Products = products,
             DeliveryMethod = model.DeliveryMethod,
             DeliveryRightAway = model.DeliveryRightAway,
             Name = model.Name,
@@ -44,6 +43,13 @@ public class OrderService : IOrderService
             ProcessingPersonalDataByEmail = model.ProcessingPersonalData?.Email,
             ProcessingPersonalDataBySms = model.ProcessingPersonalData?.Sms
         };
+
+        entity.OrderProducts = products.Select(x => new OrderProductEntity
+        {
+            Order = entity,
+            Product = x,
+            Quantity = model.ProductQuantities.First(z => z.ProductId == x.Id).Quantity
+        }).ToList();
 
         _context.Orders.Add(entity);
         
