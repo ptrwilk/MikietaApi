@@ -25,9 +25,7 @@ public class OrderModelValidator : AbstractValidator<OrderModel>
             x.DeliveryMethod != DeliveryMethodType.Delivery || (x.DeliveryMethod == DeliveryMethodType.Delivery &&
                                                                 !string.IsNullOrEmpty(x.Street) &&
                                                                 !string.IsNullOrEmpty(x.HomeNumber) &&
-                                                                !string.IsNullOrEmpty(x.City) &&
-                                                                !string.IsNullOrEmpty(x.FlatNumber) &&
-                                                                !string.IsNullOrEmpty(x.Floor))
+                                                                !string.IsNullOrEmpty(x.City))
         ).WithMessage("Street, Home Number, City, Flat Number and Floor must be provided when Delivery Method is Delivery");
     }
 }
