@@ -24,7 +24,7 @@ public class StripeFacade
         _successUrl = successUrl;
         _cancelUrl = cancelUrl;
     }
-    
+
     public StripeResponseModel CreateSession(StripeRequestModel[] models)
     {
         var options = new SessionCreateOptions
@@ -33,7 +33,11 @@ public class StripeFacade
             CancelUrl = _cancelUrl,
             LineItems = new List<SessionLineItemOptions>(),
             Mode = "payment",
-            PaymentMethodTypes = new List<string> { "blik" }
+            PaymentMethodTypes = new List<string>
+            {
+                "blik", "card", "p24", "paypal"
+            },
+            Locale = "pl"
         };
 
         foreach (var model in models)
@@ -52,14 +56,14 @@ public class StripeFacade
                 Quantity = model.Quantity,
             });
         }
-        
+
         var service = new SessionService();
         var session = service.Create(options);
-        
+
         return new StripeResponseModel
         {
             SessionId = session.Id,
-            Url  = session.Url
+            Url = session.Url
         };
     }
 }
