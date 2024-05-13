@@ -31,3 +31,28 @@ public class OrderModel
     public string? Floor { get; set; }
     public ProcessingPersonalData? ProcessingPersonalData { get; set; }
 }
+
+public class OrderResponseModel
+{
+    public int Id { get; set; }
+    public int Number { get; set; }
+    public string Name { get; set; } = null!;
+    public string Address { get; set; } = null!;
+    public string Phone { get; set; } = null!;
+    public bool Payed { get; set; }
+    public int TotalProducts { get; set; }
+    public int CompletedProducts { get; set; }
+    public OrderStatusType Status { get; set; }
+    public bool OnSitePickup { get; set; }
+    public double Cost { get; set; }
+}
+
+public class SingleProductModel
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = null!;
+    public ProductType Type { get; set; }
+    public double Price { get; set; }
+    public int Quantity { get; set; }
+    public bool Ready { get; set; }
+}

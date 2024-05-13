@@ -11,6 +11,8 @@ public static class OrderRoute
         app.MapPost("order", Order);
         app.MapGet("order/success", Success);
         app.MapGet("order/cancel", Cancel);
+        app.MapGet("order", GetAll);
+        app.MapGet("order/{orderId}", Get);
 
         return app;
     }
@@ -49,5 +51,15 @@ public static class OrderRoute
         {
             return Results.Problem(ex.Message);
         }
+    }
+    
+    private static IResult GetAll(IOrderService service)
+    {
+        return Results.Ok(service.GetAll());
+    }
+    
+    private static IResult Get(IOrderService service, int orderId)
+    {
+        return Results.Ok(service.Get(orderId));
     }
 }
