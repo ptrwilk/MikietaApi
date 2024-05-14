@@ -45,6 +45,8 @@ public class OrderResponseModel
     public OrderStatusType Status { get; set; }
     public bool OnSitePickup { get; set; }
     public double Cost { get; set; }
+    public DateTime DeliveryAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 }
 
 public class SingleProductModel

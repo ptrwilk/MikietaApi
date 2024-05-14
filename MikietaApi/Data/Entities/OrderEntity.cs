@@ -27,4 +27,5 @@ public class OrderEntity
     public bool? ProcessingPersonalDataBySms { get; set; }
     public bool Paid { get; set; }
     public string? SessionId { get; set; }
+    public DateTime? CreatedAt { get; set; }
 }

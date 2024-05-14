@@ -56,10 +56,11 @@ public class OrderService : IOrderService
             FlatNumber = model.FlatNumber,
             Floor = model.Floor,
             HomeNumber = model.HomeNumber,
-            DeliveryTiming = model.DeliveryTiming,
+            DeliveryTiming = model.DeliveryTiming.Value.ToLocalTime(),
             PaymentMethod = model.PaymentMethod,
             ProcessingPersonalDataByEmail = model.ProcessingPersonalData?.Email,
-            ProcessingPersonalDataBySms = model.ProcessingPersonalData?.Sms
+            ProcessingPersonalDataBySms = model.ProcessingPersonalData?.Sms,
+            CreatedAt = DateTime.Now
         };
 
         entity.OrderProducts = products.Select(x => new OrderProductEntity
@@ -119,7 +120,9 @@ public class OrderService : IOrderService
             Payed = x.Paid,
             Status = OrderStatusType.Preparing,
             OnSitePickup = x.DeliveryMethod == DeliveryMethodType.TakeAway,
-            TotalProducts = x.OrderProducts.Count(z => z.OrderId == x.Id)
+            TotalProducts = x.OrderProducts.Count(z => z.OrderId == x.Id),
+            CreatedAt = x.CreatedAt ?? new DateTime(),
+            DeliveryAt = x.DeliveryTiming ?? new DateTime()
         }).ToArray();
     }
 
