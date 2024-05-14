@@ -28,12 +28,12 @@ public static class OrderRoute
         return Results.Ok(service.Order(model));
     }
 
-    private static IResult Success(IOrderService service, IConfiguration configuration, string sessionId)
+    private static IResult Success(IOrderService service, ConfigurationOptions options, string sessionId)
     {
         try
         {
             var number = service.OrderSuccess(sessionId);
-            return Results.Redirect($"{configuration["WebsiteUrl"]!}/zamowienie/{number}");
+            return Results.Redirect($"{options.WebsiteUrl}/zamowienie/{number}");
         }
         catch (Exception ex)
         {
@@ -41,11 +41,11 @@ public static class OrderRoute
         }
     }
     
-    private static IResult Cancel(IOrderService service, IConfiguration configuration)
+    private static IResult Cancel(IOrderService service, ConfigurationOptions options)
     {
         try
         {
-            return Results.Redirect($"{configuration["WebsiteUrl"]!}/kasa");
+            return Results.Redirect($"{options.WebsiteUrl}/kasa");
         }
         catch (Exception ex)
         {

@@ -56,7 +56,7 @@ public class OrderService : IOrderService
             FlatNumber = model.FlatNumber,
             Floor = model.Floor,
             HomeNumber = model.HomeNumber,
-            DeliveryTiming = model.DeliveryTiming.Value.ToLocalTime(),
+            DeliveryTiming = model.DeliveryTiming?.ToLocalTime() ?? DateTime.Now,
             PaymentMethod = model.PaymentMethod,
             ProcessingPersonalDataByEmail = model.ProcessingPersonalData?.Email,
             ProcessingPersonalDataBySms = model.ProcessingPersonalData?.Sms,
