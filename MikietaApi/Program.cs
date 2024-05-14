@@ -16,14 +16,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<DataContext>(options =>
-    options.UseSqlite(builder.Configuration["ConnectionStrings:Database"]));
+builder.Services.AddDbContext<DataContext>((provider, options) =>
+    options.UseSqlite(provider.GetService<ConfigurationOptions>()!.Database));
 builder.Services.AddScoped<IProductsService, ProductsService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<DbSeeder, DbSeeder>();
 builder.Services.AddScoped<IValidator<OrderModel>, OrderModelValidator>();
 builder.Services.AddScoped<IValidator<ReservationModel>, ReservationModelValidator>();
+builder.Services.AddSingleton<ConfigurationOptions, ConfigurationOptions>();
 
 builder.Services.AddHttpContextAccessor();
 
@@ -50,7 +51,7 @@ var app = builder.Build();
 app.MapSwagger();
 app.UseSwaggerUI();
 
-StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
+StripeConfiguration.ApiKey = app.Services.GetService<ConfigurationOptions>()!.SecretKey;
 
 app.UseCors("MyPolicy");
 
