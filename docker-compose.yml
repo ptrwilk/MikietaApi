@@ -1,0 +1,18 @@
+version: '3.4'
+name: mikieta
+
+networks:
+  mikieta-dev:
+    driver: bridge 
+
+services:
+  mikietaapi:
+    image: mikietaapi:latest  
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5105:80"
+    container_name : mikietaapi
+    networks:
+      - mikieta-dev
