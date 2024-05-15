@@ -4,6 +4,7 @@ using MikietaApi;
 using MikietaApi.Converters;
 using MikietaApi.Data;
 using MikietaApi.Data.Entities;
+using MikietaApi.Hubs;
 using MikietaApi.Models;
 using MikietaApi.Routes;
 using MikietaApi.Services;
@@ -46,6 +47,8 @@ builder.Services.AddCors(options =>
     )
 );
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 app.MapSwagger();
@@ -54,6 +57,8 @@ app.UseSwaggerUI();
 StripeConfiguration.ApiKey = app.Services.GetService<ConfigurationOptions>()!.SecretKey;
 
 app.UseCors("MyPolicy");
+
+app.MapHub<MessageHub>("/messageHub");
 
 ProductsRoute.RegisterEndpoints(app);
 OrderRoute.RegisterEndpoints(app);

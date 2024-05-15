@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using MikietaApi.Converters;
 using MikietaApi.Data;
 using MikietaApi.Data.Entities;
+using MikietaApi.Hubs;
 using MikietaApi.Models;
 using MikietaApi.Stripe;
 
@@ -20,6 +22,7 @@ public interface IOrderService
     AdminOrderModel[] GetAll();
     AdminProductModel[] Get(int orderId);
     AdminOrderModel GetSingle(int orderId);
+    OrderStatusModel GetStatus(int orderId);
     AdminOrderModel Update(AdminOrderModel model);
     AdminProductModel UpdateProduct(int orderId, AdminProductModel model);
 }
@@ -29,13 +32,16 @@ public class OrderService : IOrderService
     private readonly DataContext _context;
     private readonly StripeFacade _stripe;
     private readonly IConverter<OrderProductEntity, StripeRequestModel> _converter;
+    private readonly IHubContext<MessageHub, IMessageHub> _hub;
 
     public OrderService(DataContext context, StripeFacade stripe,
-        IConverter<OrderProductEntity, StripeRequestModel> converter)
+        IConverter<OrderProductEntity, StripeRequestModel> converter,
+        IHubContext<MessageHub, IMessageHub> hub)
     {
         _context = context;
         _stripe = stripe;
         _converter = converter;
+        _hub = hub;
     }
 
     public OrderResponseModel2 Order(OrderModel model)
@@ -135,15 +141,35 @@ public class OrderService : IOrderService
         return Convert(entity);
     }
 
+    public OrderStatusModel GetStatus(int orderId)
+    {
+        var entity = _context.Orders.First(x => x.Id == orderId);
+        
+        return new OrderStatusModel
+        {
+            Status = entity.Status,
+            DeliveryAt = entity.DeliveryTiming
+        };
+    }
+
     public AdminOrderModel Update(AdminOrderModel model)
     {
         var entity = _context.Orders.First(x => x.Id == model.Id);
 
+        var deliveryAt = model.DeliveryAt.ToLocalTime();
+        
+        var canUpdate = entity.Status != model.Status || entity.DeliveryTiming != deliveryAt;
+        
         entity.Status = model.Status;
         entity.Paid = model.Payed;
-        entity.DeliveryTiming = model.DeliveryAt.ToLocalTime();
+        entity.DeliveryTiming = deliveryAt;
 
         _context.SaveChanges();
+
+        if (canUpdate)
+        {
+            _hub.Clients(model.Id).OrderChanged();
+        }
 
         return model;
     }
