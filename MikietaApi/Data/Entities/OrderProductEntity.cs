@@ -7,4 +7,5 @@ public class OrderProductEntity
     public int ProductId { get; set; }
     public ProductEntity Product { get; set; } = null!;
     public int Quantity { get; set; }
+    public bool Ready { get; set; }
 }

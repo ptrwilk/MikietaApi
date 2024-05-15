@@ -17,8 +17,11 @@ public interface IOrderService
 {
     OrderResponseModel2 Order(OrderModel model);
     int OrderSuccess(string sessionId);
-    OrderResponseModel[] GetAll();
-    SingleProductModel[] Get(int orderId);
+    AdminOrderModel[] GetAll();
+    AdminProductModel[] Get(int orderId);
+    AdminOrderModel GetSingle(int orderId);
+    AdminOrderModel Update(AdminOrderModel model);
+    AdminProductModel UpdateProduct(int orderId, AdminProductModel model);
 }
 
 public class OrderService : IOrderService
@@ -106,60 +109,87 @@ public class OrderService : IOrderService
         return entity.Number;
     }
 
-    public OrderResponseModel[] GetAll()
+    public AdminOrderModel[] GetAll()
     {
         return _context.Orders.Include(x => x.OrderProducts)
-            .ThenInclude(x => x.Product).Select(x => new OrderResponseModel
-        {
-            Id = x.Id,
-            Name = x.Name,
-            Address = $"{x.City}",
-            Cost = x.OrderProducts.Where(z => z.OrderId == x.Id).Sum(z => z.Product.Price * z.Quantity),
-            Phone = x.Phone,
-            Number = x.Number,
-            Payed = x.Paid,
-            Status = OrderStatusType.Preparing,
-            OnSitePickup = x.DeliveryMethod == DeliveryMethodType.TakeAway,
-            TotalProducts = x.OrderProducts.Count(z => z.OrderId == x.Id),
-            CreatedAt = x.CreatedAt ?? new DateTime(),
-            DeliveryAt = x.DeliveryTiming ?? new DateTime()
-        }).ToArray();
+            .ThenInclude(x => x.Product)
+            .ToList()
+            .Select(Convert).ToArray();
     }
 
-    public SingleProductModel[] Get(int orderId)
+    public AdminProductModel[] Get(int orderId)
     {
         return _context.OrderProducts.Include(x => x.Product)
             .Where(x => x.OrderId == orderId)
-            .Select(g => new SingleProductModel
-            {
-                Id = g.Product.Id,
-                Name = g.Product.Name,
-                Price = g.Product.Price * g.Quantity,
-                Type = EnumConverter.Convert(g.Product.ProductType),
-                Quantity = g.Quantity,
-            })
+            .ToList()
+            .Select(Convert)
             .ToArray();
-        
-        return new[]
+    }
+
+    public AdminOrderModel GetSingle(int orderId)
+    {
+        var entity = _context.Orders.Include(x => x.OrderProducts)
+            .ThenInclude(x => x.Product)
+            .First(x => x.Id == orderId);
+
+        return Convert(entity);
+    }
+
+    public AdminOrderModel Update(AdminOrderModel model)
+    {
+        var entity = _context.Orders.First(x => x.Id == model.Id);
+
+        entity.Status = model.Status;
+        entity.Paid = model.Payed;
+        entity.DeliveryTiming = model.DeliveryAt.ToLocalTime();
+
+        _context.SaveChanges();
+
+        return model;
+    }
+
+    public AdminProductModel UpdateProduct(int orderId, AdminProductModel model)
+    {
+        var entity = _context.OrderProducts
+            .Single(x => x.OrderId == orderId && x.ProductId == model.Id);
+
+        entity.Ready = model.Ready;
+
+        _context.SaveChanges();
+
+        return model;
+    }
+
+    private AdminProductModel Convert(OrderProductEntity entity)
+    {
+        return new AdminProductModel
         {
-            new SingleProductModel
-            {
-                Id = 1,
-                Name = "Pizza Margaritha",
-                Quantity = 2,
-                Ready = false,
-                Price = 33.3,
-                Type = ProductType.PizzaBig
-            },
-            new SingleProductModel
-            {
-                Id = 2,
-                Name = "Pizza Capricosa",
-                Quantity = 1,
-                Ready = true,
-                Price = 12.3,
-                Type = ProductType.PizzaSmall
-            }
+            Id = entity.Product.Id,
+            Name = entity.Product.Name,
+            Price = entity.Product.Price * entity.Quantity,
+            Type = EnumConverter.Convert(entity.Product.ProductType),
+            Quantity = entity.Quantity,
+            Ready = entity.Ready
+        };
+    }
+
+    private AdminOrderModel Convert(OrderEntity entity)
+    {
+        return new AdminOrderModel
+        {
+            Id = entity.Id,
+            Name = entity.Name,
+            Address = $"{entity.City}",
+            Cost = entity.OrderProducts.Where(z => z.OrderId == entity.Id).Sum(z => z.Product.Price * z.Quantity),
+            Phone = entity.Phone,
+            Number = entity.Number,
+            Payed = entity.Paid,
+            Status = entity.Status,
+            OnSitePickup = entity.DeliveryMethod == DeliveryMethodType.TakeAway,
+            TotalProducts = entity.OrderProducts.Count,
+            CompletedProducts = entity.OrderProducts.Count(z => z.Ready),
+            CreatedAt = entity.CreatedAt,
+            DeliveryAt = entity.DeliveryTiming
         };
     }
 }
