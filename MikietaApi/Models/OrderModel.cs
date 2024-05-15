@@ -32,7 +32,7 @@ public class OrderModel
     public ProcessingPersonalData? ProcessingPersonalData { get; set; }
 }
 
-public class OrderResponseModel
+public class AdminOrderModel
 {
     public int Id { get; set; }
     public int Number { get; set; }
@@ -47,14 +47,4 @@ public class OrderResponseModel
     public double Cost { get; set; }
     public DateTime DeliveryAt { get; set; }
     public DateTime CreatedAt { get; set; }
-}
-
-public class SingleProductModel
-{
-    public int Id { get; set; }
-    public string Name { get; set; } = null!;
-    public ProductType Type { get; set; }
-    public double Price { get; set; }
-    public int Quantity { get; set; }
-    public bool Ready { get; set; }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MikietaApi.Data;
 
@@ -10,9 +11,11 @@ using MikietaApi.Data;
 namespace MikietaApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240515100810_AddedStatusAndReady")]
+    partial class AddedStatusAndReady
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.18");
@@ -59,7 +62,7 @@ namespace MikietaApi.Migrations
                     b.Property<string>("Comments")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("DeliveryMethod")
@@ -69,7 +72,7 @@ namespace MikietaApi.Migrations
                     b.Property<bool?>("DeliveryRightAway")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("DeliveryTiming")
+                    b.Property<DateTime?>("DeliveryTiming")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")

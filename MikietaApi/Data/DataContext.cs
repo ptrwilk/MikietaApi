@@ -36,6 +36,9 @@ public class DataContext : DbContext
         modelBuilder.Entity<OrderEntity>()
             .Property(x => x.PaymentMethod)
             .HasConversion<string>();
+        modelBuilder.Entity<OrderEntity>()
+            .Property(x => x.Status)
+            .HasConversion<string>();
         
         modelBuilder.Entity<OrderProductEntity>()
             .HasKey(op => new { op.OrderId, op.ProductId });
