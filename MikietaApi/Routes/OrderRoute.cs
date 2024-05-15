@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.SignalR;
+using MikietaApi.Hubs;
 using MikietaApi.Models;
 using MikietaApi.Services;
 
@@ -14,6 +16,7 @@ public static class OrderRoute
         app.MapGet("order", GetAll);
         app.MapGet("order/{orderId}/products", Get);
         app.MapGet("order/{orderId}", GetSingle);
+        app.MapGet("order/{orderId}/status", GetStatus);
         app.MapPut("order", Update);
         app.MapPut("order/{orderId}/product", UpdateProduct);
 
@@ -43,7 +46,7 @@ public static class OrderRoute
             return Results.Problem(ex.Message);
         }
     }
-    
+
     private static IResult Cancel(IOrderService service, ConfigurationOptions options)
     {
         try
@@ -55,29 +58,34 @@ public static class OrderRoute
             return Results.Problem(ex.Message);
         }
     }
-    
+
     private static IResult GetAll(IOrderService service)
     {
         return Results.Ok(service.GetAll());
     }
-    
+
     private static IResult Get(IOrderService service, int orderId)
     {
         return Results.Ok(service.Get(orderId));
     }
-    
+
     private static IResult Update(IOrderService service, AdminOrderModel model)
     {
         return Results.Ok(service.Update(model));
     }
-    
+
     private static IResult UpdateProduct(IOrderService service, int orderId, AdminProductModel model)
     {
         return Results.Ok(service.UpdateProduct(orderId, model));
     }
-    
+
     private static IResult GetSingle(IOrderService service, int orderId)
     {
         return Results.Ok(service.GetSingle(orderId));
+    }
+    
+    private static IResult GetStatus(IOrderService service, int orderId)
+    {
+        return Results.Ok(service.GetStatus(orderId));
     }
 }

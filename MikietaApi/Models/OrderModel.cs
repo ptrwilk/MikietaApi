@@ -48,3 +48,9 @@ public class AdminOrderModel
     public DateTime DeliveryAt { get; set; }
     public DateTime CreatedAt { get; set; }
 }
+
+public class OrderStatusModel
+{
+    public OrderStatusType Status { get; set; }
+    public DateTime DeliveryAt { get; set; }
+}
