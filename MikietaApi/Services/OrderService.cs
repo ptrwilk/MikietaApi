@@ -19,6 +19,7 @@ public interface IOrderService
 {
     OrderResponseModel2 Order(OrderModel model);
     int OrderSuccess(string sessionId);
+    void OrderCanceled();
     AdminOrderModel[] GetAll();
     AdminProductModel[] Get(int orderId);
     AdminOrderModel GetSingle(int orderId);
@@ -87,6 +88,11 @@ public class OrderService : IOrderService
 
         _context.SaveChanges();
 
+        if (model.PaymentMethod == PaymentMethodType.Cash)
+        {
+            _hub.Clients.All.OrderMade();
+        }
+
         return new OrderResponseModel2
         {
             SessionId = res.SessionId,
@@ -111,8 +117,15 @@ public class OrderService : IOrderService
         entity.Paid = true;
 
         _context.SaveChanges();
+        
+        _hub.Clients.All.OrderMade();
 
         return entity.Number;
+    }
+
+    public void OrderCanceled()
+    {
+        _hub.Clients.All.OrderMade();
     }
 
     public AdminOrderModel[] GetAll()

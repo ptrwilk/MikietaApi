@@ -51,6 +51,7 @@ public static class OrderRoute
     {
         try
         {
+            service.OrderCanceled();
             return Results.Redirect($"{options.WebsiteUrl}/kasa");
         }
         catch (Exception ex)
