@@ -5,6 +5,7 @@ namespace MikietaApi.Hubs;
 
 public interface IMessageHub
 {
+    Task OrderMade();
     Task OrderChanged();
     Task Join(int id);
 }
@@ -12,11 +13,6 @@ public interface IMessageHub
 public class MessageHub : Hub<IMessageHub>
 {
     public static readonly ConcurrentDictionary<string, int> Dictionary = new();
-
-    public async Task SendMessage(string message, string id)
-    {
-        await Clients.All.OrderChanged();
-    }
 
     public override Task OnDisconnectedAsync(Exception? exception)
     {
