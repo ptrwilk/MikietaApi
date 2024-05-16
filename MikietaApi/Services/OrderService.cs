@@ -139,7 +139,9 @@ public class OrderService : IOrderService
         return _context.Orders.Include(x => x.OrderProducts)
             .ThenInclude(x => x.Product)
             .ToList()
-            .Select(Convert).ToArray();
+            .Select(Convert)
+            .OrderByDescending(x => x.Number)
+            .ToArray();
     }
 
     public AdminProductModel[] Get(int orderId)
