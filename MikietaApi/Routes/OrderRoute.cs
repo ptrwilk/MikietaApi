@@ -38,8 +38,8 @@ public static class OrderRoute
     {
         try
         {
-            var number = service.OrderSuccess(sessionId);
-            return Results.Redirect($"{options.WebsiteUrl}/zamowienie/{number}");
+            var id = service.OrderSuccess(sessionId);
+            return Results.Redirect($"{options.WebsiteUrl}/zamowienie/{id}");
         }
         catch (Exception ex)
         {
