@@ -11,8 +11,9 @@ namespace MikietaApi.Services;
 
 public class OrderResponseModel2
 {
-    public string SessionId { get; set; } = null!;
-    public string Url { get; set; } = null!;
+    public string? SessionId { get; set; }
+    public string? Url { get; set; }
+    public int? OrderId { get; set; }
 }
 
 public interface IOrderService
@@ -91,6 +92,11 @@ public class OrderService : IOrderService
         if (model.PaymentMethod == PaymentMethodType.Cash)
         {
             _hub.Clients.All.OrderMade();
+
+            return new OrderResponseModel2
+            {
+                OrderId = entity.Id
+            };
         }
 
         return new OrderResponseModel2
@@ -120,7 +126,7 @@ public class OrderService : IOrderService
         
         _hub.Clients.All.OrderMade();
 
-        return entity.Number;
+        return entity.Id;
     }
 
     public void OrderCanceled()
