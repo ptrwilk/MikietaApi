@@ -32,12 +32,23 @@ public class OrderModel
     public ProcessingPersonalData? ProcessingPersonalData { get; set; }
 }
 
+public class AdminAddressModel
+{
+    public string? City { get; set; }
+    public string? HomeNumber { get; set; }
+    public string? Street { get; set; }
+    public string? FlatNumber { get; set; }
+    public string? Floor { get; set; }
+    public string Text => $"{City} {Street} {HomeNumber} {FlatNumber} {Floor}".Trim();
+}
+
 public class AdminOrderModel
 {
     public int Id { get; set; }
     public int Number { get; set; }
     public string Name { get; set; } = null!;
-    public string Address { get; set; } = null!;
+    public string AddressText { get; set; } = null!;
+    public AdminAddressModel Address { get; set; } = null!;
     public string Phone { get; set; } = null!;
     public bool Payed { get; set; }
     public int TotalProducts { get; set; }
