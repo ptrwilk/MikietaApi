@@ -184,6 +184,11 @@ public class OrderService : IOrderService
         entity.Status = model.Status;
         entity.Paid = model.Payed;
         entity.DeliveryTiming = deliveryAt;
+        entity.City = model.Address.City;
+        entity.Street = model.Address.Street;
+        entity.Floor = model.Address.Floor;
+        entity.FlatNumber = model.Address.FlatNumber;
+        entity.HomeNumber = model.Address.HomeNumber;
 
         _context.SaveChanges();
 
@@ -226,7 +231,14 @@ public class OrderService : IOrderService
         {
             Id = entity.Id,
             Name = entity.Name,
-            Address = $"{entity.City}",
+            Address = new AdminAddressModel
+            {
+                City = entity.City,
+                Street = entity.Street,
+                FlatNumber = entity.FlatNumber,
+                Floor = entity.Floor,
+                HomeNumber = entity.HomeNumber
+            },
             Cost = entity.OrderProducts.Where(z => z.OrderId == entity.Id).Sum(z => z.Product.Price * z.Quantity),
             Phone = entity.Phone,
             Number = entity.Number,
