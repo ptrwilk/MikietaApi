@@ -169,7 +169,8 @@ public class OrderService : IOrderService
         return new OrderStatusModel
         {
             Status = entity.Status,
-            DeliveryAt = entity.DeliveryTiming
+            DeliveryAt = entity.DeliveryTiming,
+            DeliveryMethod = entity.DeliveryMethod
         };
     }
 
@@ -244,7 +245,7 @@ public class OrderService : IOrderService
             Number = entity.Number,
             Payed = entity.Paid,
             Status = entity.Status,
-            OnSitePickup = entity.DeliveryMethod == DeliveryMethodType.TakeAway,
+            DeliveryMethod = entity.DeliveryMethod,
             TotalProducts = entity.OrderProducts.Count,
             CompletedProducts = entity.OrderProducts.Count(z => z.Ready),
             CreatedAt = entity.CreatedAt,

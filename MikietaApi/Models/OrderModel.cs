@@ -54,14 +54,15 @@ public class AdminOrderModel
     public int TotalProducts { get; set; }
     public int CompletedProducts { get; set; }
     public OrderStatusType Status { get; set; }
-    public bool OnSitePickup { get; set; }
     public double Cost { get; set; }
     public DateTime DeliveryAt { get; set; }
     public DateTime CreatedAt { get; set; }
+    public DeliveryMethodType DeliveryMethod { get; set; }
 }
 
 public class OrderStatusModel
 {
     public OrderStatusType Status { get; set; }
     public DateTime DeliveryAt { get; set; }
+    public DeliveryMethodType DeliveryMethod { get; set; }
 }
