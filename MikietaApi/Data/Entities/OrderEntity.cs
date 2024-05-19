@@ -29,4 +29,5 @@ public class OrderEntity
     public string? SessionId { get; set; }
     public DateTime CreatedAt { get; set; }
     public OrderStatusType Status { get; set; }
+    public bool Visible { get; set; }
 }
