@@ -71,7 +71,8 @@ public class OrderService : IOrderService
             PaymentMethod = model.PaymentMethod,
             ProcessingPersonalDataByEmail = model.ProcessingPersonalData?.Email,
             ProcessingPersonalDataBySms = model.ProcessingPersonalData?.Sms,
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.Now,
+            Visible = model.PaymentMethod == PaymentMethodType.Cash
         };
 
         entity.OrderProducts = products.Select(x => new OrderProductEntity
@@ -121,7 +122,8 @@ public class OrderService : IOrderService
         }
 
         entity.Paid = true;
-
+        entity.Visible = true;
+        
         _context.SaveChanges();
         
         _hub.Clients.All.OrderMade();
@@ -138,6 +140,7 @@ public class OrderService : IOrderService
     {
         return _context.Orders.Include(x => x.OrderProducts)
             .ThenInclude(x => x.Product)
+            .Where(x => x.Visible)
             .ToList()
             .Select(Convert)
             .OrderByDescending(x => x.Number)
