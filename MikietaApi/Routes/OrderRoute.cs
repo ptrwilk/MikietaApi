@@ -1,6 +1,4 @@
 ﻿using FluentValidation;
-using Microsoft.AspNetCore.SignalR;
-using MikietaApi.Hubs;
 using MikietaApi.Models;
 using MikietaApi.Services;
 
@@ -65,7 +63,7 @@ public static class OrderRoute
         return Results.Ok(service.GetAll());
     }
 
-    private static IResult Get(IOrderService service, int orderId)
+    private static IResult Get(IOrderService service, Guid orderId)
     {
         return Results.Ok(service.Get(orderId));
     }
@@ -75,17 +73,17 @@ public static class OrderRoute
         return Results.Ok(service.Update(model));
     }
 
-    private static IResult UpdateProduct(IOrderService service, int orderId, AdminProductModel model)
+    private static IResult UpdateProduct(IOrderService service, Guid orderId, AdminProductModel model)
     {
         return Results.Ok(service.UpdateProduct(orderId, model));
     }
 
-    private static IResult GetSingle(IOrderService service, int orderId)
+    private static IResult GetSingle(IOrderService service, Guid orderId)
     {
         return Results.Ok(service.GetSingle(orderId));
     }
     
-    private static IResult GetStatus(IOrderService service, int orderId)
+    private static IResult GetStatus(IOrderService service, Guid orderId)
     {
         return Results.Ok(service.GetStatus(orderId));
     }
