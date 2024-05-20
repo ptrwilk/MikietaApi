@@ -12,7 +12,7 @@ public interface IMessageHub
 
 public class MessageHub : Hub<IMessageHub>
 {
-    public static readonly ConcurrentDictionary<string, int> Dictionary = new();
+    public static readonly ConcurrentDictionary<string, Guid> Dictionary = new();
 
     public override Task OnDisconnectedAsync(Exception? exception)
     {
@@ -21,7 +21,7 @@ public class MessageHub : Hub<IMessageHub>
         return base.OnDisconnectedAsync(exception);
     }
 
-    public async Task Join(int orderId)
+    public async Task Join(Guid orderId)
     {
         if (Dictionary.ContainsKey(Context.ConnectionId))
         {
@@ -36,7 +36,7 @@ public class MessageHub : Hub<IMessageHub>
 
 public static class MessageHubExtensions
 {
-    public static IMessageHub Clients(this IHubContext<MessageHub, IMessageHub> hub, int orderId)
+    public static IMessageHub Clients(this IHubContext<MessageHub, IMessageHub> hub, Guid orderId)
     {
         var connectionIds = new List<string>();
         foreach (var connectionId in MessageHub.Dictionary.Where(x => x.Value == orderId).Select(x => x.Key))

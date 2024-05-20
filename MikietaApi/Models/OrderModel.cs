@@ -8,7 +8,7 @@ public class ProcessingPersonalData
 
 public class ProductQuantityModel
 {
-    public int ProductId { get; set; }
+    public Guid ProductId { get; set; }
     public int Quantity { get; set; }
 }
 
@@ -44,7 +44,7 @@ public class AdminAddressModel
 
 public class AdminOrderModel
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public int Number { get; set; }
     public string Name { get; set; } = null!;
     public string AddressText { get; set; } = null!;

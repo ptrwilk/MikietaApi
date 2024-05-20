@@ -7,7 +7,7 @@ public class ProductQuantityModelValidator: AbstractValidator<ProductQuantityMod
 {
     public ProductQuantityModelValidator()
     {
-        RuleFor(x => x.ProductId).GreaterThan(0);
+        RuleFor(x => x.ProductId).NotEmpty();
         RuleFor(x => x.Quantity).GreaterThan(0);
     }
 }

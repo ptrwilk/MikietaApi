@@ -2,7 +2,7 @@
 
 public class ProductModel
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public string Name { get; set; }
     public string[] Ingredients { get; set; }
     public double Price { get; set; }
@@ -11,7 +11,7 @@ public class ProductModel
 
 public class AdminProductModel
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public string Name { get; set; } = null!;
     public ProductType Type { get; set; }
     public double Price { get; set; }

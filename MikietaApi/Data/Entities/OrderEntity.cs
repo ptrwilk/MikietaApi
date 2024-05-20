@@ -6,7 +6,7 @@ namespace MikietaApi.Data.Entities;
 public class OrderEntity
 {
     [Key]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public int Number { get; set; }
     public ICollection<OrderProductEntity> OrderProducts { get; set; }
     public DateTime DeliveryTiming { get; set; }

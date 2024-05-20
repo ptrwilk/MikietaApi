@@ -4,7 +4,8 @@ namespace MikietaApi.Data.Entities;
 
 public class ReservationEntity
 {
-    [Key] public int Id { get; set; }
+    [Key]
+    public Guid Id { get; set; }
     public DateTime ReservationDate { get; set; }
     public int NumberOfPeople { get; set; }
     public string Phone { get; set; } = null!;

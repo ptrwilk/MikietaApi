@@ -13,20 +13,20 @@ public class OrderResponseModel2
 {
     public string? SessionId { get; set; }
     public string? Url { get; set; }
-    public int? OrderId { get; set; }
+    public Guid? OrderId { get; set; }
 }
 
 public interface IOrderService
 {
     OrderResponseModel2 Order(OrderModel model);
-    int OrderSuccess(string sessionId);
+    Guid OrderSuccess(string sessionId);
     void OrderCanceled();
     AdminOrderModel[] GetAll();
-    AdminProductModel[] Get(int orderId);
-    AdminOrderModel GetSingle(int orderId);
-    OrderStatusModel GetStatus(int orderId);
+    AdminProductModel[] Get(Guid orderId);
+    AdminOrderModel GetSingle(Guid orderId);
+    OrderStatusModel GetStatus(Guid orderId);
     AdminOrderModel Update(AdminOrderModel model);
-    AdminProductModel UpdateProduct(int orderId, AdminProductModel model);
+    AdminProductModel UpdateProduct(Guid orderId, AdminProductModel model);
 }
 
 public class OrderService : IOrderService
@@ -107,7 +107,7 @@ public class OrderService : IOrderService
         };
     }
 
-    public int OrderSuccess(string sessionId)
+    public Guid OrderSuccess(string sessionId)
     {
         var entity = _context.Orders.FirstOrDefault(x => x.SessionId == sessionId);
 
@@ -147,7 +147,7 @@ public class OrderService : IOrderService
             .ToArray();
     }
 
-    public AdminProductModel[] Get(int orderId)
+    public AdminProductModel[] Get(Guid orderId)
     {
         return _context.OrderProducts.Include(x => x.Product)
             .Where(x => x.OrderId == orderId)
@@ -156,7 +156,7 @@ public class OrderService : IOrderService
             .ToArray();
     }
 
-    public AdminOrderModel GetSingle(int orderId)
+    public AdminOrderModel GetSingle(Guid orderId)
     {
         var entity = _context.Orders.Include(x => x.OrderProducts)
             .ThenInclude(x => x.Product)
@@ -165,7 +165,7 @@ public class OrderService : IOrderService
         return Convert(entity);
     }
 
-    public OrderStatusModel GetStatus(int orderId)
+    public OrderStatusModel GetStatus(Guid orderId)
     {
         var entity = _context.Orders.First(x => x.Id == orderId);
         
@@ -204,7 +204,7 @@ public class OrderService : IOrderService
         return model;
     }
 
-    public AdminProductModel UpdateProduct(int orderId, AdminProductModel model)
+    public AdminProductModel UpdateProduct(Guid orderId, AdminProductModel model)
     {
         var entity = _context.OrderProducts
             .Single(x => x.OrderId == orderId && x.ProductId == model.Id);
