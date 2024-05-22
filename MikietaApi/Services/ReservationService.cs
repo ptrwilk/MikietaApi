@@ -1,6 +1,7 @@
 ﻿using MikietaApi.Data;
 using MikietaApi.Data.Entities;
 using MikietaApi.Models;
+using MikietaApi.SendEmail;
 
 namespace MikietaApi.Services;
 
@@ -14,14 +15,23 @@ public interface IReservationService
 public class ReservationService : IReservationService
 {
     private readonly DataContext _context;
+    private readonly EmailSender _emailSender;
 
-    public ReservationService(DataContext context)
+    public ReservationService(DataContext context, EmailSender emailSender)
     {
         _context = context;
+        _emailSender = emailSender;
     }
     
     public void Reserve(ReservationModel model)
     {
+        var messageId = _emailSender.Send(new EmailSenderModel
+        {
+            RecipientEmail = "ptrwilk@outlook.com", //TODO: zmienic potem na model.email
+            NumberOfPeople = model.NumberOfPeople,
+            ReservationDate = model.ReservationDate.ToLocalTime()
+        });
+        
         _context.Reservations.Add(new ReservationEntity
         {
             Name = model.Name,
@@ -31,7 +41,8 @@ public class ReservationService : IReservationService
             ReservationDate = model.ReservationDate,
             NumberOfPeople = model.NumberOfPeople,
             Status = ReservationStatusType.Waiting,
-            CreatedAt = DateTime.Now
+            CreatedAt = DateTime.Now,
+            MessageId = messageId
         });
 
         _context.SaveChanges();
