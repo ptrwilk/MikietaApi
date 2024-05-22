@@ -8,6 +8,7 @@ public interface IReservationService
 {
     void Reserve(ReservationModel model);
     ReservationModel[] GetAll();
+    ReservationModel Update(ReservationModel model);
 }
 
 public class ReservationService : IReservationService
@@ -28,7 +29,9 @@ public class ReservationService : IReservationService
             Email = model.Email,
             Phone = model.Phone,
             ReservationDate = model.ReservationDate,
-            NumberOfPeople = model.NumberOfPeople
+            NumberOfPeople = model.NumberOfPeople,
+            Status = ReservationStatusType.Waiting,
+            CreatedAt = DateTime.Now
         });
 
         _context.SaveChanges();
@@ -41,7 +44,18 @@ public class ReservationService : IReservationService
             .OrderByDescending(x => x.Number)
             .ToArray();
     }
+
+    public ReservationModel Update(ReservationModel model)
+    {
+        var entity = _context.Reservations.First(x => x.Id == model.Id);
+
+        entity.Status = model.Status;
     
+        _context.SaveChanges();
+
+        return model;
+    }
+
     private ReservationModel Convert(ReservationEntity entity)
     {
         return new ReservationModel
@@ -53,7 +67,9 @@ public class ReservationService : IReservationService
             Email = entity.Email,
             Phone = entity.Phone,
             ReservationDate = entity.ReservationDate,
-            NumberOfPeople = entity.NumberOfPeople
+            NumberOfPeople = entity.NumberOfPeople,
+            CreatedAt = entity.CreatedAt,
+            Status = entity.Status
         };
     }
 }

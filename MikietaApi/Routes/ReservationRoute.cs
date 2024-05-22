@@ -10,6 +10,7 @@ public static class ReservationRoute
     {
         app.MapPost("reservation", Reservation);
         app.MapGet("reservation", GetAll);
+        app.MapPut("reservation", Update);
 
         return app;
     }
@@ -30,5 +31,10 @@ public static class ReservationRoute
     private static IResult GetAll(IReservationService service)
     {
         return Results.Ok(service.GetAll());
+    }
+    
+    private static IResult Update(IReservationService service, ReservationModel model)
+    {
+        return Results.Ok(service.Update(model));
     }
 }
