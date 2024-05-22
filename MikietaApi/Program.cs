@@ -7,6 +7,7 @@ using MikietaApi.Data.Entities;
 using MikietaApi.Hubs;
 using MikietaApi.Models;
 using MikietaApi.Routes;
+using MikietaApi.SendEmail;
 using MikietaApi.Services;
 using MikietaApi.Stripe;
 using MikietaApi.Validators;
@@ -26,6 +27,17 @@ builder.Services.AddScoped<DbSeeder, DbSeeder>();
 builder.Services.AddScoped<IValidator<OrderModel>, OrderModelValidator>();
 builder.Services.AddScoped<IValidator<ReservationModel>, ReservationModelValidator>();
 builder.Services.AddSingleton<ConfigurationOptions, ConfigurationOptions>();
+builder.Services.AddScoped<EmailSender, EmailSender>(provider =>
+{
+    var smtpClient = provider.GetService<ConfigurationOptions>()!.SmtpClient;
+    return new EmailSender(new EmailSenderOption
+    {
+        Host = smtpClient.Host,
+        Email = smtpClient.Email,
+        Password = smtpClient.Password,
+        Port = smtpClient.Port
+    });
+});
 
 builder.Services.AddHttpContextAccessor();
 
