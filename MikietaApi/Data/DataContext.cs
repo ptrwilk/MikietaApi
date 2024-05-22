@@ -50,20 +50,32 @@ public class DataContext : DbContext
             .HasOne(op => op.Product)
             .WithMany(p => p.OrderProducts)
             .HasForeignKey(op => op.ProductId);
+        
+        modelBuilder.Entity<ReservationEntity>()
+            .Property(x => x.Number)
+            .IsUnicode()
+            .ValueGeneratedOnAdd();
     }
 
     public override int SaveChanges()
     {
         var entries = ChangeTracker.Entries()
-            .Where(e => e.State == EntityState.Added && e.Entity is OrderEntity).ToList();
+            .Where(e => e.State == EntityState.Added).ToList();
 
         foreach (var entry in entries)
         {
-            var entity = (OrderEntity)entry.Entity;
+            if (entry.Entity is OrderEntity orderEntity)
+            {
+                var number = Orders.Any() ? Orders.Max(x => x.Number) + 1 : 1;
 
-            var number = Orders.Any() ? Orders.Max(x => x.Number) + 1 : 1;
+                orderEntity.Number = number;
+            }
+            else if (entry.Entity is ReservationEntity reservationEntity)
+            {
+                var number = Reservations.Any() ? Reservations.Max(x => x.Number) + 1 : 1;
 
-            entity.Number = number;
+                reservationEntity.Number = number;              
+            }
         }
         
         return base.SaveChanges();

@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using FluentValidation;
+﻿using FluentValidation;
 using MikietaApi.Models;
 using MikietaApi.Services;
 
@@ -10,6 +9,7 @@ public static class ReservationRoute
     public static WebApplication RegisterEndpoints(WebApplication app)
     {
         app.MapPost("reservation", Reservation);
+        app.MapGet("reservation", GetAll);
 
         return app;
     }
@@ -25,5 +25,10 @@ public static class ReservationRoute
         
         service.Reserve(model);
         return Results.Ok();
+    }
+    
+    private static IResult GetAll(IReservationService service)
+    {
+        return Results.Ok(service.GetAll());
     }
 }
