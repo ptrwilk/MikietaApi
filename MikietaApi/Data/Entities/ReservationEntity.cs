@@ -6,6 +6,7 @@ public class ReservationEntity
 {
     [Key]
     public Guid Id { get; set; }
+    public int Number { get; set; }
     public DateTime ReservationDate { get; set; }
     public int NumberOfPeople { get; set; }
     public string Phone { get; set; } = null!;

@@ -7,6 +7,7 @@ namespace MikietaApi.Services;
 public interface IReservationService
 {
     void Reserve(ReservationModel model);
+    ReservationModel[] GetAll();
 }
 
 public class ReservationService : IReservationService
@@ -31,5 +32,28 @@ public class ReservationService : IReservationService
         });
 
         _context.SaveChanges();
+    }
+
+    public ReservationModel[] GetAll()
+    {
+        return _context.Reservations.ToList()
+            .Select(Convert)
+            .OrderByDescending(x => x.Number)
+            .ToArray();
+    }
+    
+    private ReservationModel Convert(ReservationEntity entity)
+    {
+        return new ReservationModel
+        {
+            Id = entity.Id,
+            Number = entity.Number,
+            Name = entity.Name,
+            Comments = entity.Comments,
+            Email = entity.Email,
+            Phone = entity.Phone,
+            ReservationDate = entity.ReservationDate,
+            NumberOfPeople = entity.NumberOfPeople
+        };
     }
 }
