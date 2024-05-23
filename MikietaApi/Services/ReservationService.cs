@@ -10,6 +10,7 @@ public interface IReservationService
     void Reserve(ReservationModel model);
     ReservationModel[] GetAll();
     ReservationModel Update(ReservationModel model);
+    ReservationModel SendEmail(SendEmailModel model);
 }
 
 public class ReservationService : IReservationService
@@ -67,6 +68,25 @@ public class ReservationService : IReservationService
         return model;
     }
 
+    public ReservationModel SendEmail(SendEmailModel model)
+    {
+        var entity = _context.Reservations.First(x => x.Id == model.ReservationId);
+
+        if (entity.EmailSent)
+        {
+            //TODO: To i inne exception wrzucać do logów natomiast klient niech ich nie dostaje, przynajmnniej nie caly callstack
+            throw new InvalidOperationException("An email has already been sent.");
+        }
+        
+       _emailSender.Reply(entity.MessageId!, model.Message, entity.Email);
+
+       entity.EmailSent = true;
+
+       _context.SaveChanges();
+
+       return Convert(entity);
+    }
+
     private ReservationModel Convert(ReservationEntity entity)
     {
         return new ReservationModel
@@ -80,7 +100,8 @@ public class ReservationService : IReservationService
             ReservationDate = entity.ReservationDate,
             NumberOfPeople = entity.NumberOfPeople,
             CreatedAt = entity.CreatedAt,
-            Status = entity.Status
+            Status = entity.Status,
+            EmailSent = entity.EmailSent
         };
     }
 }

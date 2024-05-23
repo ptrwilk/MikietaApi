@@ -12,4 +12,11 @@ public class ReservationModel
     public string Name { get; set; } = null!;
     public string? Comments { get; set; }
     public ReservationStatusType Status { get; set; }
+    public bool EmailSent { get; set; }
+}
+
+public class SendEmailModel
+{
+    public Guid ReservationId { get; set; }
+    public string Message { get; set; } = null!;
 }

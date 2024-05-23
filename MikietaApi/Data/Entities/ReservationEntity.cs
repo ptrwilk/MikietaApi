@@ -17,4 +17,5 @@ public class ReservationEntity
     public string? Comments { get; set; }
     public string? MessageId { get; set; }
     public ReservationStatusType Status { get; set; }
+    public bool EmailSent { get; set; }
 }

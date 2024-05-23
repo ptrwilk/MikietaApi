@@ -1,6 +1,5 @@
-﻿using MailKit.Net.Smtp;
-using MailKit.Security;
-using MimeKit;
+﻿using System.Net;
+using System.Net.Mail;
 
 namespace MikietaApi.SendEmail;
 
@@ -22,45 +21,110 @@ public class EmailSenderModel
 public class EmailSender
 {
     private readonly EmailSenderOption _option;
-    private const string Address = "ul.Jakas 2a/3";
-    private const string Phone = "+32 100 000 000";
-    private const string Web = "www.mikieta.pl";
 
     public EmailSender(EmailSenderOption option)
     {
         _option = option;
     }
-    
+
     public string Send(EmailSenderModel model)
     {
-        var email = new MimeMessage();
-        email.From.Add(new MailboxAddress("Pizzeria Siemano", "zenobiusztasak@gmail.com"));
-        email.To.Add(new MailboxAddress("Klient", model.RecipientEmail));
-        email.Subject = "Rezerwacja w Pizzerii Mikieta";
+        var message = CreateMailMessage("Rezerwacja w Pizzerii Mikieta", out var messageId);
         
-        var bodyBuilder = new BodyBuilder();
-        bodyBuilder.HtmlBody = $@"
-        <p>Dzień dobry,</p>
-        <p>Dziękujemy za dokonanie rezerwacji w naszej Pizzerii Mikieta. Poniżej znajdą Państwo szczegóły rezerwacji:</p>
-        <p>Data rezerwacji: {model.ReservationDate:yyyy-MM-dd}</p>
-        <p>Godzina rezerwacji: {model.ReservationDate:HH:mm}</p>
-        <p>Liczba osób: {model.NumberOfPeople}</p>
-        <p>Otrzymają państwo potwierdzenie rezerwacji w kolejnym mailu lub/oraz drogą telefoniczną.</p>
-        <p>Z wyrazami szacunku,<br>Zespół Pizzerii Mikieta</p>
-        <p>Pizzeria Mikieta<br>
-        Adres: {Address}<br>
-        Tel.: {Phone}<br>
-        {Web}</p>
-        ";
-        
-        email.Body = bodyBuilder.ToMessageBody();
-        
-        using var smtp = new SmtpClient();
-        smtp.Connect(_option.Host, _option.Port, SecureSocketOptions.StartTls);
-        smtp.Authenticate(_option.Email, _option.Password);
-        smtp.Send(email);
-        smtp.Disconnect(true);
+        var htmlBody = SendEmailTemplateReader.Read(new SendEmailTemplateReaderModel
+        {
+            Date = model.ReservationDate.ToString("yyyy-MM-dd"),
+            Time = model.ReservationDate.ToString("HH:mm"),
+            Guests = model.NumberOfPeople.ToString(),
+        });
+        message.AlternateViews.Add(CreateAlternateView(htmlBody));
 
-        return email.MessageId;
+        Send(message);
+
+        return messageId;
+    }
+
+
+    public void Reply(string messageId, string message, string recipientEmail)
+    {
+        var replyMessage = CreateMailMessage("Re: Rezerwacja w Pizzerii Mikieta", messageId);
+        var htmlBody = ReplyEmailTemplateReader.Read(message);
+        
+        replyMessage.AlternateViews.Add(CreateAlternateView(htmlBody));
+
+        Send(replyMessage);
+    }
+
+    private AlternateView CreateAlternateView(string body)
+    {
+        return AlternateView.CreateAlternateViewFromString(body, null, "text/html");
+    }
+
+    private MailMessage CreateMailMessage(string subject, out string messageId)
+    {
+        messageId = Guid.NewGuid().ToString();
+
+        return CreateMailMessage(subject, messageId);
+    }
+    
+    private MailMessage CreateMailMessage(string subject, string messageId)
+    {
+        var message = new MailMessage();
+        message.From = new MailAddress(_option.Email, "Pizzeria Mikieta");
+        message.To.Add(new MailAddress("ptrwilk@outlook.com", "Klient")); //TODO: Replace email with one from model later       
+        message.Subject = subject;
+
+        message.Headers.Add("In-Reply-To", messageId);
+        message.Headers.Add("References", messageId);
+
+        return message;
+    }
+
+    private void Send(MailMessage message)
+    {
+        using SmtpClient smtpClient = new SmtpClient(_option.Host, _option.Port)
+        {
+            EnableSsl = true,
+            Credentials = new NetworkCredential(_option.Email, _option.Password)
+        };
+        
+        smtpClient.Send(message);
+    }
+}
+
+public class SendEmailTemplateReaderModel
+{
+    public string Date { get; set; }
+    public string Time { get; set; }
+    public string Guests { get; set; }
+}
+
+public static class SendEmailTemplateReader
+{
+    private const string Path = "SendEmail/send_email_template.html";
+    
+    public static string Read(SendEmailTemplateReaderModel model)
+    {
+        var content = File.ReadAllText(Path);
+        
+        content = content.Replace("[DATE]", model.Date);
+        content = content.Replace("[TIME]", model.Time);
+        content = content.Replace("[GUESTS]", model.Guests);
+
+        return content;
+    }
+}
+
+public static class ReplyEmailTemplateReader
+{
+    private const string Path = "SendEmail/reply_email_template.html";
+    
+    public static string Read(string text)
+    {
+        var content = File.ReadAllText(Path);
+        
+        content = content.Replace("[TEXT]", text);
+
+        return content;
     }
 }

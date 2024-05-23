@@ -11,6 +11,7 @@ public static class ReservationRoute
         app.MapPost("reservation", Reservation);
         app.MapGet("reservation", GetAll);
         app.MapPut("reservation", Update);
+        app.MapPut("reservation/sendEmail", SendEmail);
 
         return app;
     }
@@ -36,5 +37,10 @@ public static class ReservationRoute
     private static IResult Update(IReservationService service, ReservationModel model)
     {
         return Results.Ok(service.Update(model));
+    }
+    
+    private static IResult SendEmail(IReservationService service, SendEmailModel model)
+    {
+        return Results.Ok(service.SendEmail(model));
     }
 }
