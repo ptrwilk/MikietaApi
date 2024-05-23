@@ -1,5 +1,7 @@
-﻿using MikietaApi.Data;
+﻿using Microsoft.AspNetCore.SignalR;
+using MikietaApi.Data;
 using MikietaApi.Data.Entities;
+using MikietaApi.Hubs;
 using MikietaApi.Models;
 using MikietaApi.SendEmail;
 
@@ -17,11 +19,14 @@ public class ReservationService : IReservationService
 {
     private readonly DataContext _context;
     private readonly EmailSender _emailSender;
+    private readonly IHubContext<MessageHub, IMessageHub> _hub;
 
-    public ReservationService(DataContext context, EmailSender emailSender)
+    public ReservationService(DataContext context, EmailSender emailSender,
+        IHubContext<MessageHub, IMessageHub> hub)
     {
         _context = context;
         _emailSender = emailSender;
+        _hub = hub;
     }
     
     public void Reserve(ReservationModel model)
@@ -47,6 +52,8 @@ public class ReservationService : IReservationService
         });
 
         _context.SaveChanges();
+        
+        _hub.Clients.All.ReservationMade();
     }
 
     public ReservationModel[] GetAll()

@@ -7,6 +7,7 @@ public interface IMessageHub
 {
     Task OrderMade();
     Task OrderChanged();
+    Task ReservationMade();
     Task Join(int id);
 }
 
