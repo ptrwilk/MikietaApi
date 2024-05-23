@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
-      <PackageReference Include="MailKit" Version="4.6.0" />
       <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.18">
         <PrivateAssets>all</PrivateAssets>
@@ -21,6 +20,15 @@
       </PackageReference>
       <PackageReference Include="Stripe.net" Version="44.5.0" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="SendEmail\send_email_template.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="SendEmail\reply_email_template.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
