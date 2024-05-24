@@ -18,3 +18,12 @@ public class AdminProductModel
     public int Quantity { get; set; }
     public bool Ready { get; set; }
 }
+
+public class AdminProductModel2
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; } = null!;
+    public string? Description { get; set; }
+    public double Price { get; set; }
+    public ProductType ProductType { get; set; }
+}
