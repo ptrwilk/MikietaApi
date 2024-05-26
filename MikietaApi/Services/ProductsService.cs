@@ -31,7 +31,7 @@ public class ProductsService : IProductsService
 
     public AdminProductModel2[] GetAdminProducts()
     {
-        var products = _context.Products.ToList();
+        var products = _context.Products.Include(x => x.Ingredients).ToList();
 
         return products.Select(entity => new AdminProductModel2
         {
@@ -39,18 +39,28 @@ public class ProductsService : IProductsService
             ProductType = EnumConverter.Convert(entity.ProductType),
             Description = entity.Description,
             Name = entity.Name,
-            Price = entity.Price
+            Price = entity.Price,
+            Ingredients = entity.Ingredients.Select(z => new IngredientModel
+            {
+                Id = z.Id,
+                Name = z.Name
+            }).ToArray()
         }).ToArray();
     }
 
     public AdminProductModel2 UpdateAdminProduct(AdminProductModel2 model)
     {
-        var product = _context.Products.First(x => x.Id == model.Id);
+        var product = _context.Products.Include(x => x.Ingredients).First(x => x.Id == model.Id);
+
+        var ingredients = _context.Ingredients.ToList();
+        var ingredientIds = model.Ingredients.Select(x => x.Id).ToArray();
 
         product.Name = model.Name;
         product.Description = string.IsNullOrWhiteSpace(model.Description) ? null : model.Description;
         product.Price = model.Price;
         product.ProductType = EnumConverter.Convert(model.ProductType);
+        product.Ingredients.Clear();
+        product.Ingredients = ingredients.Where(x => ingredientIds.Any(z => z == x.Id)).ToList();
 
         _context.SaveChanges();
         
