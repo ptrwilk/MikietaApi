@@ -27,6 +27,6 @@ public static class ProductsRoute
     
     private static IResult UpdateAdminProduct(IProductsService service, AdminProductModel2 model)
     {
-        return Results.Ok(service.UpdateAdminProduct(model));
+        return Results.Ok(service.AddOrUpdateAdminProduct(model));
     }
 }

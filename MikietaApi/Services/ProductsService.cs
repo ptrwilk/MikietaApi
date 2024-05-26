@@ -10,7 +10,7 @@ public interface IProductsService
 {
     ProductModel[] Get();
     AdminProductModel2[] GetAdminProducts();
-    AdminProductModel2 UpdateAdminProduct(AdminProductModel2 model);
+    AdminProductModel2 AddOrUpdateAdminProduct(AdminProductModel2 model);
 }
 
 public class ProductsService : IProductsService
@@ -48,9 +48,22 @@ public class ProductsService : IProductsService
         }).ToArray();
     }
 
-    public AdminProductModel2 UpdateAdminProduct(AdminProductModel2 model)
+    public AdminProductModel2 AddOrUpdateAdminProduct(AdminProductModel2 model)
     {
-        var product = _context.Products.Include(x => x.Ingredients).First(x => x.Id == model.Id);
+        ProductEntity product;
+        if (model.Id is null)
+        {
+            product = new ProductEntity
+            {
+                Ingredients = new List<IngredientEntity>()
+            };
+
+            _context.Products.Add(product);
+        }
+        else
+        {
+            product = _context.Products.Include(x => x.Ingredients).First(x => x.Id == model.Id);
+        }
 
         var ingredients = _context.Ingredients.ToList();
         var ingredientIds = model.Ingredients.Select(x => x.Id).ToArray();
