@@ -11,6 +11,7 @@ public static class ProductsRoute
         app.MapGet("menu", GetProducts);
         app.MapGet("products", GetAdminProducts);
         app.MapPut("products", UpdateAdminProduct);
+        app.MapDelete("products/{productId}", Delete);
 
         return app;
     }
@@ -28,5 +29,10 @@ public static class ProductsRoute
     private static IResult UpdateAdminProduct(IProductsService service, AdminProductModel2 model)
     {
         return Results.Ok(service.AddOrUpdateAdminProduct(model));
+    }
+    
+    private static IResult Delete(IProductsService service, Guid productId)
+    {
+        return Results.Ok(service.Delete(productId));
     }
 }

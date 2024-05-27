@@ -11,6 +11,7 @@ public interface IProductsService
     ProductModel[] Get();
     AdminProductModel2[] GetAdminProducts();
     AdminProductModel2 AddOrUpdateAdminProduct(AdminProductModel2 model);
+    bool Delete(Guid productId);
 }
 
 public class ProductsService : IProductsService
@@ -31,7 +32,8 @@ public class ProductsService : IProductsService
 
     public AdminProductModel2[] GetAdminProducts()
     {
-        var products = _context.Products.Include(x => x.Ingredients).ToList();
+        var products = _context.Products.Include(x => x.Ingredients)
+            .Where(x => x.IsDeleted == false).ToList();
 
         return products.Select(entity => new AdminProductModel2
         {
@@ -78,6 +80,17 @@ public class ProductsService : IProductsService
         _context.SaveChanges();
         
         return model;
+    }
+
+    public bool Delete(Guid productId)
+    {
+        var product = _context.Products.First(x => x.Id == productId);
+
+        product.IsDeleted = true;
+
+        _context.SaveChanges();
+
+        return true;
     }
 
     private ProductModel Convert(ProductEntity entity)
