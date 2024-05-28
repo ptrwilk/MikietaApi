@@ -61,6 +61,8 @@ public class ProductsService : IProductsService
             };
 
             _context.Products.Add(product);
+            
+            model.Id = product.Id;
         }
         else
         {
