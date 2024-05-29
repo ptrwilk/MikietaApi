@@ -8,29 +8,31 @@ namespace MikietaApi.Services;
 
 public interface IProductsService
 {
-    ProductModel[] Get();
-    AdminProductModel2[] GetAdminProducts();
-    AdminProductModel2 AddOrUpdateAdminProduct(AdminProductModel2 model);
+    ProductModel[] Get(AddressModel address);
+    AdminProductModel2[] GetAdminProducts(AddressModel address);
+    AdminProductModel2 AddOrUpdateAdminProduct(AdminProductModel2 model, AddressModel address);
     bool Delete(Guid productId);
 }
 
 public class ProductsService : IProductsService
 {
     private readonly DataContext _context;
+    private readonly ConfigurationOptions _options;
 
-    public ProductsService(DataContext context)
+    public ProductsService(DataContext context, ConfigurationOptions options)
     {
         _context = context;
+        _options = options;
     }
     
-    public ProductModel[] Get()
+    public ProductModel[] Get(AddressModel address)
     {
         var products = _context.Products.Include(x => x.Ingredients).ToList();
 
-        return products.Select(Convert).ToArray();
+        return products.Select(x => Convert(x, address)).ToArray();
     }
 
-    public AdminProductModel2[] GetAdminProducts()
+    public AdminProductModel2[] GetAdminProducts(AddressModel address)
     {
         var products = _context.Products.Include(x => x.Ingredients)
             .Where(x => x.IsDeleted == false).ToList();
@@ -42,6 +44,8 @@ public class ProductsService : IProductsService
             Description = entity.Description,
             Name = entity.Name,
             Price = entity.Price,
+            ImageId = entity.ImageId,
+            ImageUrl = ToImageUrl(entity, address),
             Ingredients = entity.Ingredients.Select(z => new IngredientModel
             {
                 Id = z.Id,
@@ -50,36 +54,39 @@ public class ProductsService : IProductsService
         }).ToArray();
     }
 
-    public AdminProductModel2 AddOrUpdateAdminProduct(AdminProductModel2 model)
+    public AdminProductModel2 AddOrUpdateAdminProduct(AdminProductModel2 model, AddressModel address)
     {
-        ProductEntity product;
+        ProductEntity entity;
         if (model.Id is null)
         {
-            product = new ProductEntity
+            entity = new ProductEntity
             {
                 Ingredients = new List<IngredientEntity>()
             };
 
-            _context.Products.Add(product);
+            _context.Products.Add(entity);
             
-            model.Id = product.Id;
+            model.Id = entity.Id;
         }
         else
         {
-            product = _context.Products.Include(x => x.Ingredients).First(x => x.Id == model.Id);
+            entity = _context.Products.Include(x => x.Ingredients).First(x => x.Id == model.Id);
         }
 
         var ingredients = _context.Ingredients.ToList();
         var ingredientIds = model.Ingredients.Select(x => x.Id).ToArray();
 
-        product.Name = model.Name;
-        product.Description = string.IsNullOrWhiteSpace(model.Description) ? null : model.Description;
-        product.Price = model.Price;
-        product.ProductType = EnumConverter.Convert(model.ProductType);
-        product.Ingredients.Clear();
-        product.Ingredients = ingredients.Where(x => ingredientIds.Any(z => z == x.Id)).ToList();
+        entity.Name = model.Name;
+        entity.Description = string.IsNullOrWhiteSpace(model.Description) ? null : model.Description;
+        entity.Price = model.Price;
+        entity.ProductType = EnumConverter.Convert(model.ProductType);
+        entity.Ingredients.Clear();
+        entity.Ingredients = ingredients.Where(x => ingredientIds.Any(z => z == x.Id)).ToList();
+        entity.ImageId = model.ImageId;
 
         _context.SaveChanges();
+
+        model.ImageUrl = ToImageUrl(entity, address);
         
         return model;
     }
@@ -95,7 +102,7 @@ public class ProductsService : IProductsService
         return true;
     }
 
-    private ProductModel Convert(ProductEntity entity)
+    private ProductModel Convert(ProductEntity entity, AddressModel address)
     {
         return new ProductModel
         {
@@ -103,7 +110,13 @@ public class ProductsService : IProductsService
             Ingredients = entity.Description != null ? new []{ entity.Description} : entity.Ingredients.Select(x => x.Name).ToArray(),
             ProductType = EnumConverter.Convert(entity.ProductType),
             Name = entity.Name,
-            Price = entity.Price
+            Price = entity.Price,
+            ImageUrl = ToImageUrl(entity, address)
         };
+    }
+    
+    private string? ToImageUrl(ProductEntity entity, AddressModel address)
+    {
+        return entity.ImageId is not null ? $"{address}/image/{entity.ImageId}" : null;
     }
 }

@@ -12,5 +12,6 @@ public class ProductEntity
     public ProductTypeEntity ProductType { get; set; }
     public string? Description { get; set; }
     public bool IsDeleted { get; set; }
+    public Guid? ImageId { get; set; }
     public ICollection<OrderProductEntity> OrderProducts { get; set; }
 }
