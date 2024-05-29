@@ -61,6 +61,9 @@ public class DataContext : DbContext
     {
         var entries = ChangeTracker.Entries()
             .Where(e => e.State == EntityState.Added).ToList();
+        
+        var maxProductsIndex = Products.Any() ? Products.Max(x => x.Index) + 1 : 1;
+        var maxIngredientsIndex = Ingredients.Any() ? Ingredients.Max(x => x.Index) + 1 : 1;
 
         foreach (var entry in entries)
         {
@@ -75,6 +78,16 @@ public class DataContext : DbContext
                 var number = Reservations.Any() ? Reservations.Max(x => x.Number) + 1 : 1;
 
                 reservationEntity.Number = number;              
+            }
+            else if (entry.Entity is ProductEntity productEntity)
+            {
+                productEntity.Index = maxProductsIndex;
+                maxProductsIndex++;
+            }
+            if (entry.Entity is IngredientEntity ingredientEntity)
+            {
+                ingredientEntity.Index = maxIngredientsIndex;
+                maxIngredientsIndex++;
             }
         }
         

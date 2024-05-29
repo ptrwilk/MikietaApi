@@ -13,5 +13,6 @@ public class ProductEntity
     public string? Description { get; set; }
     public bool IsDeleted { get; set; }
     public Guid? ImageId { get; set; }
+    public int Index { get; set; }
     public ICollection<OrderProductEntity> OrderProducts { get; set; }
 }

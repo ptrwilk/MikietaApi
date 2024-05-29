@@ -23,7 +23,8 @@ public class IngredientService : IIngredientService
 
     public IngredientModel[] Get()
     {
-        return _context.Ingredients.Where(x => x.IsDeleted == false).ToList()
+        return _context.Ingredients.Where(x => x.IsDeleted == false)
+            .OrderBy(x => x.Index).ToList()
             .Select(x => new IngredientModel
             {
                 Id = x.Id,
