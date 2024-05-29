@@ -7,6 +7,7 @@
         public string[] Ingredients { get; set; }
         public double Price { get; set; }
         public ProductType ProductType { get; set; }
+        public string? ImageUrl { get; set; }
     }
 
     public class AdminProductModel
@@ -27,5 +28,7 @@
         public double Price { get; set; }
         public ProductType ProductType { get; set; }
         public IngredientModel[] Ingredients { get; set; } = null!;
+        public Guid? ImageId { get; set; }
+        public string? ImageUrl { get; set; }
     }
 }

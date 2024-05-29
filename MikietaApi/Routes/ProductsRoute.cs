@@ -10,25 +10,25 @@ public static class ProductsRoute
     {
         app.MapGet("menu", GetProducts);
         app.MapGet("products", GetAdminProducts);
-        app.MapPut("products", UpdateAdminProduct);
+        app.MapPut("products", AddOrUpdateAdminProduct);
         app.MapDelete("products/{productId}", Delete);
 
         return app;
     }
 
-    private static IResult GetProducts(IProductsService service)
+    private static IResult GetProducts(IProductsService service, HttpContext context)
     {
-        return Results.Ok(service.Get());
+        return Results.Ok(service.Get(new AddressModel(context)));
     }
     
-    private static IResult GetAdminProducts(IProductsService service)
+    private static IResult GetAdminProducts(IProductsService service, HttpContext context)
     {
-        return Results.Ok(service.GetAdminProducts());
+        return Results.Ok(service.GetAdminProducts(new AddressModel(context)));
     }
     
-    private static IResult UpdateAdminProduct(IProductsService service, AdminProductModel2 model)
+    private static IResult AddOrUpdateAdminProduct(IProductsService service, HttpContext context, AdminProductModel2 model)
     {
-        return Results.Ok(service.AddOrUpdateAdminProduct(model));
+        return Results.Ok(service.AddOrUpdateAdminProduct(model, new AddressModel(context)));
     }
     
     private static IResult Delete(IProductsService service, Guid productId)

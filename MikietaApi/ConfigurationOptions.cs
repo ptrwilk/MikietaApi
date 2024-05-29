@@ -7,11 +7,18 @@ public class ConfigurationOptions
     public string WebsiteUrl { get; }
     public SmtpModel SmtpClient { get; }
 
-    public ConfigurationOptions(IConfiguration configuration, IWebHostEnvironment environment, ILogger<ConfigurationOptions> logger)
+    public ConfigurationOptions(IConfiguration configuration, IWebHostEnvironment environment,
+        ILogger<ConfigurationOptions> logger)
     {
-        Database = environment.IsDevelopment() ? configuration["ConnectionStrings:Database"]! : Environment.GetEnvironmentVariable("Database")!;
-        SecretKey = environment.IsDevelopment() ? configuration["Stripe:SecretKey"]! : Environment.GetEnvironmentVariable("SecretKey")!;
-        WebsiteUrl = environment.IsDevelopment() ? configuration["WebsiteUrl"]! : Environment.GetEnvironmentVariable("WebsiteUrl")!;
+        Database = environment.IsDevelopment()
+            ? configuration["ConnectionStrings:Database"]!
+            : Environment.GetEnvironmentVariable("Database")!;
+        SecretKey = environment.IsDevelopment()
+            ? configuration["Stripe:SecretKey"]!
+            : Environment.GetEnvironmentVariable("SecretKey")!;
+        WebsiteUrl = environment.IsDevelopment()
+            ? configuration["WebsiteUrl"]!
+            : Environment.GetEnvironmentVariable("WebsiteUrl")!;
         SmtpClient = SmtpModel.Create(configuration, environment);
     }
 }
@@ -27,10 +34,18 @@ public class SmtpModel
     {
         return new SmtpModel
         {
-            Email = environment.IsDevelopment() ? configuration["SmtpClient:Email"]! : Environment.GetEnvironmentVariable("SmtpClient_Email")!,
-            Host = environment.IsDevelopment() ? configuration["SmtpClient:Host"]! : Environment.GetEnvironmentVariable("SmtpClient_Host")!,
-            Password = environment.IsDevelopment() ? configuration["SmtpClient:Password"]! : Environment.GetEnvironmentVariable("SmtpClient_Password")!,
-            Port = environment.IsDevelopment() ? int.Parse(configuration["SmtpClient:Port"]!) : int.Parse(Environment.GetEnvironmentVariable("SmtpClient_Port")!)
+            Email = environment.IsDevelopment()
+                ? configuration["SmtpClient:Email"]!
+                : Environment.GetEnvironmentVariable("SmtpClient_Email")!,
+            Host = environment.IsDevelopment()
+                ? configuration["SmtpClient:Host"]!
+                : Environment.GetEnvironmentVariable("SmtpClient_Host")!,
+            Password = environment.IsDevelopment()
+                ? configuration["SmtpClient:Password"]!
+                : Environment.GetEnvironmentVariable("SmtpClient_Password")!,
+            Port = environment.IsDevelopment()
+                ? int.Parse(configuration["SmtpClient:Port"]!)
+                : int.Parse(Environment.GetEnvironmentVariable("SmtpClient_Port")!)
         };
     }
 }
