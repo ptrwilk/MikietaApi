@@ -27,7 +27,9 @@ public class ProductsService : IProductsService
     
     public ProductModel[] Get(AddressModel address)
     {
-        var products = _context.Products.Include(x => x.Ingredients).ToList();
+        var products = _context.Products.Include(x => x.Ingredients)
+            .Where(x => x.IsDeleted == false)
+            .OrderBy(x => x.Index).ToList();
 
         return products.Select(x => Convert(x, address)).ToArray();
     }
