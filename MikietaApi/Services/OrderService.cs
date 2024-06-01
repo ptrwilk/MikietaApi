@@ -223,7 +223,8 @@ public class OrderService : IOrderService
             Id = entity.Product.Id,
             Name = entity.Product.Name,
             Price = entity.Product.Price * entity.Quantity,
-            Type = EnumConverter.Convert(entity.Product.ProductType),
+            ProductType = entity.Product.ProductType,
+            PizzaType = entity.Product.PizzaType,
             Quantity = entity.Quantity,
             Ready = entity.Ready
         };

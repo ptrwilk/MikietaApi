@@ -7,6 +7,7 @@
         public string[] Ingredients { get; set; }
         public double Price { get; set; }
         public ProductType ProductType { get; set; }
+        public PizzaType? PizzaType { get; set; }
         public string? ImageUrl { get; set; }
     }
 
@@ -14,7 +15,8 @@
     {
         public Guid Id { get; set; }
         public string Name { get; set; } = null!;
-        public ProductType Type { get; set; }
+        public ProductType ProductType { get; set; }
+        public PizzaType? PizzaType { get; set; }
         public double Price { get; set; }
         public int Quantity { get; set; }
         public bool Ready { get; set; }
@@ -27,6 +29,7 @@
         public string? Description { get; set; }
         public double Price { get; set; }
         public ProductType ProductType { get; set; }
+        public PizzaType? PizzaType { get; set; }
         public IngredientModel[] Ingredients { get; set; } = null!;
         public Guid? ImageId { get; set; }
         public string? ImageUrl { get; set; }

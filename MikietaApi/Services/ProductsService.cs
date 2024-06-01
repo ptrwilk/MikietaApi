@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MikietaApi.Converters;
 using MikietaApi.Data;
 using MikietaApi.Data.Entities;
 using MikietaApi.Models;
@@ -42,7 +41,8 @@ public class ProductsService : IProductsService
         return products.Select(entity => new AdminProductModel2
         {
             Id = entity.Id,
-            ProductType = EnumConverter.Convert(entity.ProductType),
+            ProductType = entity.ProductType,
+            PizzaType = entity.PizzaType,
             Description = entity.Description,
             Name = entity.Name,
             Price = entity.Price,
@@ -81,7 +81,8 @@ public class ProductsService : IProductsService
         entity.Name = model.Name;
         entity.Description = string.IsNullOrWhiteSpace(model.Description) ? null : model.Description;
         entity.Price = model.Price;
-        entity.ProductType = EnumConverter.Convert(model.ProductType);
+        entity.ProductType = model.ProductType;
+        entity.PizzaType = model.PizzaType;
         entity.Ingredients.Clear();
         entity.Ingredients = ingredients.Where(x => ingredientIds.Any(z => z == x.Id)).ToList();
         entity.ImageId = model.ImageId;
@@ -110,7 +111,8 @@ public class ProductsService : IProductsService
         {
             Id = entity.Id,
             Ingredients = entity.Description != null ? new []{ entity.Description} : entity.Ingredients.Select(x => x.Name).ToArray(),
-            ProductType = EnumConverter.Convert(entity.ProductType),
+            ProductType = entity.ProductType,
+            PizzaType = entity.PizzaType,
             Name = entity.Name,
             Price = entity.Price,
             ImageUrl = ToImageUrl(entity, address)
