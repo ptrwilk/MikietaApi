@@ -14,9 +14,9 @@ public class OrderEntity
     public DeliveryMethodType DeliveryMethod { get; set; }
     public string? Comments { get; set; }
     public PaymentMethodType PaymentMethod { get; set; }
-    public string Name { get; set; } = null!;
-    public string Phone { get; set; } = null!;
-    public string Email { get; set; } = null!;
+    public required string Name { get; set; }
+    public required string Phone { get; set; }
+    public required string Email { get; set; }
     public string? Nip { get; set; }
     public string? Street { get; set; }
     public string? HomeNumber { get; set; }

@@ -2,9 +2,7 @@
 
 public enum ProductType
 {
-    PizzaSmall,
-    PizzaMedium,
-    PizzaBig,
+    Pizza,
     Drink,
     Sauce,
     Snack

@@ -3,6 +3,6 @@
 public class IngredientEntity
 {
     public int Id { get; set; }
-    public string Name { get; set; } = null!;
-    public ICollection<ProductEntity> Products { get; set; }
+    public required string Name { get; set; }
+    public ICollection<ProductEntity>? Products { get; set; }
 }

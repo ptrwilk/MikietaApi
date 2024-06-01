@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using MikietaApi.Data.Entities.Enums;
 
 namespace MikietaApi.Data.Entities;
 
 public class ProductEntity
 {
-    [Key]
     public int Id { get; set; }
-    public string Name { get; set; } = null!;
-    public ICollection<IngredientEntity> Ingredients { get; set; }
+    public required string Name { get; set; }
+    public ICollection<IngredientEntity>? Ingredients { get; set; }
     public double Price { get; set; }
     public ProductTypeEntity ProductType { get; set; }
     public string? Description { get; set; }

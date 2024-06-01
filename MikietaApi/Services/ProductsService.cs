@@ -31,10 +31,12 @@ public class ProductsService : IProductsService
         return new ProductModel
         {
             Id = entity.Id,
+            Ingredientss = null,//TODO
             Ingredients = entity.Description != null ? new []{ entity.Description} : entity.Ingredients.Select(x => x.Name).ToArray(),
             ProductType = (ProductType)Enum.Parse(typeof(ProductType), entity.ProductType.ToString()),
             Name = entity.Name,
-            Price = entity.Price
+            Price = entity.Price,
+            Quantity = 0
         };
     }
 }

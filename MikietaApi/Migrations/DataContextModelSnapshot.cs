@@ -44,7 +44,7 @@ namespace MikietaApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ingredients");
+                    b.ToTable("Ingredients", (string)null);
                 });
 
             modelBuilder.Entity("MikietaApi.Data.Entities.OrderEntity", b =>
@@ -113,7 +113,7 @@ namespace MikietaApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("MikietaApi.Data.Entities.ProductEntity", b =>
@@ -138,7 +138,7 @@ namespace MikietaApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("MikietaApi.Data.Entities.ReservationEntity", b =>
@@ -170,7 +170,7 @@ namespace MikietaApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Reservations");
+                    b.ToTable("Reservations", (string)null);
                 });
 
             modelBuilder.Entity("OrderEntityProductEntity", b =>

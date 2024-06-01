@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MikietaApi.Data;
 using MikietaApi.Data.Entities;
+using MikietaApi.Data.Entities.Enums;
 
 namespace MikietaApi;
 
@@ -44,21 +45,21 @@ public class DbSeeder
             AddProduct("Frytki Belgijskie Duże", "Porcja chrupiących frytek, ketchup", 10,
                 ProductTypeEntity.Snack);
 
-            AddMargherita(17, ProductTypeEntity.PizzaSmall);
-            AddCipolla(18, ProductTypeEntity.PizzaSmall);
-            AddFunghi(18, ProductTypeEntity.PizzaSmall);
-            AddSalami(18, ProductTypeEntity.PizzaSmall);
-            AddFunghiEProsciutto(18, ProductTypeEntity.PizzaSmall);
-            AddMargherita(22, ProductTypeEntity.PizzaMedium);
-            AddCipolla(23, ProductTypeEntity.PizzaMedium);
-            AddFunghi(23, ProductTypeEntity.PizzaMedium);
-            AddSalami(26, ProductTypeEntity.PizzaMedium);
-            AddFunghiEProsciutto(26, ProductTypeEntity.PizzaMedium);
-            AddMargherita(33, ProductTypeEntity.PizzaBig);
-            AddCipolla(34, ProductTypeEntity.PizzaBig);
-            AddFunghi(34, ProductTypeEntity.PizzaBig);
-            AddSalami(36, ProductTypeEntity.PizzaBig);
-            AddFunghiEProsciutto(36, ProductTypeEntity.PizzaBig);
+            AddMargherita(17, ProductTypeEntity.Pizza);
+            AddCipolla(18, ProductTypeEntity.Pizza);
+            AddFunghi(18, ProductTypeEntity.Pizza);
+            AddSalami(18, ProductTypeEntity.Pizza);
+            AddFunghiEProsciutto(18, ProductTypeEntity.Pizza);
+            AddMargherita(22, ProductTypeEntity.Pizza);
+            AddCipolla(23, ProductTypeEntity.Pizza);
+            AddFunghi(23, ProductTypeEntity.Pizza);
+            AddSalami(26, ProductTypeEntity.Pizza);
+            AddFunghiEProsciutto(26, ProductTypeEntity.Pizza);
+            AddMargherita(33, ProductTypeEntity.Pizza);
+            AddCipolla(34, ProductTypeEntity.Pizza);
+            AddFunghi(34, ProductTypeEntity.Pizza);
+            AddSalami(36, ProductTypeEntity.Pizza);
+            AddFunghiEProsciutto(36, ProductTypeEntity.Pizza);
 
             AddProduct("Czosnkowy", "firmowy sos XXX idealnie komponujący się ze smakiem każdej naszej pizzy",
                 4, ProductTypeEntity.Sauce);
