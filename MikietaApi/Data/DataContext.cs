@@ -22,9 +22,6 @@ public class DataContext : DbContext
             .HasMany(x => x.Ingredients)
             .WithMany(x => x.Products)
             .UsingEntity(x => x.ToTable("ProductIngredient"));
-        modelBuilder.Entity<ProductEntity>()
-            .Property(x => x.ProductType)
-            .HasConversion<string>();
 
         modelBuilder.Entity<OrderEntity>()
             .Property(x => x.Number)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MikietaApi.Data;
 using MikietaApi.Data.Entities;
+using MikietaApi.Models;
 
 namespace MikietaApi;
 
@@ -36,34 +37,34 @@ public class DbSeeder
 
             AddProduct("CALZONE pieróg z nadzieniem",
                 "w każdym pierożku, ser, sos czosnkowy + 4 dowolne składniki do wyboru", 27,
-                ProductTypeEntity.Snack);
-            AddProduct("Frytki Cieńkie Małe", "Porcja chrupiących frytek, ketchup", 8, ProductTypeEntity.Snack);
-            AddProduct("Frytki Cieńkie Duże", "Porcja chrupiących frytek, ketchup", 10, ProductTypeEntity.Snack);
+                ProductType.Snack);
+            AddProduct("Frytki Cieńkie Małe", "Porcja chrupiących frytek, ketchup", 8, ProductType.Snack);
+            AddProduct("Frytki Cieńkie Duże", "Porcja chrupiących frytek, ketchup", 10, ProductType.Snack);
             AddProduct("Frytki Belgijskie Małe", "Porcja chrupiących frytek, ketchup", 8,
-                ProductTypeEntity.Snack);
+                ProductType.Snack);
             AddProduct("Frytki Belgijskie Duże", "Porcja chrupiących frytek, ketchup", 10,
-                ProductTypeEntity.Snack);
+                ProductType.Snack);
 
-            AddMargherita(17, ProductTypeEntity.PizzaSmall);
-            AddCipolla(18, ProductTypeEntity.PizzaSmall);
-            AddFunghi(18, ProductTypeEntity.PizzaSmall);
-            AddSalami(18, ProductTypeEntity.PizzaSmall);
-            AddFunghiEProsciutto(18, ProductTypeEntity.PizzaSmall);
-            AddMargherita(22, ProductTypeEntity.PizzaMedium);
-            AddCipolla(23, ProductTypeEntity.PizzaMedium);
-            AddFunghi(23, ProductTypeEntity.PizzaMedium);
-            AddSalami(26, ProductTypeEntity.PizzaMedium);
-            AddFunghiEProsciutto(26, ProductTypeEntity.PizzaMedium);
-            AddMargherita(33, ProductTypeEntity.PizzaBig);
-            AddCipolla(34, ProductTypeEntity.PizzaBig);
-            AddFunghi(34, ProductTypeEntity.PizzaBig);
-            AddSalami(36, ProductTypeEntity.PizzaBig);
-            AddFunghiEProsciutto(36, ProductTypeEntity.PizzaBig);
+            AddMargherita(17, PizzaType.Small);
+            AddCipolla(18, PizzaType.Small);
+            AddFunghi(18, PizzaType.Small);
+            AddSalami(18, PizzaType.Small);
+            AddFunghiEProsciutto(18, PizzaType.Small);
+            AddMargherita(22, PizzaType.Medium);
+            AddCipolla(23, PizzaType.Medium);
+            AddFunghi(23, PizzaType.Medium);
+            AddSalami(26, PizzaType.Medium);
+            AddFunghiEProsciutto(26, PizzaType.Medium);
+            AddMargherita(33, PizzaType.Large);
+            AddCipolla(34, PizzaType.Large);
+            AddFunghi(34, PizzaType.Large);
+            AddSalami(36, PizzaType.Large);
+            AddFunghiEProsciutto(36, PizzaType.Large);
 
             AddProduct("Czosnkowy", "firmowy sos XXX idealnie komponujący się ze smakiem każdej naszej pizzy",
-                4, ProductTypeEntity.Sauce);
-            AddProduct("Czosnkowo-szczypiorkowy", "firmowy sos XXX, ketchup", 4, ProductTypeEntity.Sauce);
-            AddProduct("Pomidorowy łagodny", null, 4, ProductTypeEntity.Sauce);
+                4, ProductType.Sauce);
+            AddProduct("Czosnkowo-szczypiorkowy", "firmowy sos XXX, ketchup", 4, ProductType.Sauce);
+            AddProduct("Pomidorowy łagodny", null, 4, ProductType.Sauce);
 
             _context.SaveChanges();
         }
@@ -74,12 +75,12 @@ public class DbSeeder
         _context.Products.Add(new ProductEntity
         {
             Name = name,
-            ProductType = ProductTypeEntity.Drink,
+            ProductType = ProductType.Drink,
             Price = price,
         });
     }
 
-    private void AddProduct(string name, string? description, double price, ProductTypeEntity type)
+    private void AddProduct(string name, string? description, double price, ProductType type)
     {
         _context.Products.Add(new ProductEntity
         {
@@ -90,30 +91,31 @@ public class DbSeeder
         });        
     }
 
-    private void AddPizza(string name, string[] ingredients, double price, ProductTypeEntity type)
+    private void AddPizza(string name, string[] ingredients, double price, PizzaType type)
     {
         var ingredient = _context.Ingredients.Where(x => ingredients.Any(i => i == x.Name)).ToArray();
         _context.Products.Add(new ProductEntity
         {
             Name = name,
-            ProductType = type,
+            ProductType = ProductType.Pizza,
+            PizzaType = type,
             Ingredients = ingredient,
             Price = price,
         });          
     }
 
-    private void AddMargherita(double price, ProductTypeEntity type) =>
+    private void AddMargherita(double price, PizzaType type) =>
         AddPizza("Margherita", new[] { "Ser", "Sos pomidorowy" }, price, type);
     
-    private void AddFunghi(double price, ProductTypeEntity type) =>
+    private void AddFunghi(double price, PizzaType type) =>
         AddPizza("Funghi", new[] { "Ser", "Sos pomidorowy", "Pieczarki" }, price, type);
     
-    private void AddFunghiEProsciutto(double price, ProductTypeEntity type) =>
+    private void AddFunghiEProsciutto(double price, PizzaType type) =>
         AddPizza("FunghiEProsciutto", new[] { "Ser", "Sos pomidorowy", "Szynka", "Pieczarki" }, price, type);
     
-    private void AddCipolla(double price, ProductTypeEntity type) =>
+    private void AddCipolla(double price, PizzaType type) =>
         AddPizza("Cipolla", new[] { "Ser", "Sos pomidorowy", "Cebula" }, price, type);
     
-    private void AddSalami(double price, ProductTypeEntity type) =>
+    private void AddSalami(double price, PizzaType type) =>
         AddPizza("Salami", new[] { "Ser", "Sos pomidorowy", "Salami" }, price, type);
 }
