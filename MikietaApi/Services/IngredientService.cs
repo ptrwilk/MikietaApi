@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MikietaApi.Data;
+﻿using MikietaApi.Data;
 using MikietaApi.Data.Entities;
 using MikietaApi.Models;
 
@@ -28,7 +27,10 @@ public class IngredientService : IIngredientService
             .Select(x => new IngredientModel
             {
                 Id = x.Id,
-                Name = x.Name
+                Name = x.Name,
+                PriceSmall = x.PriceSmall,
+                PriceLarge = x.PriceLarge,
+                PriceMedium = x.PriceMedium
             }).ToArray();
     }
     
@@ -49,6 +51,9 @@ public class IngredientService : IIngredientService
         }
 
         entity.Name = model.Name ?? "";
+        entity.PriceSmall = model.PriceSmall;
+        entity.PriceMedium = model.PriceMedium;
+        entity.PriceLarge = model.PriceLarge;
 
         _context.SaveChanges();
         

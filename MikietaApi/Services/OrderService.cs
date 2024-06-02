@@ -123,9 +123,9 @@ public class OrderService : IOrderService
 
         entity.Paid = true;
         entity.Visible = true;
-        
+
         _context.SaveChanges();
-        
+
         _hub.Clients.All.OrderMade();
 
         return entity.Id;
@@ -140,6 +140,7 @@ public class OrderService : IOrderService
     {
         return _context.Orders.Include(x => x.OrderProducts)
             .ThenInclude(x => x.Product)
+            .ThenInclude(x => x.Ingredients)
             .Where(x => x.Visible)
             .ToList()
             .Select(Convert)
@@ -150,6 +151,7 @@ public class OrderService : IOrderService
     public AdminProductModel[] Get(Guid orderId)
     {
         return _context.OrderProducts.Include(x => x.Product)
+            .ThenInclude(x => x.Ingredients)
             .Where(x => x.OrderId == orderId)
             .ToList()
             .Select(Convert)
@@ -160,6 +162,7 @@ public class OrderService : IOrderService
     {
         var entity = _context.Orders.Include(x => x.OrderProducts)
             .ThenInclude(x => x.Product)
+            .ThenInclude(x => x.Ingredients)
             .First(x => x.Id == orderId);
 
         return Convert(entity);
@@ -168,7 +171,7 @@ public class OrderService : IOrderService
     public OrderStatusModel GetStatus(Guid orderId)
     {
         var entity = _context.Orders.First(x => x.Id == orderId);
-        
+
         return new OrderStatusModel
         {
             Status = entity.Status,
@@ -182,9 +185,9 @@ public class OrderService : IOrderService
         var entity = _context.Orders.First(x => x.Id == model.Id);
 
         var deliveryAt = model.DeliveryAt.ToLocalTime();
-        
+
         var canUpdate = entity.Status != model.Status || entity.DeliveryTiming != deliveryAt;
-        
+
         entity.Status = model.Status;
         entity.Paid = model.Payed;
         entity.DeliveryTiming = deliveryAt;
@@ -222,7 +225,7 @@ public class OrderService : IOrderService
         {
             Id = entity.Product.Id,
             Name = entity.Product.Name,
-            Price = entity.Product.Price * entity.Quantity,
+            Price = ToPrice(entity.Product) * entity.Quantity,
             ProductType = entity.Product.ProductType,
             PizzaType = entity.Product.PizzaType,
             Quantity = entity.Quantity,
@@ -244,7 +247,7 @@ public class OrderService : IOrderService
                 Floor = entity.Floor,
                 HomeNumber = entity.HomeNumber
             },
-            Cost = entity.OrderProducts.Where(z => z.OrderId == entity.Id).Sum(z => z.Product.Price * z.Quantity),
+            Cost = entity.OrderProducts.Where(z => z.OrderId == entity.Id).Sum(z => ToPrice(z.Product) * z.Quantity),
             Phone = entity.Phone,
             Number = entity.Number,
             Payed = entity.Paid,
@@ -255,5 +258,12 @@ public class OrderService : IOrderService
             CreatedAt = entity.CreatedAt,
             DeliveryAt = entity.DeliveryTiming
         };
+    }
+
+    private double ToPrice(ProductEntity entity)
+    {
+        var sum = entity.Ingredients.Sum(x => entity.PizzaType is null ? 0 : x.Prices[(int)entity.PizzaType]);
+
+        return entity.Price + sum;
     }
 }
