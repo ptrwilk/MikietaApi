@@ -52,6 +52,9 @@ public class DataContext : DbContext
             .Property(x => x.Number)
             .IsUnicode()
             .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<IngredientEntity>()
+            .Ignore(x => x.Prices);
     }
 
     public override int SaveChanges()

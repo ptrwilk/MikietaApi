@@ -110,12 +110,25 @@ public class ProductsService : IProductsService
         return new ProductModel
         {
             Id = entity.Id,
-            Ingredients = entity.Description != null ? new []{ entity.Description} : entity.Ingredients.Select(x => x.Name).ToArray(),
+            Ingredients = entity.Ingredients.Select(Convert).ToArray(),
+            Description = entity.Description,
             ProductType = entity.ProductType,
             PizzaType = entity.PizzaType,
             Name = entity.Name,
             Price = entity.Price,
             ImageUrl = ToImageUrl(entity, address)
+        };
+    }
+
+    private IngredientModel Convert(IngredientEntity entity)
+    {
+        return new IngredientModel
+        {
+            Id = entity.Id,
+            Name = entity.Name,
+            PriceSmall = entity.PriceSmall,
+            PriceLarge = entity.PriceLarge,
+            PriceMedium = entity.PriceMedium
         };
     }
     
