@@ -33,11 +33,11 @@ public class OrderService : IOrderService
 {
     private readonly DataContext _context;
     private readonly StripeFacade _stripe;
-    private readonly IConverter<OrderProductEntity, StripeRequestModel> _converter;
+    private readonly IConverter<OrderOrderedProductEntity, StripeRequestModel> _converter;
     private readonly IHubContext<MessageHub, IMessageHub> _hub;
 
     public OrderService(DataContext context, StripeFacade stripe,
-        IConverter<OrderProductEntity, StripeRequestModel> converter,
+        IConverter<OrderOrderedProductEntity, StripeRequestModel> converter,
         IHubContext<MessageHub, IMessageHub> hub)
     {
         _context = context;
@@ -48,8 +48,10 @@ public class OrderService : IOrderService
 
     public OrderResponseModel2 Order(OrderModel model)
     {
-        var products = _context.Products
+        var products = _context.Products.Include(x => x.Ingredients)
             .Where(x => model.ProductQuantities.Select(g => g.ProductId).Any(z => x.Id == z)).ToArray();
+
+        var orderedProducts = products.Select(ToOrderedProduct).ToArray();
 
         //TODO: napisać validację sprawdzająca czy każdy productId znajduje sie w Products
 
@@ -75,16 +77,16 @@ public class OrderService : IOrderService
             Visible = model.PaymentMethod == PaymentMethodType.Cash
         };
 
-        entity.OrderProducts = products.Select(x => new OrderProductEntity
+        entity.OrderOrderedProducts = orderedProducts.Select(orderedProduct => new OrderOrderedProductEntity
         {
             Order = entity,
-            Product = x,
-            Quantity = model.ProductQuantities.First(z => z.ProductId == x.Id).Quantity
+            OrderedProduct = orderedProduct,
+            Quantity = model.ProductQuantities.First(z => z.ProductId == orderedProduct.ProductId).Quantity
         }).ToList();
 
         _context.Orders.Add(entity);
 
-        var res = _stripe.CreateSession(entity.OrderProducts.Select(_converter.Convert).ToArray());
+        var res = _stripe.CreateSession(entity.OrderOrderedProducts.Select(_converter.Convert).ToArray());
 
         entity.SessionId = res.SessionId;
 
@@ -138,9 +140,9 @@ public class OrderService : IOrderService
 
     public AdminOrderModel[] GetAll()
     {
-        return _context.Orders.Include(x => x.OrderProducts)
-            .ThenInclude(x => x.Product)
-            .ThenInclude(x => x.Ingredients)
+        return _context.Orders.Include(x => x.OrderOrderedProducts)
+            .ThenInclude(x => x.OrderedProduct)
+            .ThenInclude(x => x.OrderedIngredients)
             .Where(x => x.Visible)
             .ToList()
             .Select(Convert)
@@ -150,8 +152,8 @@ public class OrderService : IOrderService
 
     public AdminProductModel[] Get(Guid orderId)
     {
-        return _context.OrderProducts.Include(x => x.Product)
-            .ThenInclude(x => x.Ingredients)
+        return _context.OrderOrderedProducts.Include(x => x.OrderedProduct)
+            .ThenInclude(x => x.OrderedIngredients)
             .Where(x => x.OrderId == orderId)
             .ToList()
             .Select(Convert)
@@ -160,11 +162,11 @@ public class OrderService : IOrderService
 
     public AdminOrderModel GetSingle(Guid orderId)
     {
-        var entity = _context.Orders.Include(x => x.OrderProducts)
-            .ThenInclude(x => x.Product)
-            .ThenInclude(x => x.Ingredients)
+        var entity = _context.Orders.Include(x => x.OrderOrderedProducts)
+            .ThenInclude(x => x.OrderedProduct)
+            .ThenInclude(x => x.OrderedIngredients)
             .First(x => x.Id == orderId);
-
+        
         return Convert(entity);
     }
 
@@ -209,8 +211,8 @@ public class OrderService : IOrderService
 
     public AdminProductModel UpdateProduct(Guid orderId, AdminProductModel model)
     {
-        var entity = _context.OrderProducts
-            .Single(x => x.OrderId == orderId && x.ProductId == model.Id);
+        var entity = _context.OrderOrderedProducts
+            .Single(x => x.OrderId == orderId && x.OrderedProductId == model.Id);
 
         entity.Ready = model.Ready;
 
@@ -219,15 +221,15 @@ public class OrderService : IOrderService
         return model;
     }
 
-    private AdminProductModel Convert(OrderProductEntity entity)
+    private AdminProductModel Convert(OrderOrderedProductEntity entity)
     {
         return new AdminProductModel
         {
-            Id = entity.Product.Id,
-            Name = entity.Product.Name,
-            Price = ToPrice(entity.Product) * entity.Quantity,
-            ProductType = entity.Product.ProductType,
-            PizzaType = entity.Product.PizzaType,
+            Id = entity.OrderedProduct.Id,
+            Name = entity.OrderedProduct.Name,
+            Price = ToPrice(entity.OrderedProduct) * entity.Quantity,
+            ProductType = entity.OrderedProduct.ProductType,
+            PizzaType = entity.OrderedProduct.PizzaType,
             Quantity = entity.Quantity,
             Ready = entity.Ready
         };
@@ -247,23 +249,44 @@ public class OrderService : IOrderService
                 Floor = entity.Floor,
                 HomeNumber = entity.HomeNumber
             },
-            Cost = entity.OrderProducts.Where(z => z.OrderId == entity.Id).Sum(z => ToPrice(z.Product) * z.Quantity),
+             Cost = entity.OrderOrderedProducts.Where(z => z.OrderId == entity.Id).Sum(z => ToPrice(z.OrderedProduct) * z.Quantity),
             Phone = entity.Phone,
             Number = entity.Number,
             Payed = entity.Paid,
             Status = entity.Status,
             DeliveryMethod = entity.DeliveryMethod,
-            TotalProducts = entity.OrderProducts.Count,
-            CompletedProducts = entity.OrderProducts.Count(z => z.Ready),
+            TotalProducts = entity.OrderOrderedProducts.Count,
+            CompletedProducts = entity.OrderOrderedProducts.Count(z => z.Ready),
             CreatedAt = entity.CreatedAt,
             DeliveryAt = entity.DeliveryTiming
         };
     }
 
-    private double ToPrice(ProductEntity entity)
+    private double ToPrice(OrderedProductEntity entity)
     {
-        var sum = entity.Ingredients.Sum(x => entity.PizzaType is null ? 0 : x.Prices[(int)entity.PizzaType]);
+        var sum = entity.OrderedIngredients.Sum(x => entity.PizzaType is null ? 0 : x.Prices[(int)entity.PizzaType]);
 
         return entity.Price + sum;
+    }
+
+    private OrderedProductEntity ToOrderedProduct(ProductEntity entity)
+    {
+        return new OrderedProductEntity
+        {
+            ProductId = entity.Id,
+            PizzaType = entity.PizzaType,
+            Name = entity.Name,
+            Price = entity.Price,
+            Description = entity.Description,
+            ProductType = entity.ProductType,
+            OrderedIngredients = entity.Ingredients.Select(x => new OrderedIngredientEntity
+            {
+                Name = x.Name,
+                PriceLarge = x.PriceLarge,
+                PriceMedium = x.PriceMedium,
+                PriceSmall = x.PriceSmall,
+                IngredientId = x.Id,
+            }).ToArray()
+        };
     }
 }

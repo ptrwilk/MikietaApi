@@ -8,8 +8,10 @@ public class DataContext : DbContext
     public DbSet<IngredientEntity> Ingredients { get; set; }
     public DbSet<ProductEntity> Products { get; set; }
     public DbSet<OrderEntity> Orders { get; set; }
-    public DbSet<OrderProductEntity> OrderProducts { get; set; }
+    public DbSet<OrderOrderedProductEntity> OrderOrderedProducts { get; set; }
     public DbSet<ReservationEntity> Reservations { get; set; }
+    public DbSet<OrderedProductEntity> OrderedProducts { get; set; }
+    public DbSet<OrderedIngredientEntity> OrderedIngredients { get; set; }
     
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
@@ -37,16 +39,16 @@ public class DataContext : DbContext
             .Property(x => x.Status)
             .HasConversion<string>();
         
-        modelBuilder.Entity<OrderProductEntity>()
-            .HasKey(op => new { op.OrderId, op.ProductId });
-        modelBuilder.Entity<OrderProductEntity>()
+        modelBuilder.Entity<OrderOrderedProductEntity>()
+            .HasKey(op => new { op.OrderId, ProductId = op.OrderedProductId });
+        modelBuilder.Entity<OrderOrderedProductEntity>()
             .HasOne(op => op.Order)
-            .WithMany(o => o.OrderProducts)
+            .WithMany(o => o.OrderOrderedProducts)
             .HasForeignKey(op => op.OrderId);
-        modelBuilder.Entity<OrderProductEntity>()
-            .HasOne(op => op.Product)
-            .WithMany(p => p.OrderProducts)
-            .HasForeignKey(op => op.ProductId);
+        modelBuilder.Entity<OrderOrderedProductEntity>()
+            .HasOne(op => op.OrderedProduct)
+            .WithMany(p => p.OrderOrderedProducts)
+            .HasForeignKey(op => op.OrderedProductId);
         
         modelBuilder.Entity<ReservationEntity>()
             .Property(x => x.Number)
@@ -55,6 +57,11 @@ public class DataContext : DbContext
 
         modelBuilder.Entity<IngredientEntity>()
             .Ignore(x => x.Prices);
+        
+        modelBuilder.Entity<OrderedProductEntity>()
+            .HasMany(x => x.OrderedIngredients)
+            .WithMany(x => x.OrderedProducts)
+            .UsingEntity(x => x.ToTable("OrderedProductOrderedIngredient"));
     }
 
     public override int SaveChanges()

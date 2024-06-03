@@ -8,7 +8,7 @@ public class OrderEntity
     [Key]
     public Guid Id { get; set; }
     public int Number { get; set; }
-    public ICollection<OrderProductEntity> OrderProducts { get; set; }
+    public ICollection<OrderOrderedProductEntity> OrderOrderedProducts { get; set; } = null!;
     public DateTime DeliveryTiming { get; set; }
     public bool? DeliveryRightAway { get; set; }
     public DeliveryMethodType DeliveryMethod { get; set; }
