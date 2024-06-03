@@ -43,7 +43,7 @@ builder.Services.AddScoped<EmailSender, EmailSender>(provider =>
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddScoped<IConverter<OrderProductEntity, StripeRequestModel>, StripeRequestConverter>();
+builder.Services.AddScoped<IConverter<OrderOrderedProductEntity, StripeRequestModel>, StripeRequestConverter>();
 builder.Services.AddScoped<StripeFacade, StripeFacade>(x =>
 {
     var context = x.GetRequiredService<IHttpContextAccessor>().HttpContext!;

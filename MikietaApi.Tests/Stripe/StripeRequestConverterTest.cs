@@ -12,9 +12,9 @@ public class StripeRequestConverterTest
     {
         var converter = new StripeRequestConverter();
 
-        var res = converter.Convert(new OrderProductEntity
+        var res = converter.Convert(new OrderOrderedProductEntity
         {
-            Product = new ProductEntity
+            OrderedProduct = new OrderedProductEntity
             {
                 Price = price,
             }
