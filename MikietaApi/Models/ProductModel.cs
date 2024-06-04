@@ -21,6 +21,7 @@
         public double Price { get; set; }
         public int Quantity { get; set; }
         public bool Ready { get; set; }
+        public AdditionalIngredientModel[] AdditionalIngredients { get; set; }
     }
 
     public class AdminProductModel2

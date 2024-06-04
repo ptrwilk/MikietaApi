@@ -48,12 +48,7 @@ public class OrderService : IOrderService
 
     public OrderResponseModel2 Order(OrderModel model)
     {
-        var products = _context.Products.Include(x => x.Ingredients)
-            .Where(x => model.ProductQuantities.Select(g => g.ProductId).Any(z => x.Id == z)).ToArray();
-
-        var orderedProducts = products.Select(ToOrderedProduct).ToArray();
-
-        //TODO: napisać validację sprawdzająca czy każdy productId znajduje sie w Products
+        var orderedProducts = CreateOrderedProducts(model);
 
         var entity = new OrderEntity
         {
@@ -142,7 +137,8 @@ public class OrderService : IOrderService
     {
         return _context.Orders.Include(x => x.OrderOrderedProducts)
             .ThenInclude(x => x.OrderedProduct)
-            .ThenInclude(x => x.OrderedIngredients)
+            .ThenInclude(x => x.OrderedProductOrderedIngredients)
+            .ThenInclude(x => x.OrderedIngredient)
             .Where(x => x.Visible)
             .ToList()
             .Select(Convert)
@@ -153,7 +149,8 @@ public class OrderService : IOrderService
     public AdminProductModel[] Get(Guid orderId)
     {
         return _context.OrderOrderedProducts.Include(x => x.OrderedProduct)
-            .ThenInclude(x => x.OrderedIngredients)
+            .ThenInclude(x => x.OrderedProductOrderedIngredients)
+            .ThenInclude(x => x.OrderedIngredient)
             .Where(x => x.OrderId == orderId)
             .ToList()
             .Select(Convert)
@@ -164,9 +161,10 @@ public class OrderService : IOrderService
     {
         var entity = _context.Orders.Include(x => x.OrderOrderedProducts)
             .ThenInclude(x => x.OrderedProduct)
-            .ThenInclude(x => x.OrderedIngredients)
+            .ThenInclude(x => x.OrderedProductOrderedIngredients)
+            .ThenInclude(x => x.OrderedIngredient)
             .First(x => x.Id == orderId);
-        
+
         return Convert(entity);
     }
 
@@ -231,7 +229,14 @@ public class OrderService : IOrderService
             ProductType = entity.OrderedProduct.ProductType,
             PizzaType = entity.OrderedProduct.PizzaType,
             Quantity = entity.Quantity,
-            Ready = entity.Ready
+            Ready = entity.Ready,
+            AdditionalIngredients = entity.OrderedProduct.OrderedProductOrderedIngredients
+                .Where(x => x.IsAdditionalIngredient).Select(x => new AdditionalIngredientModel
+                {
+                    IngredientId = x.OrderedIngredient.IngredientId,
+                    Name = x.OrderedIngredient.Name,
+                    Quantity = x.Quantity
+                }).ToArray()
         };
     }
 
@@ -249,7 +254,8 @@ public class OrderService : IOrderService
                 Floor = entity.Floor,
                 HomeNumber = entity.HomeNumber
             },
-             Cost = entity.OrderOrderedProducts.Where(z => z.OrderId == entity.Id).Sum(z => ToPrice(z.OrderedProduct) * z.Quantity),
+            Cost = entity.OrderOrderedProducts.Where(z => z.OrderId == entity.Id)
+                .Sum(z => ToPrice(z.OrderedProduct) * z.Quantity),
             Phone = entity.Phone,
             Number = entity.Number,
             Payed = entity.Paid,
@@ -262,15 +268,53 @@ public class OrderService : IOrderService
         };
     }
 
+    private OrderedProductEntity[] CreateOrderedProducts(OrderModel model)
+    {
+        //TODO: napisać validację sprawdzająca czy każdy productId znajduje sie w Products
+        var products = _context.Products.Include(x => x.Ingredients)
+            .Where(x => model.ProductQuantities.Select(g => g.ProductId).Any(z => x.Id == z)).ToArray();
+
+        //TODO: napisać validację sprawdzająca czy każdy ingredientId znajduje sie w Ingredients
+        var additionalIngredients = model.ProductQuantities
+            .SelectMany(z => z.AdditionalIngredients ?? Array.Empty<AdditionalIngredientModel>())
+            .Select(g => g.IngredientId).ToArray();
+        var ingredients = _context.Ingredients.Where(x => additionalIngredients.Any(z => z == x.Id)).ToArray();
+
+        Dictionary<AdditionalIngredientModel, int> AdditionalIngredientModels(Guid productId) =>
+            (model.ProductQuantities.First(x => x.ProductId == productId).AdditionalIngredients ??
+             Array.Empty<AdditionalIngredientModel>())
+            .ToDictionary(x => x, x => x.Quantity);
+
+        Dictionary<IngredientEntity, int> AdditionalIngredientEntities(Guid productId) =>
+            ingredients.Where(x => AdditionalIngredientModels(productId).Any(z => z.Key.IngredientId == x.Id))
+                .ToDictionary(x => x,
+                    x => AdditionalIngredientModels(productId).First(z => z.Key.IngredientId == x.Id).Value);
+
+        return products.Select(x => ToOrderedProduct(x, AdditionalIngredientEntities(x.Id))).ToArray();
+    }
+
     private double ToPrice(OrderedProductEntity entity)
     {
-        var sum = entity.OrderedIngredients.Sum(x => entity.PizzaType is null ? 0 : x.Prices[(int)entity.PizzaType]);
+        var sum = entity.OrderedProductOrderedIngredients.Sum(x =>
+            entity.PizzaType is null ? 0 : x.OrderedIngredient.Prices[(int)entity.PizzaType]);
 
         return entity.Price + sum;
     }
 
-    private OrderedProductEntity ToOrderedProduct(ProductEntity entity)
+    private OrderedProductEntity ToOrderedProduct(ProductEntity entity,
+        Dictionary<IngredientEntity, int> additionalIngredients)
     {
+        var orderedProductOrderedIngredients = entity.Ingredients.Select(x => new OrderedProductOrderedIngredientEntity
+        {
+            Quantity = 1,
+            OrderedIngredient = ToOrderedIngredient(x)
+        }).Concat(additionalIngredients.Select(x => new OrderedProductOrderedIngredientEntity
+        {
+            Quantity = x.Value,
+            IsAdditionalIngredient = true,
+            OrderedIngredient = ToOrderedIngredient(x.Key)
+        })).ToArray();
+
         return new OrderedProductEntity
         {
             ProductId = entity.Id,
@@ -279,14 +323,19 @@ public class OrderService : IOrderService
             Price = entity.Price,
             Description = entity.Description,
             ProductType = entity.ProductType,
-            OrderedIngredients = entity.Ingredients.Select(x => new OrderedIngredientEntity
-            {
-                Name = x.Name,
-                PriceLarge = x.PriceLarge,
-                PriceMedium = x.PriceMedium,
-                PriceSmall = x.PriceSmall,
-                IngredientId = x.Id,
-            }).ToArray()
+            OrderedProductOrderedIngredients = orderedProductOrderedIngredients
+        };
+    }
+
+    private OrderedIngredientEntity ToOrderedIngredient(IngredientEntity entity)
+    {
+        return new OrderedIngredientEntity
+        {
+            Name = entity.Name,
+            PriceLarge = entity.PriceLarge,
+            PriceMedium = entity.PriceMedium,
+            PriceSmall = entity.PriceSmall,
+            IngredientId = entity.Id,
         };
     }
 }

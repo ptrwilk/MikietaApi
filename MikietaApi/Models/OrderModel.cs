@@ -6,10 +6,18 @@ public class ProcessingPersonalData
     public bool? Sms { get; set; }
 }
 
+public class AdditionalIngredientModel
+{
+    public Guid IngredientId { get; set; }
+    public string Name { get; set; } = null!;
+    public int Quantity { get; set; }
+}
+
 public class ProductQuantityModel
 {
     public Guid ProductId { get; set; }
     public int Quantity { get; set; }
+    public AdditionalIngredientModel[]? AdditionalIngredients { get; set; }
 }
 
 public class OrderModel
