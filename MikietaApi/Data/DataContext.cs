@@ -12,6 +12,7 @@ public class DataContext : DbContext
     public DbSet<ReservationEntity> Reservations { get; set; }
     public DbSet<OrderedProductEntity> OrderedProducts { get; set; }
     public DbSet<OrderedIngredientEntity> OrderedIngredients { get; set; }
+    public DbSet<OrderedProductOrderedIngredientEntity> OrderedProductOrderedIngredients { get; set; }
     
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
@@ -58,10 +59,16 @@ public class DataContext : DbContext
         modelBuilder.Entity<IngredientEntity>()
             .Ignore(x => x.Prices);
         
-        modelBuilder.Entity<OrderedProductEntity>()
-            .HasMany(x => x.OrderedIngredients)
-            .WithMany(x => x.OrderedProducts)
-            .UsingEntity(x => x.ToTable("OrderedProductOrderedIngredient"));
+        modelBuilder.Entity<OrderedProductOrderedIngredientEntity>()
+            .HasKey(op => new { op.OrderedProductId, op.OrderedIngredientId });
+        modelBuilder.Entity<OrderedProductOrderedIngredientEntity>()
+            .HasOne(op => op.OrderedProduct)
+            .WithMany(o => o.OrderedProductOrderedIngredients)
+            .HasForeignKey(op => op.OrderedProductId);
+        modelBuilder.Entity<OrderedProductOrderedIngredientEntity>()
+            .HasOne(op => op.OrderedIngredient)
+            .WithMany(p => p.OrderedProductOrderedIngredients)
+            .HasForeignKey(op => op.OrderedIngredientId);
     }
 
     public override int SaveChanges()
