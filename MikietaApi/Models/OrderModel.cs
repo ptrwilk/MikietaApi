@@ -13,11 +13,27 @@ public class AdditionalIngredientModel
     public int Quantity { get; set; }
 }
 
+public class RemovedIngredientModel
+{
+    public Guid IngredientId { get; set; }
+    public string Name { get; set; } = null!;
+}
+
+public class ReplacedIngredientModel
+{
+    public Guid FromIngredientId { get; set; }
+    public string FromName { get; set; } = null!;
+    public Guid ToIngredientId { get; set; }
+    public string ToName { get; set; } = null!;
+}
+
 public class ProductQuantityModel
 {
     public Guid ProductId { get; set; }
     public int Quantity { get; set; }
     public AdditionalIngredientModel[]? AdditionalIngredients { get; set; }
+    public RemovedIngredientModel[]? RemovedIngredients { get; set; }
+    public ReplacedIngredientModel[]? ReplacedIngredients { get; set; }
 }
 
 public class OrderModel

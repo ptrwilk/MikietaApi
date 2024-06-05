@@ -8,4 +8,7 @@ public class OrderedProductOrderedIngredientEntity
     public OrderedIngredientEntity OrderedIngredient { get; set; } = null!;
     public int Quantity { get; set; }
     public bool IsAdditionalIngredient { get; set; }
+    public bool IsIngredientRemoved { get; set; }
+    public Guid? ReplacedIngredientId { get; set; }
+    public OrderedIngredientEntity? ReplacedIngredient { get; set; }
 }

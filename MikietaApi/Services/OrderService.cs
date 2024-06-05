@@ -45,7 +45,8 @@ public class OrderService : IOrderService
         _converter = converter;
         _hub = hub;
     }
-
+    
+    //TODO: Tests checking if prices are correct after making an order
     public OrderResponseModel2 Order(OrderModel model)
     {
         var orderedProducts = CreateOrderedProducts(model);
@@ -151,6 +152,9 @@ public class OrderService : IOrderService
         return _context.OrderOrderedProducts.Include(x => x.OrderedProduct)
             .ThenInclude(x => x.OrderedProductOrderedIngredients)
             .ThenInclude(x => x.OrderedIngredient)
+            .Include(x => x.OrderedProduct)
+            .ThenInclude(x => x.OrderedProductOrderedIngredients)
+            .ThenInclude(x => x.ReplacedIngredient)
             .Where(x => x.OrderId == orderId)
             .ToList()
             .Select(Convert)
@@ -221,6 +225,8 @@ public class OrderService : IOrderService
 
     private AdminProductModel Convert(OrderOrderedProductEntity entity)
     {
+        var items = entity.OrderedProduct.OrderedProductOrderedIngredients.ToArray();
+
         return new AdminProductModel
         {
             Id = entity.OrderedProduct.Id,
@@ -230,12 +236,25 @@ public class OrderService : IOrderService
             PizzaType = entity.OrderedProduct.PizzaType,
             Quantity = entity.Quantity,
             Ready = entity.Ready,
-            AdditionalIngredients = entity.OrderedProduct.OrderedProductOrderedIngredients
+            AdditionalIngredients = items
                 .Where(x => x.IsAdditionalIngredient).Select(x => new AdditionalIngredientModel
                 {
                     IngredientId = x.OrderedIngredient.IngredientId,
                     Name = x.OrderedIngredient.Name,
                     Quantity = x.Quantity
+                }).ToArray(),
+            RemovedIngredients = items.Where(x => x.IsIngredientRemoved).Select(x => new RemovedIngredientModel
+            {
+                IngredientId = x.OrderedIngredient.IngredientId,
+                Name = x.OrderedIngredient.Name
+            }).ToArray(),
+            ReplacedIngredients = items.Where(x => x.ReplacedIngredient is not null).Select(x =>
+                new ReplacedIngredientModel
+                {
+                    FromIngredientId = x.OrderedIngredient.IngredientId,
+                    FromName = x.OrderedIngredient.Name,
+                    ToIngredientId = x.ReplacedIngredient!.IngredientId,
+                    ToName = x.ReplacedIngredient!.Name
                 }).ToArray()
         };
     }
@@ -278,7 +297,18 @@ public class OrderService : IOrderService
         var additionalIngredients = model.ProductQuantities
             .SelectMany(z => z.AdditionalIngredients ?? Array.Empty<AdditionalIngredientModel>())
             .Select(g => g.IngredientId).ToArray();
-        var ingredients = _context.Ingredients.Where(x => additionalIngredients.Any(z => z == x.Id)).ToArray();
+        var removedIngredients = model.ProductQuantities
+            .SelectMany(z => z.RemovedIngredients ?? Array.Empty<RemovedIngredientModel>())
+            .Select(x => x.IngredientId).ToArray();
+        var fromIngredients = model.ProductQuantities
+            .SelectMany(z => z.ReplacedIngredients ?? Array.Empty<ReplacedIngredientModel>())
+            .Select(x => x.FromIngredientId).ToArray();
+        var toIngredients = model.ProductQuantities
+            .SelectMany(z => z.ReplacedIngredients ?? Array.Empty<ReplacedIngredientModel>())
+            .Select(x => x.ToIngredientId).ToArray();
+        var ingredients = _context.Ingredients
+            .Where(x => additionalIngredients.Concat(removedIngredients)
+                .Concat(fromIngredients).Concat(toIngredients).Any(z => z == x.Id)).ToArray();
 
         Dictionary<AdditionalIngredientModel, int> AdditionalIngredientModels(Guid productId) =>
             (model.ProductQuantities.First(x => x.ProductId == productId).AdditionalIngredients ??
@@ -290,7 +320,22 @@ public class OrderService : IOrderService
                 .ToDictionary(x => x,
                     x => AdditionalIngredientModels(productId).First(z => z.Key.IngredientId == x.Id).Value);
 
-        return products.Select(x => ToOrderedProduct(x, AdditionalIngredientEntities(x.Id))).ToArray();
+
+        IngredientEntity[] RemovedIngredientEntities(Guid productId) => ingredients.Where(x =>
+            (model.ProductQuantities.First(p => p.ProductId == productId)
+                .RemovedIngredients ?? Array.Empty<RemovedIngredientModel>()).Any(z =>
+                z.IngredientId == x.Id)).ToArray();
+
+
+        Dictionary<IngredientEntity, IngredientEntity> ReplacedIngredients(Guid productId) =>
+            (model.ProductQuantities.First(x => x.ProductId == productId).ReplacedIngredients ??
+             Array.Empty<ReplacedIngredientModel>())
+            .ToDictionary(x => ingredients.First(z => z.Id == x.FromIngredientId),
+                x => ingredients.First(z => z.Id == x.ToIngredientId));
+
+        return products.Select(x =>
+            ToOrderedProduct(x, AdditionalIngredientEntities(x.Id), RemovedIngredientEntities(x.Id),
+                ReplacedIngredients(x.Id))).ToArray();
     }
 
     private double ToPrice(OrderedProductEntity entity)
@@ -302,18 +347,33 @@ public class OrderService : IOrderService
     }
 
     private OrderedProductEntity ToOrderedProduct(ProductEntity entity,
-        Dictionary<IngredientEntity, int> additionalIngredients)
+        Dictionary<IngredientEntity, int> additionalIngredients,
+        IngredientEntity[] removedIngredients,
+        Dictionary<IngredientEntity, IngredientEntity> replacedIngredients)
     {
-        var orderedProductOrderedIngredients = entity.Ingredients.Select(x => new OrderedProductOrderedIngredientEntity
-        {
-            Quantity = 1,
-            OrderedIngredient = ToOrderedIngredient(x)
-        }).Concat(additionalIngredients.Select(x => new OrderedProductOrderedIngredientEntity
-        {
-            Quantity = x.Value,
-            IsAdditionalIngredient = true,
-            OrderedIngredient = ToOrderedIngredient(x.Key)
-        })).ToArray();
+        var orderedProductOrderedIngredients = entity.Ingredients
+            .Where(x => removedIngredients.All(z => z.Id != x.Id))
+            .Where(x => replacedIngredients.All(z => z.Key.Id != x.Id))
+            .Select(x => new OrderedProductOrderedIngredientEntity
+            {
+                Quantity = 1,
+                OrderedIngredient = ToOrderedIngredient(x)
+            }).Concat(additionalIngredients.Select(x => new OrderedProductOrderedIngredientEntity
+            {
+                Quantity = x.Value,
+                IsAdditionalIngredient = true,
+                OrderedIngredient = ToOrderedIngredient(x.Key)
+            })).Concat(removedIngredients.Select(x => new OrderedProductOrderedIngredientEntity
+            {
+                Quantity = 1,
+                IsIngredientRemoved = true,
+                OrderedIngredient = ToOrderedIngredient(x)
+            })).Concat(replacedIngredients.Select(x => new OrderedProductOrderedIngredientEntity
+            {
+                Quantity = 1,
+                ReplacedIngredient = ToOrderedIngredient(x.Value),
+                OrderedIngredient = ToOrderedIngredient(x.Key)
+            })).ToArray();
 
         return new OrderedProductEntity
         {

@@ -8,7 +8,16 @@ public class OrderModelValidator : AbstractValidator<OrderModel>
     public OrderModelValidator()
     {
         RuleFor(x => x.ProductQuantities).NotEmpty();
-        RuleForEach(x => x.ProductQuantities).SetValidator(new ProductQuantityModelValidator());
+        RuleForEach(x => x.ProductQuantities).SetValidator(new ProductQuantityModelValidator())
+            .ChildRules(productQuantity =>
+            {
+                productQuantity.RuleForEach(x => x.AdditionalIngredients)
+                    .SetValidator(new AdditionalIngredientModelValidator());
+                productQuantity.RuleForEach(x => x.RemovedIngredients)
+                    .SetValidator(new RemovedIngredientModelValidator());
+                productQuantity.RuleForEach(x => x.ReplacedIngredients)
+                    .SetValidator(new ReplacedIngredientModelValidator());
+            });
         RuleFor(x => x).Must(x => x.DeliveryTiming != null || x.DeliveryRightAway == true).WithMessage(
             $"Either {nameof(OrderModel.DeliveryTiming)} or {nameof(OrderModel.DeliveryRightAway)} must have a value.");
         RuleFor(x => x.DeliveryMethod).NotNull();
@@ -26,6 +35,7 @@ public class OrderModelValidator : AbstractValidator<OrderModel>
                                                                 !string.IsNullOrEmpty(x.Street) &&
                                                                 !string.IsNullOrEmpty(x.HomeNumber) &&
                                                                 !string.IsNullOrEmpty(x.City))
-        ).WithMessage("Street, Home Number, City, Flat Number and Floor must be provided when Delivery Method is Delivery");
+        ).WithMessage(
+            "Street, Home Number, City, Flat Number and Floor must be provided when Delivery Method is Delivery");
     }
 }
