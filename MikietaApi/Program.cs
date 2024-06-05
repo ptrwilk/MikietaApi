@@ -28,6 +28,9 @@ builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<DbSeeder, DbSeeder>();
 builder.Services.AddScoped<IValidator<OrderModel>, OrderModelValidator>();
 builder.Services.AddScoped<IValidator<ReservationModel>, ReservationModelValidator>();
+builder.Services.AddScoped<IValidator<AdditionalIngredientModel>, AdditionalIngredientModelValidator>();
+builder.Services.AddScoped<IValidator<RemovedIngredientModel>, RemovedIngredientModelValidator>();
+builder.Services.AddScoped<IValidator<ReplacedIngredientModel>, ReplacedIngredientModelValidator>();
 builder.Services.AddSingleton<ConfigurationOptions, ConfigurationOptions>();
 builder.Services.AddScoped<EmailSender, EmailSender>(provider =>
 {
@@ -85,3 +88,8 @@ var seeder = scope.ServiceProvider.GetService<DbSeeder>();
 seeder!.Seed();
 
 app.Run();
+
+// Make the implicit Program class public so test projects can access it
+public partial class Program
+{
+}

@@ -22,6 +22,8 @@
         public int Quantity { get; set; }
         public bool Ready { get; set; }
         public AdditionalIngredientModel[] AdditionalIngredients { get; set; }
+        public RemovedIngredientModel[] RemovedIngredients { get; set; }
+        public ReplacedIngredientModel[] ReplacedIngredients { get; set; }
     }
 
     public class AdminProductModel2
