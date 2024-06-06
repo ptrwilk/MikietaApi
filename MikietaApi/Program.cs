@@ -1,4 +1,5 @@
 using FluentValidation;
+using GoogleMaps.LocationServices;
 using Microsoft.EntityFrameworkCore;
 using MikietaApi;
 using MikietaApi.Converters;
@@ -25,12 +26,14 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<IIngredientService, IngredientService>();
 builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IDeliveryService, DeliveryService>();
 builder.Services.AddScoped<DbSeeder, DbSeeder>();
 builder.Services.AddScoped<IValidator<OrderModel>, OrderModelValidator>();
 builder.Services.AddScoped<IValidator<ReservationModel>, ReservationModelValidator>();
 builder.Services.AddScoped<IValidator<AdditionalIngredientModel>, AdditionalIngredientModelValidator>();
 builder.Services.AddScoped<IValidator<RemovedIngredientModel>, RemovedIngredientModelValidator>();
 builder.Services.AddScoped<IValidator<ReplacedIngredientModel>, ReplacedIngredientModelValidator>();
+builder.Services.AddScoped<IValidator<DeliveryModel>, DeliveryModelValidator>();
 builder.Services.AddSingleton<ConfigurationOptions, ConfigurationOptions>();
 builder.Services.AddScoped<EmailSender, EmailSender>(provider =>
 {
@@ -42,6 +45,11 @@ builder.Services.AddScoped<EmailSender, EmailSender>(provider =>
         Password = smtpClient.Password,
         Port = smtpClient.Port
     });
+});
+builder.Services.AddScoped<GoogleLocationService, GoogleLocationService>(provider =>
+{
+    var googleApiKey = provider.GetService<ConfigurationOptions>()!.GoogleApiKey;
+    return new GoogleLocationService(googleApiKey);
 });
 
 builder.Services.AddHttpContextAccessor();
@@ -82,6 +90,7 @@ OrderRoute.RegisterEndpoints(app);
 ReservationRoute.RegisterEndpoints(app);
 IngredientRoute.RegisterEndpoints(app);
 ImageRoute.RegisterEndpoints(app);
+DeliveryRoute.RegisterEndpoints(app);
 
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetService<DbSeeder>();
