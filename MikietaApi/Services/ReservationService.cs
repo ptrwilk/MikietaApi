@@ -9,7 +9,7 @@ namespace MikietaApi.Services;
 
 public interface IReservationService
 {
-    void Reserve(ReservationModel model);
+    bool Reserve(ReservationModel model);
     ReservationModel[] GetAll();
     ReservationModel Update(ReservationModel model);
     ReservationModel SendEmail(SendEmailModel model);
@@ -29,7 +29,7 @@ public class ReservationService : IReservationService
         _hub = hub;
     }
     
-    public void Reserve(ReservationModel model)
+    public bool Reserve(ReservationModel model)
     {
         var messageId = _emailSender.Send(new EmailSenderModel
         {
@@ -54,6 +54,8 @@ public class ReservationService : IReservationService
         _context.SaveChanges();
         
         _hub.Clients.All.ReservationMade();
+
+        return true;
     }
 
     public ReservationModel[] GetAll()

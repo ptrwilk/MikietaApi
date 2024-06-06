@@ -25,8 +25,7 @@ public static class ReservationRoute
             return Results.ValidationProblem(validation.ToDictionary());
         }
         
-        service.Reserve(model);
-        return Results.Ok();
+        return Results.Ok(service.Reserve(model));
     }
     
     private static IResult GetAll(IReservationService service)
