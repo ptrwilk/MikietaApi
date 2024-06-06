@@ -36,7 +36,7 @@ public class ProductsService : IProductsService
     public AdminProductModel2[] GetAdminProducts(AddressModel address)
     {
         var products = _context.Products.Include(x => x.Ingredients)
-            .Where(x => x.IsDeleted == false).ToList();
+            .Where(x => x.IsDeleted == false).OrderBy(x => x.Index).ToList();
 
         return products.Select(entity => new AdminProductModel2
         {
