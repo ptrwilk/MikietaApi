@@ -27,6 +27,7 @@ builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<IIngredientService, IngredientService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IDeliveryService, DeliveryService>();
+builder.Services.AddScoped<ISettingService, SettingService>();
 builder.Services.AddScoped<DbSeeder, DbSeeder>();
 builder.Services.AddScoped<IValidator<OrderModel>, OrderModelValidator>();
 builder.Services.AddScoped<IValidator<ReservationModel>, ReservationModelValidator>();
@@ -91,6 +92,7 @@ ReservationRoute.RegisterEndpoints(app);
 IngredientRoute.RegisterEndpoints(app);
 ImageRoute.RegisterEndpoints(app);
 DeliveryRoute.RegisterEndpoints(app);
+SettingRoute.RegisterEndpoints(app);
 
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetService<DbSeeder>();

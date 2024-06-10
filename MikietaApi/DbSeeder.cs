@@ -68,6 +68,21 @@ public class DbSeeder
 
             _context.SaveChanges();
         }
+
+        if (!_context.Settings.Any())
+        {
+            foreach (var key in SettingEntity.Keys)
+            {
+                var value = key.Contains("Open") || key.Contains("Delivery") ? "00:00" : null;
+                _context.Settings.Add(new SettingEntity
+                {
+                    Key = key,
+                    Value = value
+                });
+            }
+        
+            _context.SaveChanges();
+        }
     }
 
     private void AddDrink(string name, double price)
