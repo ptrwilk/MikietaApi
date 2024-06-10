@@ -111,4 +111,38 @@ public class DataContext : DbContext
         
         return base.SaveChanges();
     }
+    
+    public T? GetValue<T>(SettingEntity[] settings, string key)
+    {
+        var value = settings.Single(x => x.Key == key).Value;
+
+        if (string.IsNullOrEmpty(value))
+        {
+            return default;
+        }
+        
+        if (typeof(T) == typeof(TimeSpan))
+        {
+            return (T)(object)TimeSpan.Parse(value ?? "");
+        }
+
+        if (typeof(T) == typeof(string))
+        {
+            return (T)(object)value;
+        }
+        
+        if (typeof(T) == typeof(double) || typeof(T) == typeof(double?))
+        {
+            return (T)(object)double.Parse(value);
+        }
+
+        throw new ArgumentException($"Case not specified for type {typeof(T)}");
+    }
+
+    public T? GetValue<T>(string key)
+    {
+        var settings = Settings.Single(x => x.Key == key);
+        
+        return GetValue<T>(new [] {settings}, key);
+    }
 }

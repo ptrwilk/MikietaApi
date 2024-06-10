@@ -35,21 +35,31 @@ public class OrderService : IOrderService
     private readonly StripeFacade _stripe;
     private readonly IConverter<OrderOrderedProductEntity, StripeRequestModel> _converter;
     private readonly IHubContext<MessageHub, IMessageHub> _hub;
+    private readonly IDeliveryService _deliveryService;
 
     public OrderService(DataContext context, StripeFacade stripe,
         IConverter<OrderOrderedProductEntity, StripeRequestModel> converter,
-        IHubContext<MessageHub, IMessageHub> hub)
+        IHubContext<MessageHub, IMessageHub> hub,
+        IDeliveryService deliveryService)
     {
         _context = context;
         _stripe = stripe;
         _converter = converter;
         _hub = hub;
+        _deliveryService = deliveryService;
     }
     
     //TODO: Tests checking if prices are correct after making an order
     public OrderResponseModel2 Order(OrderModel model)
     {
         var orderedProducts = CreateOrderedProducts(model);
+
+        var deliveryPrice = _deliveryService.CheckDistance(new DeliveryModel
+        {
+            HomeNumber = model.HomeNumber ?? "",
+            City = model.City ?? "",
+            Street = model.Street ?? ""
+        }).DeliveryPrice;
 
         var entity = new OrderEntity
         {
@@ -70,7 +80,8 @@ public class OrderService : IOrderService
             ProcessingPersonalDataByEmail = model.ProcessingPersonalData?.Email,
             ProcessingPersonalDataBySms = model.ProcessingPersonalData?.Sms,
             CreatedAt = DateTime.Now,
-            Visible = model.PaymentMethod == PaymentMethodType.Cash
+            Visible = model.PaymentMethod == PaymentMethodType.Cash,
+            DeliveryPrice = deliveryPrice
         };
 
         entity.OrderOrderedProducts = orderedProducts.Select(orderedProduct => new OrderOrderedProductEntity
@@ -82,7 +93,7 @@ public class OrderService : IOrderService
 
         _context.Orders.Add(entity);
 
-        var res = _stripe.CreateSession(entity.OrderOrderedProducts.Select(_converter.Convert).ToArray());
+        var res = _stripe.CreateSession(entity.OrderOrderedProducts.Select(_converter.Convert).ToArray(), entity.DeliveryPrice);
 
         entity.SessionId = res.SessionId;
 
@@ -274,7 +285,7 @@ public class OrderService : IOrderService
                 HomeNumber = entity.HomeNumber
             },
             Cost = entity.OrderOrderedProducts.Where(z => z.OrderId == entity.Id)
-                .Sum(z => ToPrice(z.OrderedProduct) * z.Quantity),
+                .Sum(z => ToPrice(z.OrderedProduct) * z.Quantity) + (entity.DeliveryPrice ?? 0),
             Phone = entity.Phone,
             Number = entity.Number,
             Payed = entity.Paid,
@@ -283,7 +294,8 @@ public class OrderService : IOrderService
             TotalProducts = entity.OrderOrderedProducts.Count,
             CompletedProducts = entity.OrderOrderedProducts.Count(z => z.Ready),
             CreatedAt = entity.CreatedAt,
-            DeliveryAt = entity.DeliveryTiming
+            DeliveryAt = entity.DeliveryTiming,
+            DeliveryPrice = entity.DeliveryPrice
         };
     }
 

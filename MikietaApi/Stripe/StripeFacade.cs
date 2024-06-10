@@ -25,7 +25,7 @@ public class StripeFacade
         _cancelUrl = cancelUrl;
     }
 
-    public StripeResponseModel CreateSession(StripeRequestModel[] models)
+    public StripeResponseModel CreateSession(StripeRequestModel[] models, double? deliveryPrice)
     {
         var options = new SessionCreateOptions
         {
@@ -54,6 +54,23 @@ public class StripeFacade
                     },
                 },
                 Quantity = model.Quantity,
+            });
+        }
+
+        if (deliveryPrice.HasValue)
+        {
+            options.LineItems.Add(new SessionLineItemOptions()
+            {
+                PriceData = new SessionLineItemPriceDataOptions
+                {
+                    UnitAmount = (int)deliveryPrice.Value * 100,
+                    Currency = "pln",
+                    ProductData = new SessionLineItemPriceDataProductDataOptions
+                    {
+                        Name = "Dostawa",
+                    }
+                },
+                Quantity = 1
             });
         }
 

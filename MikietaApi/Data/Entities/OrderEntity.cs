@@ -30,4 +30,5 @@ public class OrderEntity
     public DateTime CreatedAt { get; set; }
     public OrderStatusType Status { get; set; }
     public bool Visible { get; set; }
+    public double? DeliveryPrice { get; set; }
 }
