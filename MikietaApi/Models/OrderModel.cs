@@ -82,6 +82,7 @@ public class AdminOrderModel
     public DateTime DeliveryAt { get; set; }
     public DateTime CreatedAt { get; set; }
     public DeliveryMethodType DeliveryMethod { get; set; }
+    public double? DeliveryPrice { get; set; }
 }
 
 public class OrderStatusModel

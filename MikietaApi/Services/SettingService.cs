@@ -18,32 +18,32 @@ public class SettingService : ISettingService
     {
         _context = context;
     }
-    
+
     public SettingModel Get()
     {
         var settings = _context.Settings.ToArray();
-        
+
         var openingHours = SettingEntity.OpensFrom.Select((key, index) => new SettingHoursModel
         {
-            From = GetValue<TimeSpan>(settings, key),
-            To = GetValue<TimeSpan>(settings, SettingEntity.OpensTo[index])
+            From = _context.GetValue<TimeSpan>(settings, key),
+            To = _context.GetValue<TimeSpan>(settings, SettingEntity.OpensTo[index])
         }).ToArray();
-        
+
         var deliveryHours = SettingEntity.DeliveriesFrom.Select((key, index) => new SettingHoursModel
         {
-            From = GetValue<TimeSpan>(settings, key),
-            To = GetValue<TimeSpan>(settings, SettingEntity.DeliveriesTo[index])
-        }).ToArray() ;
+            From = _context.GetValue<TimeSpan>(settings, key),
+            To = _context.GetValue<TimeSpan>(settings, SettingEntity.DeliveriesTo[index])
+        }).ToArray();
 
         return new SettingModel
         {
-            Street = GetValue<string?>(settings, SettingEntity.Street),
-            City = GetValue<string?>(settings, SettingEntity.City),
-            ZipCode = GetValue<string?>(settings, SettingEntity.ZipCode),
-            Phone = GetValue<string?>(settings, SettingEntity.Phone),
-            Facebook = GetValue<string?>(settings, SettingEntity.Facebook),
-            DeliveryPrice = GetValue<double?>(settings, SettingEntity.DeliveryPrice),
-            DeliveryRange = GetValue<double?>(settings, SettingEntity.DeliveryRange),
+            Street = _context.GetValue<string?>(settings, SettingEntity.Street),
+            City = _context.GetValue<string?>(settings, SettingEntity.City),
+            ZipCode = _context.GetValue<string?>(settings, SettingEntity.ZipCode),
+            Phone = _context.GetValue<string?>(settings, SettingEntity.Phone),
+            Facebook = _context.GetValue<string?>(settings, SettingEntity.Facebook),
+            DeliveryPrice = _context.GetValue<double?>(settings, SettingEntity.DeliveryPrice),
+            DeliveryRange = _context.GetValue<double?>(settings, SettingEntity.DeliveryRange),
             OpeningHours = openingHours,
             DeliveryHours = deliveryHours
         };
@@ -65,7 +65,7 @@ public class SettingService : ISettingService
         {
             Update(settings, SettingEntity.OpensFrom[i], model.OpeningHours[i].From.ToString());
             Update(settings, SettingEntity.OpensTo[i], model.OpeningHours[i].To.ToString());
-            
+
             Update(settings, SettingEntity.DeliveriesFrom[i], model.DeliveryHours[i].From.ToString());
             Update(settings, SettingEntity.DeliveriesFrom[i], model.DeliveryHours[i].To.ToString());
         }
@@ -73,33 +73,6 @@ public class SettingService : ISettingService
         _context.SaveChanges();
 
         return model;
-    }
-
-    private T? GetValue<T>(SettingEntity[] settings, string key)
-    {
-        var value = settings.Single(x => x.Key == key).Value;
-
-        if (string.IsNullOrEmpty(value))
-        {
-            return default;
-        }
-        
-        if (typeof(T) == typeof(TimeSpan))
-        {
-            return (T)(object)TimeSpan.Parse(value ?? "");
-        }
-
-        if (typeof(T) == typeof(string))
-        {
-            return (T)(object)value;
-        }
-        
-        if (typeof(T) == typeof(double) || typeof(T) == typeof(double?))
-        {
-            return (T)(object)double.Parse(value);
-        }
-
-        throw new ArgumentException($"Case not specified for type {typeof(T)}");
     }
 
     private void Update(SettingEntity[] settings, string key, string? value)

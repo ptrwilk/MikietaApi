@@ -28,7 +28,12 @@ public static class DeliveryRoute
         }
         catch (DeliveryCheckException e)
         {
-            return Results.NotFound(e.Error);
+            return Results.Ok(new DeliveryResponseModel
+            {
+                ErrorType = e.Error.ErrorType,
+                ErrorMessage = e.Error.Message,
+                HasError = true
+            });
         }
     }
 }

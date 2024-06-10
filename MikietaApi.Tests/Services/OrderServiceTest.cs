@@ -455,14 +455,8 @@ public class OrderServiceTest
     [TestCaseSource(nameof(CreateOrderedProducts_Cases))]
     public void CreateOrderedProducts(OrderModel model, OrderedProductEntity[] expectedOrderedProductEntity)
     {
-        var res = InvokePrivateMethod<OrderedProductEntity[]>(_orderService, "CreateOrderedProducts", model);
+        var res = Helpers.InvokePrivateMethod<OrderedProductEntity[]>(_orderService, "CreateOrderedProducts", model);
         
         res.ShouldBeEquivalentTo(expectedOrderedProductEntity);
-    }
-    
-    private static TResult InvokePrivateMethod<TResult>(object obj, string methodName, params object[] args)
-    {
-        var method = obj.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic);
-        return (TResult)method.Invoke(obj, args);
     }
 }
