@@ -13,6 +13,7 @@ public class DataContext : DbContext
     public DbSet<OrderedProductEntity> OrderedProducts { get; set; }
     public DbSet<OrderedIngredientEntity> OrderedIngredients { get; set; }
     public DbSet<OrderedProductOrderedIngredientEntity> OrderedProductOrderedIngredients { get; set; }
+    public DbSet<SettingEntity> Settings { get; set; }
     
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
@@ -69,6 +70,9 @@ public class DataContext : DbContext
             .HasOne(op => op.OrderedIngredient)
             .WithMany(p => p.OrderedProductOrderedIngredients)
             .HasForeignKey(op => op.OrderedIngredientId);
+
+        modelBuilder.Entity<SettingEntity>()
+            .HasKey(x => x.Key);
     }
 
     public override int SaveChanges()
