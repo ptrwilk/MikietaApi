@@ -90,4 +90,5 @@ public class OrderStatusModel
     public OrderStatusType Status { get; set; }
     public DateTime DeliveryAt { get; set; }
     public DeliveryMethodType DeliveryMethod { get; set; }
+    public bool CanClearBasket { get; set; }
 }
