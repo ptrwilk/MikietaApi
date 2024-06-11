@@ -17,6 +17,7 @@ public static class OrderRoute
         app.MapGet("order/{orderId}/status", GetStatus);
         app.MapPut("order", Update);
         app.MapPut("order/{orderId}/product", UpdateProduct);
+        app.MapPut("order/{orderId}/clear-can-clear-basket", ClearCanClearBasket);
 
         return app;
     }
@@ -86,5 +87,10 @@ public static class OrderRoute
     private static IResult GetStatus(IOrderService service, Guid orderId)
     {
         return Results.Ok(service.GetStatus(orderId));
+    }
+    
+    private static IResult ClearCanClearBasket(IOrderService service, Guid orderId)
+    {
+        return Results.Ok(service.ClearCanClearBasket(orderId));
     }
 }

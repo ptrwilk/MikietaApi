@@ -27,6 +27,7 @@ public interface IOrderService
     OrderStatusModel GetStatus(Guid orderId);
     AdminOrderModel Update(AdminOrderModel model);
     AdminProductModel UpdateProduct(Guid orderId, AdminProductModel model);
+    bool ClearCanClearBasket(Guid orderId);
 }
 
 public class OrderService : IOrderService
@@ -81,7 +82,8 @@ public class OrderService : IOrderService
             ProcessingPersonalDataBySms = model.ProcessingPersonalData?.Sms,
             CreatedAt = DateTime.Now,
             Visible = model.PaymentMethod == PaymentMethodType.Cash,
-            DeliveryPrice = deliveryPrice
+            DeliveryPrice = deliveryPrice,
+            CanClearBasket = model.PaymentMethod == PaymentMethodType.Cash
         };
 
         entity.OrderOrderedProducts = orderedProducts.Select(orderedProduct => new OrderOrderedProductEntity
@@ -105,7 +107,7 @@ public class OrderService : IOrderService
 
             return new OrderResponseModel2
             {
-                OrderId = entity.Id
+                OrderId = entity.Id,
             };
         }
 
@@ -132,6 +134,7 @@ public class OrderService : IOrderService
 
         entity.Paid = true;
         entity.Visible = true;
+        entity.CanClearBasket = true;
 
         _context.SaveChanges();
 
@@ -191,7 +194,8 @@ public class OrderService : IOrderService
         {
             Status = entity.Status,
             DeliveryAt = entity.DeliveryTiming,
-            DeliveryMethod = entity.DeliveryMethod
+            DeliveryMethod = entity.DeliveryMethod,
+            CanClearBasket = entity.CanClearBasket
         };
     }
 
@@ -232,6 +236,21 @@ public class OrderService : IOrderService
         _context.SaveChanges();
 
         return model;
+    }
+
+    public bool ClearCanClearBasket(Guid orderId)
+    {
+        var order = _context.Orders.Single(x => x.Id == orderId);
+
+        var flagCleared = order.CanClearBasket;
+        order.CanClearBasket = false;
+
+        if (flagCleared)
+        {
+            _context.SaveChanges();
+        }
+
+        return flagCleared;
     }
 
     private AdminProductModel Convert(OrderOrderedProductEntity entity)
