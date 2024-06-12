@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using MikietaApi.Models;
 using MikietaApi.Services;
 
@@ -59,26 +60,31 @@ public static class OrderRoute
         }
     }
 
+    [Authorize]
     private static IResult GetAll(IOrderService service)
     {
         return Results.Ok(service.GetAll());
     }
 
+    [Authorize]
     private static IResult Get(IOrderService service, Guid orderId)
     {
         return Results.Ok(service.Get(orderId));
     }
 
+    [Authorize]
     private static IResult Update(IOrderService service, AdminOrderModel model)
     {
         return Results.Ok(service.Update(model));
     }
 
+    [Authorize]
     private static IResult UpdateProduct(IOrderService service, Guid orderId, AdminProductModel model)
     {
         return Results.Ok(service.UpdateProduct(orderId, model));
     }
 
+    [Authorize]
     private static IResult GetSingle(IOrderService service, Guid orderId)
     {
         return Results.Ok(service.GetSingle(orderId));

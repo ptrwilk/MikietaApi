@@ -1,4 +1,5 @@
-﻿using MikietaApi.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using MikietaApi.Models;
 using MikietaApi.Services;
 
 namespace MikietaApi.Routes;
@@ -14,16 +15,19 @@ public static class IngredientRoute
         return app;
     }
     
+    [Authorize]
     private static IResult Get(IIngredientService service)
     {
         return Results.Ok(service.Get());
     }
     
+    [Authorize]
     private static IResult Update(IIngredientService service, IngredientModel model)
     {
         return Results.Ok(service.Update(model));
     }
     
+    [Authorize]
     private static IResult Delete(IIngredientService service, Guid ingredientId)
     {
         return Results.Ok(service.Delete(ingredientId));

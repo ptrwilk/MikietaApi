@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MikietaApi", "MikietaApi\Mi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MikietaApi.Tests", "MikietaApi.Tests\MikietaApi.Tests.csproj", "{C7CF416B-A01C-48CE-ADC0-BCE37CD48DA4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jwt.Core", "Jwt.Core\Jwt.Core.csproj", "{3E4801CB-6138-4B4E-AA26-FEC5180938EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{C7CF416B-A01C-48CE-ADC0-BCE37CD48DA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C7CF416B-A01C-48CE-ADC0-BCE37CD48DA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C7CF416B-A01C-48CE-ADC0-BCE37CD48DA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E4801CB-6138-4B4E-AA26-FEC5180938EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E4801CB-6138-4B4E-AA26-FEC5180938EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E4801CB-6138-4B4E-AA26-FEC5180938EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E4801CB-6138-4B4E-AA26-FEC5180938EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -33,4 +33,8 @@
       </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Jwt.Core\Jwt.Core.csproj" />
+    </ItemGroup>
+
 </Project>
