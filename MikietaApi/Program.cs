@@ -1,5 +1,6 @@
 using FluentValidation;
 using GoogleMaps.LocationServices;
+using Jwt.Core;
 using Microsoft.EntityFrameworkCore;
 using MikietaApi;
 using MikietaApi.Converters;
@@ -18,7 +19,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerWithJwt();
 
+builder.Services.AddSingleton<IJwtTokenFactory>(_ => new JwtTokenFactory(builder.Configuration["Jwt:Key"]!));
 builder.Services.AddDbContext<DataContext>((provider, options) =>
     options.UseSqlite(provider.GetService<ConfigurationOptions>()!.Database));
 builder.Services.AddScoped<IProductsService, ProductsService>();
@@ -28,6 +31,7 @@ builder.Services.AddScoped<IIngredientService, IngredientService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IDeliveryService, DeliveryService>();
 builder.Services.AddScoped<ISettingService, SettingService>();
+builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<DbSeeder, DbSeeder>();
 builder.Services.AddScoped<IValidator<OrderModel>, OrderModelValidator>();
 builder.Services.AddScoped<IValidator<ReservationModel>, ReservationModelValidator>();
@@ -54,6 +58,9 @@ builder.Services.AddScoped<GoogleLocationService, GoogleLocationService>(provide
 });
 
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddAuthenticationWithJwt(builder.Configuration["Jwt:Key"]!);
+builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IConverter<OrderOrderedProductEntity, StripeRequestModel>, StripeRequestConverter>();
 builder.Services.AddScoped<StripeFacade, StripeFacade>(x =>
@@ -82,6 +89,8 @@ app.UseSwaggerUI();
 
 StripeConfiguration.ApiKey = app.Services.GetService<ConfigurationOptions>()!.SecretKey;
 
+app.UseAuthentication();
+app.UseAuthorization();
 app.UseCors("MyPolicy");
 
 app.MapHub<MessageHub>("/messageHub");
@@ -93,6 +102,7 @@ IngredientRoute.RegisterEndpoints(app);
 ImageRoute.RegisterEndpoints(app);
 DeliveryRoute.RegisterEndpoints(app);
 SettingRoute.RegisterEndpoints(app);
+LoginRoute.RegisterEndpoints(app);
 
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetService<DbSeeder>();

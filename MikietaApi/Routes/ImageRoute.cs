@@ -1,4 +1,5 @@
-﻿using MikietaApi.Services;
+﻿using Microsoft.AspNetCore.Authorization;
+using MikietaApi.Services;
 
 namespace MikietaApi.Routes;
 
@@ -17,6 +18,7 @@ public static class ImageRoute
         return Results.File(service.Get(imageId), "image/png");
     }
 
+    [Authorize]
     private static async Task<IResult> Add(IImageService service, IFormFile file)
     {
         if (file is { Length: > 0 })

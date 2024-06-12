@@ -1,4 +1,5 @@
-﻿using MikietaApi.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using MikietaApi.Models;
 using MikietaApi.Services;
 
 namespace MikietaApi.Routes;
@@ -21,16 +22,19 @@ public static class ProductsRoute
         return Results.Ok(service.Get(new AddressModel(context)));
     }
     
+    [Authorize]
     private static IResult GetAdminProducts(IProductsService service, HttpContext context)
     {
         return Results.Ok(service.GetAdminProducts(new AddressModel(context)));
     }
     
+    [Authorize]
     private static IResult AddOrUpdateAdminProduct(IProductsService service, HttpContext context, AdminProductModel2 model)
     {
         return Results.Ok(service.AddOrUpdateAdminProduct(model, new AddressModel(context)));
     }
     
+    [Authorize]
     private static IResult Delete(IProductsService service, Guid productId)
     {
         return Results.Ok(service.Delete(productId));
