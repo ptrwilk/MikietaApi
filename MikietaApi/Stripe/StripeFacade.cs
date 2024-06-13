@@ -10,6 +10,7 @@ public class StripeResponseModel
 
 public class StripeRequestModel
 {
+    public string Name { get; set; } = null!;
     public int Price { get; set; }
     public int Quantity { get; set; }
 }
@@ -50,7 +51,7 @@ public class StripeFacade
                     Currency = "pln",
                     ProductData = new SessionLineItemPriceDataProductDataOptions
                     {
-                        Name = "Pizza",
+                        Name = model.Name,
                     },
                 },
                 Quantity = model.Quantity,
