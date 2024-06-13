@@ -12,6 +12,7 @@ public class SettingEntity
     public const string Facebook = nameof(Facebook);
     public const string DeliveryRange = nameof(DeliveryRange);
     public const string DeliveryPrice = nameof(DeliveryPrice);
+    public const string Email = nameof(Email);
     
     public const string OpenMondayFrom = nameof(OpenMondayFrom);
     public const string OpenTuesdayFrom = nameof(OpenTuesdayFrom);
@@ -57,7 +58,7 @@ public class SettingEntity
     public static readonly string[] DeliveriesTo =
         { DeliveryMondayTo, DeliveryTuesdayTo, DeliveryWednesdayTo, DeliveryThursdayTo, DeliveryFridayTo, DeliverySaturdayTo, DeliverySundayTo };
     
-    public static readonly string[] Keys = new[] { Street, City, ZipCode, Phone, Facebook, DeliveryRange, DeliveryPrice }
+    public static readonly string[] Keys = new[] { Street, City, ZipCode, Phone, Facebook, DeliveryRange, DeliveryPrice, Email }
         .Concat(OpensFrom).Concat(OpensTo).Concat(DeliveriesFrom).Concat(DeliveriesTo).ToArray();
 
 }

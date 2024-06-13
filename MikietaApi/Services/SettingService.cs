@@ -44,6 +44,7 @@ public class SettingService : ISettingService
             Facebook = _context.GetValue<string?>(settings, SettingEntity.Facebook),
             DeliveryPrice = _context.GetValue<double?>(settings, SettingEntity.DeliveryPrice),
             DeliveryRange = _context.GetValue<double?>(settings, SettingEntity.DeliveryRange),
+            Email = _context.GetValue<string?>(settings, SettingEntity.Email),
             OpeningHours = openingHours,
             DeliveryHours = deliveryHours
         };
@@ -60,6 +61,7 @@ public class SettingService : ISettingService
         Update(settings, SettingEntity.Facebook, model.Facebook);
         Update(settings, SettingEntity.DeliveryPrice, model.DeliveryPrice.ToString());
         Update(settings, SettingEntity.DeliveryRange, model.DeliveryRange.ToString());
+        Update(settings, SettingEntity.Email, model.Email);
 
         for (var i = 0; i < SettingEntity.OpensFrom.Length; i++)
         {
@@ -67,7 +69,7 @@ public class SettingService : ISettingService
             Update(settings, SettingEntity.OpensTo[i], model.OpeningHours[i].To.ToString());
 
             Update(settings, SettingEntity.DeliveriesFrom[i], model.DeliveryHours[i].From.ToString());
-            Update(settings, SettingEntity.DeliveriesFrom[i], model.DeliveryHours[i].To.ToString());
+            Update(settings, SettingEntity.DeliveriesTo[i], model.DeliveryHours[i].To.ToString());
         }
 
         _context.SaveChanges();
