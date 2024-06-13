@@ -13,7 +13,7 @@ public class DbSeeder
     {
         _context = context;
     }
-    
+
     public void Seed()
     {
         _context.Database.Migrate();
@@ -26,7 +26,7 @@ public class DbSeeder
             _context.Ingredients.Add(new IngredientEntity { Name = "Pieczarki" });
             _context.Ingredients.Add(new IngredientEntity { Name = "Salami" });
             _context.Ingredients.Add(new IngredientEntity { Name = "Szynka" });
-            
+
             _context.SaveChanges();
 
             AddDrink("Kozel Lezak", 10);
@@ -69,9 +69,10 @@ public class DbSeeder
             _context.SaveChanges();
         }
 
-        if (!_context.Settings.Any())
+        var keyAdded = false;
+        foreach (var key in SettingEntity.Keys)
         {
-            foreach (var key in SettingEntity.Keys)
+            if (_context.Settings.All(x => x.Key != key))
             {
                 var value = key.Contains("Open") || key.Contains("Delivery") ? "00:00" : null;
                 _context.Settings.Add(new SettingEntity
@@ -79,8 +80,12 @@ public class DbSeeder
                     Key = key,
                     Value = value
                 });
+                keyAdded = true;
             }
-        
+        }
+
+        if (keyAdded)
+        {
             _context.SaveChanges();
         }
     }
@@ -103,7 +108,7 @@ public class DbSeeder
             ProductType = type,
             Description = description,
             Price = price,
-        });        
+        });
     }
 
     private void AddPizza(string name, string[] ingredients, double price, PizzaType type)
@@ -116,21 +121,21 @@ public class DbSeeder
             PizzaType = type,
             Ingredients = ingredient,
             Price = price,
-        });          
+        });
     }
 
     private void AddMargherita(double price, PizzaType type) =>
         AddPizza("Margherita", new[] { "Ser", "Sos pomidorowy" }, price, type);
-    
+
     private void AddFunghi(double price, PizzaType type) =>
         AddPizza("Funghi", new[] { "Ser", "Sos pomidorowy", "Pieczarki" }, price, type);
-    
+
     private void AddFunghiEProsciutto(double price, PizzaType type) =>
         AddPizza("FunghiEProsciutto", new[] { "Ser", "Sos pomidorowy", "Szynka", "Pieczarki" }, price, type);
-    
+
     private void AddCipolla(double price, PizzaType type) =>
         AddPizza("Cipolla", new[] { "Ser", "Sos pomidorowy", "Cebula" }, price, type);
-    
+
     private void AddSalami(double price, PizzaType type) =>
         AddPizza("Salami", new[] { "Ser", "Sos pomidorowy", "Salami" }, price, type);
 }

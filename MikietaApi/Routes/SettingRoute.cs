@@ -14,7 +14,6 @@ public static class SettingRoute
         return app;
     }
     
-    [Authorize]
     private static IResult Get(ISettingService service)
     {
         return Results.Ok(service.Get());
