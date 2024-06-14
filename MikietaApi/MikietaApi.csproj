@@ -25,10 +25,40 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="SendEmail\send_email_template.html">
+      <None Update="SendEmail\OrderTemplate\send_order_email_template.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
-      <None Update="SendEmail\reply_email_template.html">
+      <None Update="SendEmail\OrderTemplate\send_order_email_template_example.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="SendEmail\OrderTemplate\product_fragment.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="SendEmail\OrderTemplate\ingredients_fragment.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="SendEmail\OrderTemplate\delivery_cost_fragment.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="SendEmail\Reservation\Templates\reply_email_template.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="SendEmail\Reservation\Templates\send_email_template.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="SendEmail\Order\Templates\send_order_email_template.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="SendEmail\Order\Templates\send_order_email_template_example.html">
+        <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      </None>
+      <None Update="SendEmail\Order\Templates\product_fragment.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="SendEmail\Order\Templates\ingredients_fragment.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="SendEmail\Order\Templates\delivery_cost_fragment.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
     </ItemGroup>
