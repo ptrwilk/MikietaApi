@@ -4,6 +4,7 @@ using MikietaApi.Data.Entities;
 using MikietaApi.Hubs;
 using MikietaApi.Models;
 using MikietaApi.SendEmail;
+using MikietaApi.SendEmail.Reservation.Models;
 
 namespace MikietaApi.Services;
 
@@ -18,20 +19,22 @@ public interface IReservationService
 public class ReservationService : IReservationService
 {
     private readonly DataContext _context;
-    private readonly EmailSender _emailSender;
+    private readonly IEmailSender<ReservationEmailSenderModel> _emailSender;
+    private readonly IEmailReply<ReservationEmailReplyModel> _emailReply;
     private readonly IHubContext<MessageHub, IMessageHub> _hub;
 
-    public ReservationService(DataContext context, EmailSender emailSender,
-        IHubContext<MessageHub, IMessageHub> hub)
+    public ReservationService(DataContext context, IEmailSender<ReservationEmailSenderModel> emailSender,
+        IHubContext<MessageHub, IMessageHub> hub, IEmailReply<ReservationEmailReplyModel> emailReply)
     {
         _context = context;
         _emailSender = emailSender;
         _hub = hub;
+        _emailReply = emailReply;
     }
     
     public bool Reserve(ReservationModel model)
     {
-        var messageId = _emailSender.Send(new EmailSenderModel
+        var messageId = _emailSender.Send(new ReservationEmailSenderModel
         {
             RecipientEmail = "ptrwilk@outlook.com", //TODO: zmienic potem na model.email
             NumberOfPeople = model.NumberOfPeople,
@@ -87,7 +90,10 @@ public class ReservationService : IReservationService
             throw new InvalidOperationException("An email has already been sent.");
         }
         
-       _emailSender.Reply(entity.MessageId!, model.Message, entity.Email);
+        _emailReply.Reply(entity.MessageId!, new ReservationEmailReplyModel
+        {
+            Text = model.Message
+        }, entity.Email);
 
        entity.EmailSent = true;
 

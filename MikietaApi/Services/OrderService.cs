@@ -5,6 +5,8 @@ using MikietaApi.Data;
 using MikietaApi.Data.Entities;
 using MikietaApi.Hubs;
 using MikietaApi.Models;
+using MikietaApi.SendEmail;
+using MikietaApi.SendEmail.Order;
 using MikietaApi.Stripe;
 
 namespace MikietaApi.Services;
@@ -37,19 +39,25 @@ public class OrderService : IOrderService
     private readonly IConverter<OrderOrderedProductEntity, StripeRequestModel> _converter;
     private readonly IHubContext<MessageHub, IMessageHub> _hub;
     private readonly IDeliveryService _deliveryService;
+    private readonly IEmailSender<OrderEmailSenderModel> _emailSender;
+    private readonly ConfigurationOptions _options;
 
     public OrderService(DataContext context, StripeFacade stripe,
         IConverter<OrderOrderedProductEntity, StripeRequestModel> converter,
         IHubContext<MessageHub, IMessageHub> hub,
-        IDeliveryService deliveryService)
+        IDeliveryService deliveryService,
+        IEmailSender<OrderEmailSenderModel> emailSender,
+        ConfigurationOptions options)
     {
         _context = context;
         _stripe = stripe;
         _converter = converter;
         _hub = hub;
         _deliveryService = deliveryService;
+        _emailSender = emailSender;
+        _options = options;
     }
-    
+
     //TODO: Tests checking if prices are correct after making an order
     public OrderResponseModel2 Order(OrderModel model)
     {
@@ -95,7 +103,8 @@ public class OrderService : IOrderService
 
         _context.Orders.Add(entity);
 
-        var res = _stripe.CreateSession(entity.OrderOrderedProducts.Select(_converter.Convert).ToArray(), entity.DeliveryPrice);
+        var res = _stripe.CreateSession(entity.OrderOrderedProducts.Select(_converter.Convert).ToArray(),
+            entity.DeliveryPrice);
 
         entity.SessionId = res.SessionId;
 
@@ -103,6 +112,8 @@ public class OrderService : IOrderService
 
         if (model.PaymentMethod == PaymentMethodType.Cash)
         {
+            _emailSender.Send(ConvertToEmailSender(entity));
+
             _hub.Clients.All.OrderMade();
 
             return new OrderResponseModel2
@@ -118,9 +129,32 @@ public class OrderService : IOrderService
         };
     }
 
+    private OrderEmailSenderModel ConvertToEmailSender(OrderEntity entity)
+    {
+        return new OrderEmailSenderModel
+        {
+            Delivery = entity.DeliveryMethod == DeliveryMethodType.Delivery,
+            TransferPaid = false,
+            Link = $"{_options.WebsiteUrl}/zamowienie/{entity.Id}",
+            DeliveryCost = entity.DeliveryPrice ?? 0,
+            OrderDate = DateTime.Now,
+            Products = entity.OrderOrderedProducts.Select(x => new OrderProductFragmentModel
+            {
+                Price = x.OrderedProduct.Price,
+                Quantity = x.Quantity,
+                Name = x.OrderedProduct.Name,
+                Ingredients = x.OrderedProduct.OrderedProductOrderedIngredients.Select(y => y.OrderedIngredient.Name)
+                    .ToArray()
+            }).ToArray()
+        };
+    }
+
     public Guid OrderSuccess(string sessionId)
     {
-        var entity = _context.Orders.FirstOrDefault(x => x.SessionId == sessionId);
+        var entity = _context.Orders
+            .Include(x => x.OrderOrderedProducts).ThenInclude(x => x.OrderedProduct)
+            .ThenInclude(x => x.OrderedProductOrderedIngredients)
+            .FirstOrDefault(x => x.SessionId == sessionId);
 
         if (entity == null)
         {
@@ -137,6 +171,8 @@ public class OrderService : IOrderService
         entity.CanClearBasket = true;
 
         _context.SaveChanges();
+
+        _emailSender.Send(ConvertToEmailSender(entity));
 
         _hub.Clients.All.OrderMade();
 
@@ -303,8 +339,7 @@ public class OrderService : IOrderService
                 Floor = entity.Floor,
                 HomeNumber = entity.HomeNumber
             },
-            Cost = entity.OrderOrderedProducts.Where(z => z.OrderId == entity.Id)
-                .Sum(z => ToPrice(z.OrderedProduct) * z.Quantity) + (entity.DeliveryPrice ?? 0),
+            Cost = GetOrderPrice(entity),
             Phone = entity.Phone,
             Number = entity.Number,
             Payed = entity.Paid,
@@ -316,6 +351,12 @@ public class OrderService : IOrderService
             DeliveryAt = entity.DeliveryTiming,
             DeliveryPrice = entity.DeliveryPrice
         };
+    }
+
+    private double GetOrderPrice(OrderEntity entity)
+    {
+        return entity.OrderOrderedProducts.Where(z => z.OrderId == entity.Id)
+            .Sum(z => ToPrice(z.OrderedProduct) * z.Quantity) + (entity.DeliveryPrice ?? 0);
     }
 
     private OrderedProductEntity[] CreateOrderedProducts(OrderModel model)

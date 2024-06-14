@@ -10,6 +10,9 @@ using MikietaApi.Hubs;
 using MikietaApi.Models;
 using MikietaApi.Routes;
 using MikietaApi.SendEmail;
+using MikietaApi.SendEmail.Order;
+using MikietaApi.SendEmail.Reservation;
+using MikietaApi.SendEmail.Reservation.Models;
 using MikietaApi.Services;
 using MikietaApi.Stripe;
 using MikietaApi.Validators;
@@ -40,17 +43,20 @@ builder.Services.AddScoped<IValidator<RemovedIngredientModel>, RemovedIngredient
 builder.Services.AddScoped<IValidator<ReplacedIngredientModel>, ReplacedIngredientModelValidator>();
 builder.Services.AddScoped<IValidator<DeliveryModel>, DeliveryModelValidator>();
 builder.Services.AddSingleton<ConfigurationOptions, ConfigurationOptions>();
-builder.Services.AddScoped<EmailSender, EmailSender>(provider =>
+builder.Services.AddSingleton<EmailSenderOption, EmailSenderOption>(provider =>
 {
     var smtpClient = provider.GetService<ConfigurationOptions>()!.SmtpClient;
-    return new EmailSender(new EmailSenderOption
+    return new EmailSenderOption
     {
         Host = smtpClient.Host,
         Email = smtpClient.Email,
         Password = smtpClient.Password,
         Port = smtpClient.Port
-    });
+    };
 });
+builder.Services.AddScoped<IEmailSender<ReservationEmailSenderModel>, ReservationEmailSender>();
+builder.Services.AddScoped<IEmailReply<ReservationEmailReplyModel>, ReservationEmailReply>();
+builder.Services.AddScoped<IEmailSender<OrderEmailSenderModel>, OrderEmailSender>();
 builder.Services.AddScoped<GoogleLocationService, GoogleLocationService>(provider =>
 {
     var googleApiKey = provider.GetService<ConfigurationOptions>()!.GoogleApiKey;
