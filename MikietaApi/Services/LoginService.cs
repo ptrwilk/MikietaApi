@@ -1,5 +1,4 @@
 ﻿using Jwt.Core;
-using Microsoft.AspNetCore.Authorization;
 using MikietaApi.Models;
 
 namespace MikietaApi.Services;

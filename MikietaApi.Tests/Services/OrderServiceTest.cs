@@ -1,12 +1,10 @@
-﻿using System.Reflection;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MikietaApi.Data;
 using MikietaApi.Data.Entities;
 using MikietaApi.Models;
 using MikietaApi.Services;
-using MikietaApi.Stripe;
 using Shouldly;
 
 namespace MikietaApi.Tests.Services;
