@@ -1,6 +1,4 @@
-﻿using System.Net.Mail;
-
-namespace MikietaApi.SendEmail;
+﻿namespace MikietaApi.SendEmail;
 
 public interface IEmailSender<in T>
 {
