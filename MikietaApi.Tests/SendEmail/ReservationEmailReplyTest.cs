@@ -26,7 +26,7 @@ public class ReservationEmailReplyTest
 
         var content = sender.ReadFromTemplate(new ReservationEmailReplyModel
         {
-           Text = "Test"
+           Message = "Test"
         });
         
         File.WriteAllText("ReservationEmailReply.html", content);

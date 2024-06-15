@@ -6,8 +6,8 @@ public interface IEmailSender<in T>
 }
 
 public abstract class EmailSenderBase<T> : EmailBase<T>, IEmailSender<T>
+    where T : EmailSenderModelBase
 {
-    protected abstract string Subject { get; }
 
     protected EmailSenderBase(EmailSenderOption option) : base(option)
     {
@@ -15,7 +15,7 @@ public abstract class EmailSenderBase<T> : EmailBase<T>, IEmailSender<T>
     
     public string Send(T model)
     {
-        var message = CreateMailMessage(Subject, out var messageId);
+        var message = CreateMailMessage(model, Subject, out var messageId);
         
         var content = ReadFromTemplate(model);
         

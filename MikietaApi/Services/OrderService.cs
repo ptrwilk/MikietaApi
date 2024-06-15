@@ -138,6 +138,7 @@ public class OrderService : IOrderService
             Link = $"{_options.WebsiteUrl}/zamowienie/{entity.Id}",
             DeliveryCost = entity.DeliveryPrice ?? 0,
             OrderDate = DateTime.Now,
+            RecipientEmail = entity.Email,
             Products = entity.OrderOrderedProducts.Select(x => new OrderProductFragmentModel
             {
                 Price = x.OrderedProduct.Price,
@@ -154,6 +155,7 @@ public class OrderService : IOrderService
         var entity = _context.Orders
             .Include(x => x.OrderOrderedProducts).ThenInclude(x => x.OrderedProduct)
             .ThenInclude(x => x.OrderedProductOrderedIngredients)
+            .ThenInclude(x => x.OrderedIngredient)
             .FirstOrDefault(x => x.SessionId == sessionId);
 
         if (entity == null)

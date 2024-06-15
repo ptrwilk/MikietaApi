@@ -1,6 +1,6 @@
 ﻿namespace MikietaApi.SendEmail.Order;
 
-public class OrderEmailSenderModel
+public class OrderEmailSenderModel : EmailSenderModelBase
 {
     public string Link { get; set; } = null!;
     public DateTime OrderDate { get; set; }

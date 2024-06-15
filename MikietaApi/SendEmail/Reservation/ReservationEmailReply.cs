@@ -6,6 +6,8 @@ public class ReservationEmailReply : EmailReplyBase<ReservationEmailReplyModel>
 {
     private const string Path = "SendEmail/Reservation/Templates/reply_email_template.html";
     
+    protected override string Subject => "Rezerwacja w Pizzerii Mikieta";
+
     public ReservationEmailReply(EmailSenderOption option) : base(option)
     {
         
@@ -15,7 +17,7 @@ public class ReservationEmailReply : EmailReplyBase<ReservationEmailReplyModel>
     {
         var content = File.ReadAllText(Path);
         
-        content = content.Replace("[TEXT]", model.Text);
+        content = content.Replace("[TEXT]", model.Message);
 
         return content;
     }
