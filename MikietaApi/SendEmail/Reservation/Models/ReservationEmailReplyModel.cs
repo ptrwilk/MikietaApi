@@ -1,6 +1,6 @@
 ﻿namespace MikietaApi.SendEmail.Reservation.Models;
 
-public class ReservationEmailReplyModel
+public class ReservationEmailReplyModel : EmailReplayModelBase
 {
-    public string Text { get; set; } = null!;
+    public string Message { get; set; } = null!;
 }

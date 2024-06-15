@@ -31,16 +31,16 @@ public class ReservationService : IReservationService
         _hub = hub;
         _emailReply = emailReply;
     }
-    
+
     public bool Reserve(ReservationModel model)
     {
         var messageId = _emailSender.Send(new ReservationEmailSenderModel
         {
-            RecipientEmail = "ptrwilk@outlook.com", //TODO: zmienic potem na model.email
+            RecipientEmail = model.Email,
             NumberOfPeople = model.NumberOfPeople,
             ReservationDate = model.ReservationDate.ToLocalTime()
         });
-        
+
         _context.Reservations.Add(new ReservationEntity
         {
             Name = model.Name,
@@ -55,7 +55,7 @@ public class ReservationService : IReservationService
         });
 
         _context.SaveChanges();
-        
+
         _hub.Clients.All.ReservationMade();
 
         return true;
@@ -74,7 +74,7 @@ public class ReservationService : IReservationService
         var entity = _context.Reservations.First(x => x.Id == model.Id);
 
         entity.Status = model.Status;
-    
+
         _context.SaveChanges();
 
         return model;
@@ -89,17 +89,19 @@ public class ReservationService : IReservationService
             //TODO: To i inne exception wrzucać do logów natomiast klient niech ich nie dostaje, przynajmnniej nie caly callstack
             throw new InvalidOperationException("An email has already been sent.");
         }
-        
-        _emailReply.Reply(entity.MessageId!, new ReservationEmailReplyModel
+
+        _emailReply.Reply(new ReservationEmailReplyModel
         {
-            Text = model.Message
-        }, entity.Email);
+            Message = model.Message,
+            MessageId = entity.MessageId!,
+            RecipientEmail = entity.Email
+        });
 
-       entity.EmailSent = true;
+        entity.EmailSent = true;
 
-       _context.SaveChanges();
+        _context.SaveChanges();
 
-       return Convert(entity);
+        return Convert(entity);
     }
 
     private ReservationModel Convert(ReservationEntity entity)

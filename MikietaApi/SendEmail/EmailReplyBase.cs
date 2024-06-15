@@ -2,19 +2,20 @@
 
 public interface IEmailReply<T>
 {
-    void Reply(string messageId, T message, string recipientEmail);
+    void Reply(T model);
     
 }
 public abstract class EmailReplyBase<T> : EmailBase<T>, IEmailReply<T>
+    where T : EmailReplayModelBase
 {
     protected EmailReplyBase(EmailSenderOption option) : base(option)
     {
     }
 
-    public void Reply(string messageId, T message, string recipientEmail)
+    public void Reply(T model)
     {
-        var replyMessage = CreateMailMessage("Re: Rezerwacja w Pizzerii Mikieta", messageId);
-        var htmlBody = ReadFromTemplate(message);
+        var replyMessage = CreateMailMessage(model, $"Re: {Subject}", model.MessageId);
+        var htmlBody = ReadFromTemplate(model);
         
         replyMessage.AlternateViews.Add(CreateAlternateView(htmlBody));
 

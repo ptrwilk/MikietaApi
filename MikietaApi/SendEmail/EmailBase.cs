@@ -4,6 +4,7 @@ using System.Net.Mail;
 namespace MikietaApi.SendEmail;
 
 public abstract class EmailBase<T>
+    where T : EmailSenderModelBase
 {
     private readonly EmailSenderOption _option;
 
@@ -12,20 +13,22 @@ public abstract class EmailBase<T>
         _option = option;
     }
     
+    protected abstract string Subject { get; }
+    
     protected abstract string ReadFromTemplate(T model);
     
-    protected MailMessage CreateMailMessage(string subject, out string messageId)
+    protected MailMessage CreateMailMessage(T model, string subject, out string messageId)
     {
         messageId = Guid.NewGuid().ToString();
 
-        return CreateMailMessage(subject, messageId);
+        return CreateMailMessage(model, subject, messageId);
     }
     
-    protected MailMessage CreateMailMessage(string subject, string messageId)
+    protected MailMessage CreateMailMessage(T model, string subject, string messageId)
     {
         var message = new MailMessage();
         message.From = new MailAddress(_option.Email, "Pizzeria Mikieta");
-        message.To.Add(new MailAddress("ptrwilk@outlook.com", "Klient")); //TODO: Replace email with one from model later       
+        message.To.Add(new MailAddress(model.RecipientEmail, "Klient"));    
         message.Subject = subject;
 
         message.Headers.Add("In-Reply-To", messageId);
