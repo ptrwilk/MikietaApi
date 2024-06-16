@@ -58,7 +58,6 @@ public class OrderService : IOrderService
         _options = options;
     }
 
-    //TODO: Tests checking if prices are correct after making an order
     public OrderResponseModel2 Order(OrderModel model)
     {
         var orderedProducts = CreateOrderedProducts(model);
@@ -415,7 +414,11 @@ public class OrderService : IOrderService
     private double ToPrice(OrderedProductEntity entity)
     {
         var sum = entity.OrderedProductOrderedIngredients.Sum(x =>
-            entity.PizzaType is null ? 0 : x.OrderedIngredient.Prices[(int)entity.PizzaType]);
+            entity.PizzaType is null || x.IsIngredientRemoved
+                ? 0
+                : x.ReplacedIngredient is not null
+                    ? x.ReplacedIngredient.Prices[(int)entity.PizzaType] * x.Quantity
+                    : x.OrderedIngredient.Prices[(int)entity.PizzaType] * x.Quantity);
 
         return entity.Price + sum;
     }
