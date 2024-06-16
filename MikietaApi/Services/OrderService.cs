@@ -58,7 +58,6 @@ public class OrderService : IOrderService
         _options = options;
     }
 
-    //TODO: Tests checking if prices are correct after making an order
     public OrderResponseModel2 Order(OrderModel model)
     {
         var orderedProducts = CreateOrderedProducts(model);
