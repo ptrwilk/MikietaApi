@@ -207,6 +207,7 @@ public class OrderService : IOrderService
             .ThenInclude(x => x.OrderedProductOrderedIngredients)
             .ThenInclude(x => x.ReplacedIngredient)
             .Where(x => x.OrderId == orderId)
+            .OrderBy(x => x.OrderedProduct.Index)
             .ToList()
             .Select(Convert)
             .ToArray();
@@ -418,7 +419,7 @@ public class OrderService : IOrderService
 
     private static void ValidateProducts(OrderModel model, ProductEntity[] products)
     {
-        if (!products.Select(x => x.Id).SequenceEqual(model.ProductQuantities.Select(x => x.ProductId)))
+        if (!products.Select(x => x.Id).OrderBy(x => x).SequenceEqual(model.ProductQuantities.Select(x => x.ProductId).OrderBy(x => x)))
         {
             throw new ArgumentException(
                 "One or more provided Product Ids are not included in the expected set of IDs.");
