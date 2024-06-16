@@ -9,7 +9,6 @@ public class OrderedIngredientEntity
     public Guid IngredientId { get; set; }
     public IngredientEntity? Ingredient { get; set; }
     public string Name { get; set; } = null!;
-    //TODO: Not used
     public int Index { get; set; }
     public double PriceSmall { get; set; }
     public double PriceMedium { get; set; }

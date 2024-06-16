@@ -14,7 +14,6 @@ public class OrderedProductEntity
     public ProductType ProductType { get; set; }
     public PizzaType? PizzaType { get; set; }
     public string? Description { get; set; }
-    //TODO: Not used
     public int Index { get; set; }
     public ICollection<OrderedProductOrderedIngredientEntity> OrderedProductOrderedIngredients { get; set; }
     public ICollection<OrderOrderedProductEntity> OrderOrderedProducts { get; set; }

@@ -909,6 +909,21 @@ public class OrderServiceTest
                     }
                 }
             }), true, "").SetName("Order_ProductsIdsValidationTest 14");
+        
+        yield return new TestCaseData(
+            CreateModel(new ProductQuantityModel[]
+            {
+                new()
+                {
+                    ProductId = Guid.Parse("00000000-0000-0000-0000-000000000002"),
+                    Quantity = 1
+                },
+                new()
+                {
+                    ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                    Quantity = 1
+                }
+            }), true, "").SetName("Order_ProductsIdsValidationTest 15");
     }
 
     private static OrderModel CreateModel(ProductQuantityModel[] models) => new()

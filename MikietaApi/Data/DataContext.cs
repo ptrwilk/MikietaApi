@@ -82,6 +82,8 @@ public class DataContext : DbContext
         
         var maxProductsIndex = Products.Any() ? Products.Max(x => x.Index) + 1 : 1;
         var maxIngredientsIndex = Ingredients.Any() ? Ingredients.Max(x => x.Index) + 1 : 1;
+        var maxOrderedIngredient = OrderedIngredients.Any() ? OrderedIngredients.Max(x => x.Index) + 1 : 1;
+        var maxOrderedProducts = OrderedProducts.Any() ? OrderedProducts.Max(x => x.Index) + 1 : 1;
 
         foreach (var entry in entries)
         {
@@ -102,10 +104,20 @@ public class DataContext : DbContext
                 productEntity.Index = maxProductsIndex;
                 maxProductsIndex++;
             }
-            if (entry.Entity is IngredientEntity ingredientEntity)
+            else if (entry.Entity is IngredientEntity ingredientEntity)
             {
                 ingredientEntity.Index = maxIngredientsIndex;
                 maxIngredientsIndex++;
+            }
+            else if (entry.Entity is OrderedIngredientEntity orderedIngredientEntity)
+            {
+                orderedIngredientEntity.Index = maxOrderedIngredient;
+                maxOrderedIngredient++;
+            }
+            else if (entry.Entity is OrderedProductEntity orderedProductEntity)
+            {
+                orderedProductEntity.Index = maxOrderedProducts;
+                maxOrderedProducts++;
             }
         }
         
