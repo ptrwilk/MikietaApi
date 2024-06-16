@@ -31,7 +31,14 @@ public static class OrderRoute
             return Results.ValidationProblem(validation.ToDictionary());
         }
 
-        return Results.Ok(service.Order(model));
+        try
+        {
+            return Results.Ok(service.Order(model));
+        }
+        catch (ArgumentException ex)
+        {
+            return Results.BadRequest(ex.Message);
+        }
     }
 
     private static IResult Success(IOrderService service, ConfigurationOptions options, string sessionId)

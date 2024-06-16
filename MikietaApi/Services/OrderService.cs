@@ -362,11 +362,16 @@ public class OrderService : IOrderService
 
     private OrderedProductEntity[] CreateOrderedProducts(OrderModel model)
     {
-        //TODO: napisać validację sprawdzająca czy każdy productId znajduje sie w Products
         var products = _context.Products.Include(x => x.Ingredients)
             .Where(x => model.ProductQuantities.Select(g => g.ProductId).Any(z => x.Id == z)).ToArray();
 
-        //TODO: napisać validację sprawdzająca czy każdy ingredientId znajduje sie w Ingredients
+        ValidateProducts(model, products);
+        ValidateRemovedIngredients(model, products);
+
+        var allIngredients = _context.Ingredients.ToArray();
+        ValidateAdditionalIngredients(model, allIngredients);
+        ValidateReplacedIngredients(model, products, allIngredients);
+
         var additionalIngredients = model.ProductQuantities
             .SelectMany(z => z.AdditionalIngredients ?? Array.Empty<AdditionalIngredientModel>())
             .Select(g => g.IngredientId).ToArray();
@@ -379,7 +384,7 @@ public class OrderService : IOrderService
         var toIngredients = model.ProductQuantities
             .SelectMany(z => z.ReplacedIngredients ?? Array.Empty<ReplacedIngredientModel>())
             .Select(x => x.ToIngredientId).ToArray();
-        var ingredients = _context.Ingredients
+        var ingredients = allIngredients
             .Where(x => additionalIngredients.Concat(removedIngredients)
                 .Concat(fromIngredients).Concat(toIngredients).Any(z => z == x.Id)).ToArray();
 
@@ -409,6 +414,67 @@ public class OrderService : IOrderService
         return products.Select(x =>
             ToOrderedProduct(x, AdditionalIngredientEntities(x.Id), RemovedIngredientEntities(x.Id),
                 ReplacedIngredients(x.Id))).ToArray();
+    }
+
+    private static void ValidateProducts(OrderModel model, ProductEntity[] products)
+    {
+        if (!products.Select(x => x.Id).SequenceEqual(model.ProductQuantities.Select(x => x.ProductId)))
+        {
+            throw new ArgumentException(
+                "One or more provided Product Ids are not included in the expected set of IDs.");
+        }
+    }
+
+    private void ValidateRemovedIngredients(OrderModel model, ProductEntity[] products)
+    {
+        foreach (var product in products)
+        {
+            var removedIngredientModels = model.ProductQuantities
+                .First(x => x.ProductId == product.Id).RemovedIngredients;
+
+            if (removedIngredientModels != null &&
+                !product.Ingredients.Any(x => removedIngredientModels.Any(z => z.IngredientId == x.Id)))
+            {
+                throw new ArgumentException(
+                    $"One or more provided RemovedIngredient Ids are not included in the expected Product Id: {product.Id}.");
+            }
+        }
+    }
+
+    private void ValidateAdditionalIngredients(OrderModel model, IngredientEntity[] ingredients)
+    {
+        var additionalIngredients = model.ProductQuantities.Where(g => g.AdditionalIngredients is not null)
+            .SelectMany(z => z.AdditionalIngredients!).ToArray();
+
+        if (additionalIngredients.Any() && additionalIngredients.All(x => ingredients.All(z => z.Id != x.IngredientId)))
+        {
+            throw new ArgumentException(
+                "One or more provided AdditionalIngredient Ids are not included in the expected set of Ingredient IDs.");
+        }
+    }
+
+    private void ValidateReplacedIngredients(OrderModel model, ProductEntity[] products, IngredientEntity[] ingredients)
+    {
+        foreach (var product in products)
+        {
+            var replacedIngredients = model.ProductQuantities.First(x => x.ProductId == product.Id).ReplacedIngredients;
+
+            if (replacedIngredients is not null &&
+                !product.Ingredients.Any(x => replacedIngredients.Any(z => z.FromIngredientId == x.Id)))
+            {
+                throw new ArgumentException(
+                    $"One or more provided ReplacedFromIngredient Ids are not included in the expected Product Id: {product.Id}.");
+            }
+        }
+
+        var toIngredientIds = model.ProductQuantities.Where(x => x.ReplacedIngredients is not null)
+            .SelectMany(x => x.ReplacedIngredients!).Select(x => x.ToIngredientId).ToArray();
+
+        if (toIngredientIds.Any() && toIngredientIds.All(x => ingredients.All(id => id.Id != x)))
+        {
+            throw new ArgumentException(
+                "One or more provided ReplacedToIngredient Ids are not included in the expected set of Ingredient IDs.");
+        }
     }
 
     private double ToPrice(OrderedProductEntity entity)
