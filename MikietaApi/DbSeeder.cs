@@ -74,7 +74,12 @@ public class DbSeeder
         {
             if (_context.Settings.All(x => x.Key != key))
             {
-                var value = key.Contains("Open") || key.Contains("Delivery") ? "00:00" : null;
+                string? value = null;
+                if (SettingEntity.Times.Any(z => z.Equals(key)))
+                {
+                    value = "00:00:00";
+                }
+
                 _context.Settings.Add(new SettingEntity
                 {
                     Key = key,
