@@ -1,6 +1,7 @@
 using FluentValidation;
 using GoogleMaps.LocationServices;
 using Jwt.Core;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using MikietaApi;
 using MikietaApi.Converters;
@@ -16,6 +17,7 @@ using MikietaApi.SendEmail.Reservation.Models;
 using MikietaApi.Services;
 using MikietaApi.Stripe;
 using MikietaApi.Validators;
+using Serilog;
 using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -72,11 +74,11 @@ builder.Services.AddScoped<IConverter<OrderOrderedProductEntity, StripeRequestMo
 builder.Services.AddScoped<StripeFacade, StripeFacade>(x =>
 {
     var context = x.GetRequiredService<IHttpContextAccessor>().HttpContext!;
-    
+
     var url = $"{context.Request.Scheme}://{context.Request.Host}";
     var successUrl = $"{url}/order/success?sessionId={{CHECKOUT_SESSION_ID}}";
     var cancelUrl = $"{url}/order/cancel";
-    
+
     return new StripeFacade(successUrl, cancelUrl);
 });
 
@@ -85,6 +87,10 @@ builder.Services.AddCors(options =>
         b => { b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); }
     )
 );
+
+Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
+
+builder.Host.UseSerilog();
 
 builder.Services.AddSignalR();
 
@@ -98,8 +104,29 @@ StripeConfiguration.ApiKey = app.Services.GetService<ConfigurationOptions>()!.Se
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors("MyPolicy");
+app.UseSerilogRequestLogging();
 
 app.MapHub<MessageHub>("/messageHub");
+
+app.UseExceptionHandler(appError =>
+{
+    appError.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+
+        var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+
+        if (contextFeature is not null)
+        {
+            await context.Response.WriteAsJsonAsync(new
+            {
+                StatusCode = context.Response.StatusCode,
+                Message = "Internal Server Error"
+            });
+        }
+    });
+});
 
 ProductsRoute.RegisterEndpoints(app);
 OrderRoute.RegisterEndpoints(app);
