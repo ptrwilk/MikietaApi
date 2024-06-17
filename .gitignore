@@ -43,3 +43,4 @@ appsettings.Development.json
 NuGet.Config
 
 database.db
+logs/
