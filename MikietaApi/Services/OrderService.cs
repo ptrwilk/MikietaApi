@@ -24,11 +24,11 @@ public interface IOrderService
     Guid OrderSuccess(string sessionId);
     void OrderCanceled();
     AdminOrderModel[] GetAll();
-    AdminProductModel[] Get(Guid orderId);
+    AdminOrderedProductModel[] Get(Guid orderId);
     AdminOrderModel GetSingle(Guid orderId);
     OrderStatusModel GetStatus(Guid orderId);
     AdminOrderModel Update(AdminOrderModel model);
-    AdminProductModel UpdateProduct(Guid orderId, AdminProductModel model);
+    AdminOrderedProductModel UpdateProduct(Guid orderId, AdminOrderedProductModel model);
     bool ClearCanClearBasket(Guid orderId);
 }
 
@@ -198,7 +198,7 @@ public class OrderService : IOrderService
             .ToArray();
     }
 
-    public AdminProductModel[] Get(Guid orderId)
+    public AdminOrderedProductModel[] Get(Guid orderId)
     {
         return _context.OrderOrderedProducts.Include(x => x.OrderedProduct)
             .ThenInclude(x => x.OrderedProductOrderedIngredients)
@@ -264,7 +264,7 @@ public class OrderService : IOrderService
         return model;
     }
 
-    public AdminProductModel UpdateProduct(Guid orderId, AdminProductModel model)
+    public AdminOrderedProductModel UpdateProduct(Guid orderId, AdminOrderedProductModel model)
     {
         var entity = _context.OrderOrderedProducts
             .Single(x => x.OrderId == orderId && x.OrderedProductId == model.Id);
@@ -291,11 +291,11 @@ public class OrderService : IOrderService
         return flagCleared;
     }
 
-    private AdminProductModel Convert(OrderOrderedProductEntity entity)
+    private AdminOrderedProductModel Convert(OrderOrderedProductEntity entity)
     {
         var items = entity.OrderedProduct.OrderedProductOrderedIngredients.ToArray();
 
-        return new AdminProductModel
+        return new AdminOrderedProductModel
         {
             Id = entity.OrderedProduct.Id,
             Name = entity.OrderedProduct.Name,

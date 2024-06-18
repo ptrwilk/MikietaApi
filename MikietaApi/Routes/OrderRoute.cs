@@ -86,7 +86,7 @@ public static class OrderRoute
     }
 
     [Authorize]
-    private static IResult UpdateProduct(IOrderService service, Guid orderId, AdminProductModel model)
+    private static IResult UpdateProduct(IOrderService service, Guid orderId, AdminOrderedProductModel model)
     {
         return Results.Ok(service.UpdateProduct(orderId, model));
     }
