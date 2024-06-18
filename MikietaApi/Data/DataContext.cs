@@ -26,6 +26,19 @@ public class DataContext : DbContext
             .HasMany(x => x.Ingredients)
             .WithMany(x => x.Products)
             .UsingEntity(x => x.ToTable("ProductIngredient"));
+        modelBuilder.Entity<ProductEntity>()
+            .Property(x => x.ProductType)
+            .HasConversion<string>();
+        modelBuilder.Entity<ProductEntity>()
+            .Property(x => x.PizzaType)
+            .HasConversion<string>();
+        
+        modelBuilder.Entity<OrderedProductEntity>()
+            .Property(x => x.ProductType)
+            .HasConversion<string>();
+        modelBuilder.Entity<OrderedProductEntity>()
+            .Property(x => x.PizzaType)
+            .HasConversion<string>();
 
         modelBuilder.Entity<OrderEntity>()
             .Property(x => x.Number)
@@ -56,6 +69,9 @@ public class DataContext : DbContext
             .Property(x => x.Number)
             .IsUnicode()
             .ValueGeneratedOnAdd();
+        modelBuilder.Entity<ReservationEntity>()
+            .Property(x => x.Status)
+            .HasConversion<string>();
 
         modelBuilder.Entity<IngredientEntity>()
             .Ignore(x => x.Prices);

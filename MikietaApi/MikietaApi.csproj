@@ -62,10 +62,23 @@
       <None Update="SendEmail\Order\Templates\delivery_cost_fragment.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Remove="logs\**" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Jwt.Core\Jwt.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="logs\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="logs\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="logs\**" />
     </ItemGroup>
 
 </Project>

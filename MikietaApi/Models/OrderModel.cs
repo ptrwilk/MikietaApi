@@ -1,4 +1,6 @@
-﻿namespace MikietaApi.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace MikietaApi.Models;
 
 public class ProcessingPersonalData
 {
@@ -41,8 +43,12 @@ public class OrderModel
     public ProductQuantityModel[] ProductQuantities { get; set; } = null!;
     public DateTime? DeliveryTiming { get; set; }
     public bool? DeliveryRightAway { get; set; }
+    
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public DeliveryMethodType DeliveryMethod { get; set; }
     public string? Comments { get; set; }
+    
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public PaymentMethodType PaymentMethod { get; set; }
     public string Name { get; set; } = null!;
     public string Phone { get; set; } = null!;
@@ -77,18 +83,25 @@ public class AdminOrderModel
     public bool Payed { get; set; }
     public int TotalProducts { get; set; }
     public int CompletedProducts { get; set; }
+    
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public OrderStatusType Status { get; set; }
     public double Cost { get; set; }
     public DateTime DeliveryAt { get; set; }
     public DateTime CreatedAt { get; set; }
+    
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public DeliveryMethodType DeliveryMethod { get; set; }
     public double? DeliveryPrice { get; set; }
 }
 
 public class OrderStatusModel
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public OrderStatusType Status { get; set; }
     public DateTime DeliveryAt { get; set; }
+    
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public DeliveryMethodType DeliveryMethod { get; set; }
     public bool CanClearBasket { get; set; }
 }

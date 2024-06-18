@@ -1,4 +1,6 @@
-﻿namespace MikietaApi.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace MikietaApi.Models;
 
 public class DeliveryModel
 {
@@ -9,6 +11,7 @@ public class DeliveryModel
 
 public class DeliveryResponseModel
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public DeliveryCheckErrorType? ErrorType { get; set; }
     public bool HasError { get; set; }
     public string? ErrorMessage { get; set; }

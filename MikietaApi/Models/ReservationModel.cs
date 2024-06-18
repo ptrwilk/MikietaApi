@@ -1,4 +1,6 @@
-﻿namespace MikietaApi.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace MikietaApi.Models;
 
 public class ReservationModel
 {
@@ -11,6 +13,8 @@ public class ReservationModel
     public string Email { get; set; } = null!;
     public string Name { get; set; } = null!;
     public string? Comments { get; set; }
+    
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public ReservationStatusType Status { get; set; }
     public bool EmailSent { get; set; }
 }

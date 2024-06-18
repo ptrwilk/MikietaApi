@@ -8,8 +8,8 @@ namespace MikietaApi.Services;
 public interface IProductsService
 {
     ProductModel[] Get(AddressModel address);
-    AdminProductModel2[] GetAdminProducts(AddressModel address);
-    AdminProductModel2 AddOrUpdateAdminProduct(AdminProductModel2 model, AddressModel address);
+    AdminProductModel[] GetAdminProducts(AddressModel address);
+    AdminProductModel AddOrUpdateAdminProduct(AdminProductModel model, AddressModel address);
     bool Delete(Guid productId);
 }
 
@@ -33,12 +33,12 @@ public class ProductsService : IProductsService
         return products.Select(x => Convert(x, address)).ToArray();
     }
 
-    public AdminProductModel2[] GetAdminProducts(AddressModel address)
+    public AdminProductModel[] GetAdminProducts(AddressModel address)
     {
         var products = _context.Products.Include(x => x.Ingredients)
             .Where(x => x.IsDeleted == false).OrderBy(x => x.Index).ToList();
 
-        return products.Select(entity => new AdminProductModel2
+        return products.Select(entity => new AdminProductModel
         {
             Id = entity.Id,
             ProductType = entity.ProductType,
@@ -56,7 +56,7 @@ public class ProductsService : IProductsService
         }).ToArray();
     }
 
-    public AdminProductModel2 AddOrUpdateAdminProduct(AdminProductModel2 model, AddressModel address)
+    public AdminProductModel AddOrUpdateAdminProduct(AdminProductModel model, AddressModel address)
     {
         ProductEntity entity;
         if (model.Id is null)

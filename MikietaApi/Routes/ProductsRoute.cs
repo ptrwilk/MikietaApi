@@ -29,7 +29,7 @@ public static class ProductsRoute
     }
     
     [Authorize]
-    private static IResult AddOrUpdateAdminProduct(IProductsService service, HttpContext context, AdminProductModel2 model)
+    private static IResult AddOrUpdateAdminProduct(IProductsService service, HttpContext context, AdminProductModel model)
     {
         return Results.Ok(service.AddOrUpdateAdminProduct(model, new AddressModel(context)));
     }
