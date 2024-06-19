@@ -143,12 +143,12 @@ public class OrderService : IOrderService
             x.DeliveryCost = entity.DeliveryPrice ?? 0;
             x.OrderDate = DateTime.Now;
             x.RecipientEmail = entity.Email;
-            x.Products = entity.OrderOrderedProducts.Select(x => new OrderProductFragmentModel
+            x.Products = entity.OrderOrderedProducts.Select(z => new OrderProductFragmentModel
             {
-                Price = x.OrderedProduct.Price,
-                Quantity = x.Quantity,
-                Name = x.OrderedProduct.Name,
-                Ingredients = x.OrderedProduct.OrderedProductOrderedIngredients.Select(y => y.OrderedIngredient.Name)
+                Price = z.OrderedProduct.Price,
+                Quantity = z.Quantity,
+                Name = z.OrderedProduct.Name,
+                Ingredients = z.OrderedProduct.OrderedProductOrderedIngredients.Select(y => y.OrderedIngredient.Name)
                     .ToArray()
             }).ToArray();
         });
