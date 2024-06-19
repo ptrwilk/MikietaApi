@@ -140,7 +140,7 @@ public class DataContext : DbContext
         return base.SaveChanges();
     }
     
-    public T? GetValue<T>(SettingEntity[] settings, string key)
+    public static T? GetValue<T>(SettingEntity[] settings, string key)
     {
         var value = settings.Single(x => x.Key == key).Value;
 

@@ -18,6 +18,7 @@ public class ReservationEmailReply : EmailReplyBase<ReservationEmailReplyModel>
         var content = File.ReadAllText(Path);
         
         content = content.Replace("[TEXT]", model.Message);
+        content = content.Replace("[RECIPIENT_FRAGMENT]", ReadFromRecipientFragment(model));
 
         return content;
     }

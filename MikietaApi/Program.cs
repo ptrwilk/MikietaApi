@@ -7,6 +7,7 @@ using MikietaApi;
 using MikietaApi.Converters;
 using MikietaApi.Data;
 using MikietaApi.Data.Entities;
+using MikietaApi.Factories;
 using MikietaApi.Hubs;
 using MikietaApi.Models;
 using MikietaApi.Routes;
@@ -45,6 +46,7 @@ builder.Services.AddScoped<IValidator<RemovedIngredientModel>, RemovedIngredient
 builder.Services.AddScoped<IValidator<ReplacedIngredientModel>, ReplacedIngredientModelValidator>();
 builder.Services.AddScoped<IValidator<DeliveryModel>, DeliveryModelValidator>();
 builder.Services.AddSingleton<ConfigurationOptions, ConfigurationOptions>();
+builder.Services.AddSingleton<IEmailSenderModelFactory, EmailSenderModelFactory>();
 builder.Services.AddSingleton<EmailSenderOption, EmailSenderOption>(provider =>
 {
     var smtpClient = provider.GetService<ConfigurationOptions>()!.SmtpClient;

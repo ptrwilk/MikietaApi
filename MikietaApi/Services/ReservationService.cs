@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using MikietaApi.Data;
 using MikietaApi.Data.Entities;
+using MikietaApi.Factories;
 using MikietaApi.Hubs;
 using MikietaApi.Models;
 using MikietaApi.SendEmail;
@@ -21,25 +22,29 @@ public class ReservationService : IReservationService
     private readonly DataContext _context;
     private readonly IEmailSender<ReservationEmailSenderModel> _emailSender;
     private readonly IEmailReply<ReservationEmailReplyModel> _emailReply;
+    private readonly IEmailSenderModelFactory _emailSenderFactory;
     private readonly IHubContext<MessageHub, IMessageHub> _hub;
 
     public ReservationService(DataContext context, IEmailSender<ReservationEmailSenderModel> emailSender,
-        IHubContext<MessageHub, IMessageHub> hub, IEmailReply<ReservationEmailReplyModel> emailReply)
+        IHubContext<MessageHub, IMessageHub> hub, IEmailReply<ReservationEmailReplyModel> emailReply,
+        IEmailSenderModelFactory emailSenderFactory)
     {
         _context = context;
         _emailSender = emailSender;
         _hub = hub;
         _emailReply = emailReply;
+        _emailSenderFactory = emailSenderFactory;
     }
 
     public bool Reserve(ReservationModel model)
     {
-        var messageId = _emailSender.Send(new ReservationEmailSenderModel
+        var settings = _context.Settings.ToArray();
+        var messageId = _emailSender.Send(_emailSenderFactory.Create<ReservationEmailSenderModel>(settings, x =>
         {
-            RecipientEmail = model.Email,
-            NumberOfPeople = model.NumberOfPeople,
-            ReservationDate = model.ReservationDate.ToLocalTime()
-        });
+            x.RecipientEmail = model.Email;
+            x.NumberOfPeople = model.NumberOfPeople;
+            x.ReservationDate = model.ReservationDate.ToLocalTime();
+        }));
 
         _context.Reservations.Add(new ReservationEntity
         {
@@ -90,12 +95,13 @@ public class ReservationService : IReservationService
             throw new InvalidOperationException("An email has already been sent.");
         }
 
-        _emailReply.Reply(new ReservationEmailReplyModel
+        var settings = _context.Settings.ToArray();
+        _emailReply.Reply(_emailSenderFactory.Create<ReservationEmailReplyModel>(settings, x =>
         {
-            Message = model.Message,
-            MessageId = entity.MessageId!,
-            RecipientEmail = entity.Email
-        });
+            x.Message = model.Message;
+            x.MessageId = entity.MessageId!;
+            x.RecipientEmail = entity.Email;
+        }));
 
         entity.EmailSent = true;
 

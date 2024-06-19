@@ -25,26 +25,26 @@ public class SettingService : ISettingService
 
         var openingHours = SettingEntity.OpensFrom.Select((key, index) => new SettingHoursModel
         {
-            From = _context.GetValue<TimeSpan>(settings, key),
-            To = _context.GetValue<TimeSpan>(settings, SettingEntity.OpensTo[index])
+            From = DataContext.GetValue<TimeSpan>(settings, key),
+            To = DataContext.GetValue<TimeSpan>(settings, SettingEntity.OpensTo[index])
         }).ToArray();
 
         var deliveryHours = SettingEntity.DeliveriesFrom.Select((key, index) => new SettingHoursModel
         {
-            From = _context.GetValue<TimeSpan>(settings, key),
-            To = _context.GetValue<TimeSpan>(settings, SettingEntity.DeliveriesTo[index])
+            From = DataContext.GetValue<TimeSpan>(settings, key),
+            To = DataContext.GetValue<TimeSpan>(settings, SettingEntity.DeliveriesTo[index])
         }).ToArray();
 
         return new SettingModel
         {
-            Street = _context.GetValue<string?>(settings, SettingEntity.Street),
-            City = _context.GetValue<string?>(settings, SettingEntity.City),
-            ZipCode = _context.GetValue<string?>(settings, SettingEntity.ZipCode),
-            Phone = _context.GetValue<string?>(settings, SettingEntity.Phone),
-            Facebook = _context.GetValue<string?>(settings, SettingEntity.Facebook),
-            DeliveryPrice = _context.GetValue<double?>(settings, SettingEntity.DeliveryPrice),
-            DeliveryRange = _context.GetValue<double?>(settings, SettingEntity.DeliveryRange),
-            Email = _context.GetValue<string?>(settings, SettingEntity.Email),
+            Street = DataContext.GetValue<string?>(settings, SettingEntity.Street),
+            City = DataContext.GetValue<string?>(settings, SettingEntity.City),
+            ZipCode = DataContext.GetValue<string?>(settings, SettingEntity.ZipCode),
+            Phone = DataContext.GetValue<string?>(settings, SettingEntity.Phone),
+            Facebook = DataContext.GetValue<string?>(settings, SettingEntity.Facebook),
+            DeliveryPrice = DataContext.GetValue<double?>(settings, SettingEntity.DeliveryPrice),
+            DeliveryRange = DataContext.GetValue<double?>(settings, SettingEntity.DeliveryRange),
+            Email = DataContext.GetValue<string?>(settings, SettingEntity.Email),
             OpeningHours = openingHours,
             DeliveryHours = deliveryHours
         };
