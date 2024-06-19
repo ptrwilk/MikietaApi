@@ -6,6 +6,8 @@ namespace MikietaApi.SendEmail;
 public abstract class EmailBase<T>
     where T : EmailSenderModelBase
 {
+    private const string RecipientFragmentPath = "SendEmail/Templates/recipient_fragment.html";
+
     private readonly EmailSenderOption _option;
 
     protected EmailBase(EmailSenderOption option)
@@ -51,5 +53,17 @@ public abstract class EmailBase<T>
         };
         
         smtpClient.Send(message);
+    }
+
+    protected string ReadFromRecipientFragment(T model)
+    {
+        var content = File.ReadAllText(RecipientFragmentPath);
+        
+        content = content.Replace("[ADDRESS]", model.Address);
+        content = content.Replace("[PHONE]", model.Phone);
+        content = content.Replace("[LINK]", model.Link);
+        content = content.Replace("[LINK_TEXT]", model.LinkText);
+        
+        return content;
     }
 }

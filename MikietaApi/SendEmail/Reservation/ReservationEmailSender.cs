@@ -19,6 +19,7 @@ public class ReservationEmailSender : EmailSenderBase<ReservationEmailSenderMode
         content = content.Replace("[DATE]", model.ReservationDate.ToString("yyyy-MM-dd"));
         content = content.Replace("[TIME]", model.ReservationDate.ToString("HH:mm"));
         content = content.Replace("[GUESTS]", model.NumberOfPeople.ToString());
+        content = content.Replace("[RECIPIENT_FRAGMENT]", ReadFromRecipientFragment(model));
 
         return content;
     }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MikietaApi.Converters;
 using MikietaApi.Data;
 using MikietaApi.Data.Entities;
+using MikietaApi.Factories;
 using MikietaApi.Hubs;
 using MikietaApi.Models;
 using MikietaApi.SendEmail;
@@ -41,13 +42,15 @@ public class OrderService : IOrderService
     private readonly IDeliveryService _deliveryService;
     private readonly IEmailSender<OrderEmailSenderModel> _emailSender;
     private readonly ConfigurationOptions _options;
+    private readonly IEmailSenderModelFactory _emailSenderFactory;
 
     public OrderService(DataContext context, StripeFacade stripe,
         IConverter<OrderOrderedProductEntity, StripeRequestModel> converter,
         IHubContext<MessageHub, IMessageHub> hub,
         IDeliveryService deliveryService,
         IEmailSender<OrderEmailSenderModel> emailSender,
-        ConfigurationOptions options)
+        ConfigurationOptions options,
+        IEmailSenderModelFactory emailSenderFactory)
     {
         _context = context;
         _stripe = stripe;
@@ -56,6 +59,7 @@ public class OrderService : IOrderService
         _deliveryService = deliveryService;
         _emailSender = emailSender;
         _options = options;
+        _emailSenderFactory = emailSenderFactory;
     }
 
     public OrderResponseModel2 Order(OrderModel model)
@@ -130,23 +134,33 @@ public class OrderService : IOrderService
 
     private OrderEmailSenderModel ConvertToEmailSender(OrderEntity entity)
     {
-        return new OrderEmailSenderModel
+        var settings = _context.Settings.ToArray();
+        return _emailSenderFactory.Create<OrderEmailSenderModel>(settings, x =>
         {
-            Delivery = entity.DeliveryMethod == DeliveryMethodType.Delivery,
-            TransferPaid = false,
-            Link = $"{_options.WebsiteUrl}/zamowienie/{entity.Id}",
-            DeliveryCost = entity.DeliveryPrice ?? 0,
-            OrderDate = DateTime.Now,
-            RecipientEmail = entity.Email,
-            Products = entity.OrderOrderedProducts.Select(x => new OrderProductFragmentModel
+            x.Delivery = entity.DeliveryMethod == DeliveryMethodType.Delivery;
+            x.TransferPaid = false;
+            x.Link = $"{_options.WebsiteUrl}/zamowienie/{entity.Id}";
+            x.DeliveryCost = entity.DeliveryPrice ?? 0;
+            x.OrderDate = DateTime.Now;
+            x.RecipientEmail = entity.Email;
+            x.Products = entity.OrderOrderedProducts.Select(x => new OrderProductFragmentModel
             {
                 Price = x.OrderedProduct.Price,
                 Quantity = x.Quantity,
                 Name = x.OrderedProduct.Name,
                 Ingredients = x.OrderedProduct.OrderedProductOrderedIngredients.Select(y => y.OrderedIngredient.Name)
                     .ToArray()
-            }).ToArray()
-        };
+            }).ToArray();
+        });
+    }
+
+    private T Owad<T>()
+    where T: EmailSenderModelBase, new()
+    {
+        var z = _context.Settings.ToArray();
+        var k = new T();
+        
+        return k;
     }
 
     public Guid OrderSuccess(string sessionId)

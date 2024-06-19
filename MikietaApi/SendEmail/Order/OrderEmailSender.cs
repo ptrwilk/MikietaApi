@@ -27,6 +27,7 @@ public class OrderEmailSender : EmailSenderBase<OrderEmailSenderModel>
         content = content.Replace("[TOTAL_PRICE]", ToString(model.Products.Select(x => x.Price).Sum() + model.DeliveryCost));
         content = content.Replace("[PRODUCT_FRAGMENT]", string.Join("\n", model.Products.Select(ReadFromProductFragment).ToArray()));
         content = content.Replace("[DELIVERY_COST_FRAGMENT]", ReadFromDeliveryCostFragment(model));
+        content = content.Replace("[RECIPIENT_FRAGMENT]", ReadFromRecipientFragment(model));
 
         return content;
     }
