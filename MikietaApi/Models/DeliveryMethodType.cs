@@ -3,6 +3,5 @@
 public enum DeliveryMethodType
 {
     Delivery,
-    TakeAway,
-    DinningIn
+    TakeAway
 }

@@ -57,9 +57,15 @@ public class OrderServiceTest
 
         _dbContext = provider.GetRequiredService<DataContext>();
 
+        //TODO: temporary solution for prescribing settings
+        //Try using [OneTimeSetUp] instead of [SetUp] to speed up tests running
+        var settings = _dbContext.Settings.ToArray();
+
         _dbContext.Database.EnsureDeleted();
 
         _dbContext.Database.Migrate();
+        
+        _dbContext.Settings.AddRange(settings);
 
         var ingredients = new List<IngredientEntity>
         {
@@ -934,7 +940,7 @@ public class OrderServiceTest
         Email = "w@w.w",
         PaymentMethod = PaymentMethodType.Cash,
         DeliveryRightAway = true,
-        DeliveryMethod = DeliveryMethodType.DinningIn
+        DeliveryMethod = DeliveryMethodType.TakeAway
     };
 
     [TestCaseSource(nameof(Order_ProductsIdsValidationTest_Cases))]
