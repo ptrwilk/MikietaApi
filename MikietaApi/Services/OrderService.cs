@@ -66,12 +66,14 @@ public class OrderService : IOrderService
     {
         var orderedProducts = CreateOrderedProducts(model);
 
-        var deliveryPrice = _deliveryService.CheckDistance(new DeliveryModel
-        {
-            HomeNumber = model.HomeNumber ?? "",
-            City = model.City ?? "",
-            Street = model.Street ?? ""
-        }).DeliveryPrice;
+        var deliveryPrice = model.DeliveryMethod == DeliveryMethodType.Delivery
+            ? _deliveryService.CheckDistance(new DeliveryModel
+            {
+                HomeNumber = model.HomeNumber ?? "",
+                City = model.City ?? "",
+                Street = model.Street ?? ""
+            }).DeliveryPrice
+            : null;
 
         var entity = new OrderEntity
         {
@@ -155,11 +157,11 @@ public class OrderService : IOrderService
     }
 
     private T Owad<T>()
-    where T: EmailSenderModelBase, new()
+        where T : EmailSenderModelBase, new()
     {
         var z = _context.Settings.ToArray();
         var k = new T();
-        
+
         return k;
     }
 
@@ -433,7 +435,8 @@ public class OrderService : IOrderService
 
     private static void ValidateProducts(OrderModel model, ProductEntity[] products)
     {
-        if (!products.Select(x => x.Id).OrderBy(x => x).SequenceEqual(model.ProductQuantities.Select(x => x.ProductId).OrderBy(x => x)))
+        if (!products.Select(x => x.Id).OrderBy(x => x)
+                .SequenceEqual(model.ProductQuantities.Select(x => x.ProductId).OrderBy(x => x)))
         {
             throw new ArgumentException(
                 "One or more provided Product Ids are not included in the expected set of IDs.");
