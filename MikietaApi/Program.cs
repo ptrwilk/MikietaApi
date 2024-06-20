@@ -27,7 +27,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerWithJwt();
 
-builder.Services.AddSingleton<IJwtTokenFactory>(_ => new JwtTokenFactory(builder.Configuration["Jwt:Key"]!));
+builder.Services.AddSingleton<IJwtTokenFactory>(_ => new JwtTokenFactory(builder.Environment.IsDevelopment()
+    ? builder.Configuration["Jwt:Key"]!
+    : Environment.GetEnvironmentVariable("Jwt_Key")!));
+
 builder.Services.AddDbContext<DataContext>((provider, options) =>
     options.UseSqlite(provider.GetService<ConfigurationOptions>()!.Database));
 builder.Services.AddScoped<IProductsService, ProductsService>();
@@ -69,7 +72,10 @@ builder.Services.AddScoped<GoogleLocationService, GoogleLocationService>(provide
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddAuthenticationWithJwt(builder.Configuration["Jwt:Key"]!);
+builder.Services.AddAuthenticationWithJwt(builder.Environment.IsDevelopment()
+    ? builder.Configuration["Jwt:Key"]!
+    : Environment.GetEnvironmentVariable("Jwt_Key")!);
+
 builder.Services.AddAuthorization();
 
 builder.Services.AddScoped<IConverter<OrderOrderedProductEntity, StripeRequestModel>, StripeRequestConverter>();
