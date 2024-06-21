@@ -7,6 +7,7 @@ public class ConfigurationOptions
     public string WebsiteUrl { get; }
     public SmtpModel SmtpClient { get; }
     public string GoogleApiKey { get; }
+    public string AdminWebsiteUrl { get; }
 
     public ConfigurationOptions(IConfiguration configuration, IWebHostEnvironment environment,
         ILogger<ConfigurationOptions> logger)
@@ -24,6 +25,9 @@ public class ConfigurationOptions
         GoogleApiKey = environment.IsDevelopment()
             ? configuration["GoogleApiKey"]!
             : Environment.GetEnvironmentVariable("GoogleApiKey")!;
+        AdminWebsiteUrl = environment.IsDevelopment()
+            ? configuration["AdminWebsiteUrl"]!
+            : Environment.GetEnvironmentVariable("AdminWebsiteUrl")!;
     }
 }
 

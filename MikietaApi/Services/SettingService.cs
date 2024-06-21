@@ -13,10 +13,12 @@ interface ISettingService
 public class SettingService : ISettingService
 {
     private readonly DataContext _context;
+    private readonly ConfigurationOptions _configurationOptions;
 
-    public SettingService(DataContext context)
+    public SettingService(DataContext context, ConfigurationOptions configurationOptions)
     {
         _context = context;
+        _configurationOptions = configurationOptions;
     }
 
     public SettingModel Get()
@@ -46,7 +48,8 @@ public class SettingService : ISettingService
             DeliveryRange = DataContext.GetValue<double?>(settings, SettingEntity.DeliveryRange),
             Email = DataContext.GetValue<string?>(settings, SettingEntity.Email),
             OpeningHours = openingHours,
-            DeliveryHours = deliveryHours
+            DeliveryHours = deliveryHours,
+            AdminWebsiteUrl = _configurationOptions.AdminWebsiteUrl
         };
     }
 
