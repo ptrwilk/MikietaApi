@@ -10,6 +10,7 @@ public class SettingModel
     public double? DeliveryRange { get; set; }
     public double? DeliveryPrice { get; set; }
     public string? Email { get; set; }
+    public string AdminWebsiteUrl { get; set; } = null!;
 
     public SettingHoursModel[] OpeningHours { get; set; } = null!;
     public SettingHoursModel[] DeliveryHours { get; set; } = null!;
