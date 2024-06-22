@@ -59,5 +59,5 @@ To ensure proper authentication with [Panel Restauratora], you need to provide a
 [stripe.com]: <https://stripe.com/en-pl>
 [IMAP, POP, and SMTP]: <https://developers.google.com/gmail/imap/imap-smtp>
 [Google API]: <https://console.cloud.google.com/apis/credentials>
-[Panel Restauratora]: <http://google.pl>
+[Panel Restauratora]: <https://github.com/ptrwilk/mikieta-admin>
 [GUIDGenerator]: <https://www.guidgenerator.com/>
