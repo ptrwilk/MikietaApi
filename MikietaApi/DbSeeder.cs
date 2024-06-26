@@ -45,21 +45,11 @@ public class DbSeeder
             AddProduct("Frytki Belgijskie Duże", "Porcja chrupiących frytek, ketchup", 10,
                 ProductType.Snack);
 
-            AddMargherita(17, PizzaType.Small);
-            AddCipolla(18, PizzaType.Small);
-            AddFunghi(18, PizzaType.Small);
-            AddSalami(18, PizzaType.Small);
-            AddFunghiEProsciutto(18, PizzaType.Small);
-            AddMargherita(22, PizzaType.Medium);
-            AddCipolla(23, PizzaType.Medium);
-            AddFunghi(23, PizzaType.Medium);
-            AddSalami(26, PizzaType.Medium);
-            AddFunghiEProsciutto(26, PizzaType.Medium);
-            AddMargherita(33, PizzaType.Large);
-            AddCipolla(34, PizzaType.Large);
-            AddFunghi(34, PizzaType.Large);
-            AddSalami(36, PizzaType.Large);
-            AddFunghiEProsciutto(36, PizzaType.Large);
+            AddMargherita(new[] { 17d, 22d, 33d });
+            AddCipolla(new[] { 18d, 23d, 34d });
+            AddFunghi(new[] { 18d, 23d, 34d });
+            AddFunghi(new[] { 18d, 26d, 36d });
+            AddFunghiEProsciutto(new[] { 18d, 26d, 36d });
 
             AddProduct("Czosnkowy", "firmowy sos XXX idealnie komponujący się ze smakiem każdej naszej pizzy",
                 4, ProductType.Sauce);
@@ -116,31 +106,39 @@ public class DbSeeder
         });
     }
 
-    private void AddPizza(string name, string[] ingredients, double price, PizzaType type)
+    private void AddPizza(string name, string[] ingredients, double[] prices)
     {
         var ingredient = _context.Ingredients.Where(x => ingredients.Any(i => i == x.Name)).ToArray();
         _context.Products.Add(new ProductEntity
         {
             Name = name,
             ProductType = ProductType.Pizza,
-            PizzaType = type,
             Ingredients = ingredient,
-            Price = price,
+            Sizes = prices.Select((x, i) => new PizzaSizeEntity
+            {
+                Price = x,
+                Size = i switch
+                {
+                    0 => PizzaType.Small,
+                    1 => PizzaType.Medium,
+                    _ => PizzaType.Large
+                }
+            }).ToArray()
         });
     }
 
-    private void AddMargherita(double price, PizzaType type) =>
-        AddPizza("Margherita", new[] { "Ser", "Sos pomidorowy" }, price, type);
+    private void AddMargherita(double[] prices) =>
+        AddPizza("Margherita", new[] { "Ser", "Sos pomidorowy" }, prices);
 
-    private void AddFunghi(double price, PizzaType type) =>
-        AddPizza("Funghi", new[] { "Ser", "Sos pomidorowy", "Pieczarki" }, price, type);
+    private void AddFunghi(double[] prices) =>
+        AddPizza("Funghi", new[] { "Ser", "Sos pomidorowy", "Pieczarki" }, prices);
 
-    private void AddFunghiEProsciutto(double price, PizzaType type) =>
-        AddPizza("FunghiEProsciutto", new[] { "Ser", "Sos pomidorowy", "Szynka", "Pieczarki" }, price, type);
+    private void AddFunghiEProsciutto(double[] prices) =>
+        AddPizza("FunghiEProsciutto", new[] { "Ser", "Sos pomidorowy", "Szynka", "Pieczarki" }, prices);
 
-    private void AddCipolla(double price, PizzaType type) =>
-        AddPizza("Cipolla", new[] { "Ser", "Sos pomidorowy", "Cebula" }, price, type);
+    private void AddCipolla(double[] prices) =>
+        AddPizza("Cipolla", new[] { "Ser", "Sos pomidorowy", "Cebula" }, prices);
 
-    private void AddSalami(double price, PizzaType type) =>
-        AddPizza("Salami", new[] { "Ser", "Sos pomidorowy", "Salami" }, price, type);
+    private void AddSalami(double[] prices) =>
+        AddPizza("Salami", new[] { "Ser", "Sos pomidorowy", "Salami" }, prices);
 }

@@ -14,6 +14,7 @@ public class DataContext : DbContext
     public DbSet<OrderedIngredientEntity> OrderedIngredients { get; set; }
     public DbSet<OrderedProductOrderedIngredientEntity> OrderedProductOrderedIngredients { get; set; }
     public DbSet<SettingEntity> Settings { get; set; }
+    public DbSet<PizzaSizeEntity> PizzaSizes { get; set; }
     
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
@@ -28,9 +29,6 @@ public class DataContext : DbContext
             .UsingEntity(x => x.ToTable("ProductIngredient"));
         modelBuilder.Entity<ProductEntity>()
             .Property(x => x.ProductType)
-            .HasConversion<string>();
-        modelBuilder.Entity<ProductEntity>()
-            .Property(x => x.PizzaType)
             .HasConversion<string>();
         
         modelBuilder.Entity<OrderedProductEntity>()
@@ -89,6 +87,10 @@ public class DataContext : DbContext
 
         modelBuilder.Entity<SettingEntity>()
             .HasKey(x => x.Key);
+        
+        modelBuilder.Entity<PizzaSizeEntity>()
+            .Property(x => x.Size)
+            .HasConversion<string>();
     }
 
     public override int SaveChanges()

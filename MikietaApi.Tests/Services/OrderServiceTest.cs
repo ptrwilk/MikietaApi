@@ -100,6 +100,24 @@ public class OrderServiceTest
             {
                 ingredients.First(x => x.Id == Guid.Parse("10000000-0000-0000-0000-000000000001")),
                 ingredients.First(x => x.Id == Guid.Parse("10000000-0000-0000-0000-000000000002"))
+            },
+            Sizes = new List<PizzaSizeEntity>()
+            {
+                new()
+                {
+                    Price = 12,
+                    Size = PizzaType.Small
+                },
+                new()
+                {
+                    Price = 15,
+                    Size = PizzaType.Medium
+                },
+                new()
+                {
+                    Price = 20,
+                    Size = PizzaType.Large
+                }
             }
         });
 
@@ -138,6 +156,7 @@ public class OrderServiceTest
                 {
                     Quantity = 1,
                     ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                    PizzaType = PizzaType.Medium,
                     AdditionalIngredients = new[]
                     {
                         new AdditionalIngredientModel
@@ -154,6 +173,8 @@ public class OrderServiceTest
             {
                 ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                 Name = "Pizza1",
+                PizzaType = PizzaType.Medium,
+                Price = 15d,
                 OrderedProductOrderedIngredients = new OrderedProductOrderedIngredientEntity[]
                 {
                     new()
@@ -507,9 +528,10 @@ public class OrderServiceTest
                 {
                     ProductId = Guid.Parse("00000000-0000-0000-0000-000000000004"),
                     Quantity = 2,
+                    PizzaType = PizzaType.Small,
                 }
             }
-        }, PizzaType.Small, 1d, 28d).SetName("Order_TestCost 01");
+        }, 1d, 28d).SetName("Order_TestCost 01");
 
         yield return new TestCaseData(new OrderModel
         {
@@ -523,9 +545,10 @@ public class OrderServiceTest
                 {
                     ProductId = Guid.Parse("00000000-0000-0000-0000-000000000004"),
                     Quantity = 1,
+                    PizzaType = PizzaType.Medium,
                 }
             }
-        }, PizzaType.Medium, 1d, 16.25d).SetName("Order_TestCost 02");
+        }, 1d, 19.25d).SetName("Order_TestCost 02");
 
         yield return new TestCaseData(new OrderModel
         {
@@ -539,9 +562,10 @@ public class OrderServiceTest
                 {
                     ProductId = Guid.Parse("00000000-0000-0000-0000-000000000004"),
                     Quantity = 1,
+                    PizzaType = PizzaType.Large,
                 }
             }
-        }, PizzaType.Large, 1d, 18.5d).SetName("Order_TestCost 03");
+        }, 1d, 26.5d).SetName("Order_TestCost 03");
 
         yield return new TestCaseData(new OrderModel
         {
@@ -555,6 +579,7 @@ public class OrderServiceTest
                 {
                     ProductId = Guid.Parse("00000000-0000-0000-0000-000000000004"),
                     Quantity = 1,
+                    PizzaType = PizzaType.Large,
                     RemovedIngredients = new RemovedIngredientModel[]
                     {
                         new()
@@ -564,7 +589,7 @@ public class OrderServiceTest
                     }
                 }
             }
-        }, PizzaType.Large, 1d, 15.5d).SetName("Order_TestCost 04");
+        }, 1d, 23.5d).SetName("Order_TestCost 04");
 
         yield return new TestCaseData(new OrderModel
         {
@@ -578,6 +603,7 @@ public class OrderServiceTest
                 {
                     ProductId = Guid.Parse("00000000-0000-0000-0000-000000000004"),
                     Quantity = 1,
+                    PizzaType = PizzaType.Large,
                     AdditionalIngredients = new AdditionalIngredientModel[]
                     {
                         new()
@@ -588,7 +614,7 @@ public class OrderServiceTest
                     }
                 }
             }
-        }, PizzaType.Large, 1d, 23.5d).SetName("Order_TestCost 05");
+        }, 1d, 31.5d).SetName("Order_TestCost 05");
 
         yield return new TestCaseData(new OrderModel
         {
@@ -602,6 +628,7 @@ public class OrderServiceTest
                 {
                     ProductId = Guid.Parse("00000000-0000-0000-0000-000000000004"),
                     Quantity = 1,
+                    PizzaType = PizzaType.Large,
                     ReplacedIngredients = new ReplacedIngredientModel[]
                     {
                         new()
@@ -612,11 +639,27 @@ public class OrderServiceTest
                     }
                 }
             }
-        }, PizzaType.Large, 1d, 19d).SetName("Order_TestCost 06");
+        }, 1d, 27d).SetName("Order_TestCost 06");
+        
+        yield return new TestCaseData(new OrderModel
+        {
+            Email = "test@test.test",
+            Name = "name",
+            Phone = "123",
+            PaymentMethod = PaymentMethodType.Cash,
+            ProductQuantities = new ProductQuantityModel[]
+            {
+                new()
+                {
+                    ProductId = Guid.Parse("00000000-0000-0000-0000-000000000005"),
+                    Quantity = 2
+                }
+            }
+        }, 1d, 15d).SetName("Order_TestCost 07");
     }
 
     [TestCaseSource(nameof(Order_TestCost_Cases))]
-    public void Order_TestCost(OrderModel model, PizzaType pizzaType, double deliveryPrice, double expectedCost)
+    public void Order_TestCost(OrderModel model, double deliveryPrice, double expectedCost)
     {
         //Arrange
         _deliveryServiceMock.CheckDistance(Arg.Any<DeliveryModel>()).Returns(new DeliveryResponseModel
@@ -652,7 +695,33 @@ public class OrderServiceTest
             Name = "Pizza1",
             Price = 12,
             Ingredients = ingredients,
-            PizzaType = pizzaType
+            ProductType = ProductType.Pizza,
+            Sizes = new PizzaSizeEntity[]
+            {
+                new()
+                {
+                    Price = 12,
+                    Size = PizzaType.Small
+                },
+                new()
+                {
+                    Price = 15,
+                    Size = PizzaType.Medium
+                },
+                new()
+                {
+                    Price = 20,
+                    Size = PizzaType.Large
+                }
+            }
+        });
+        
+        _dbContext.Products.Add(new ProductEntity
+        {
+            Id = Guid.Parse("00000000-0000-0000-0000-000000000005"),
+            Name = "Drink",
+            Price = 7,
+            ProductType = ProductType.Drink,
         });
 
         _dbContext.SaveChanges();
@@ -930,6 +999,22 @@ public class OrderServiceTest
                     Quantity = 1
                 }
             }), true, "").SetName("Order_ProductsIdsValidationTest 15");
+        
+        yield return new TestCaseData(
+            CreateModel(new ProductQuantityModel[]
+            {
+                new()
+                {
+                    ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                    Quantity = 1
+                },
+                new()
+                {
+                    ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                    Quantity = 4,
+                    PizzaType = PizzaType.Medium
+                }
+            }), true, "").SetName("Order_ProductsIdsValidationTest 16");
     }
 
     private static OrderModel CreateModel(ProductQuantityModel[] models) => new()
@@ -965,5 +1050,40 @@ public class OrderServiceTest
             var content = await response.Content.ReadAsStringAsync();
             content.ShouldBe($"\"{expectedMessage}\"");
         }
+    }
+
+    [Test]
+    public void Order_Validate_ThrowException()
+    {
+        //Arrange
+        _deliveryServiceMock.CheckDistance(Arg.Any<DeliveryModel>()).Returns(new DeliveryResponseModel
+        {
+            DeliveryPrice = 0
+        });
+
+        var model = CreateModel(new ProductQuantityModel[]
+        {
+            new()
+            {
+                Quantity = 1,
+                ProductId = Guid.Parse("00000000-0000-0000-0000-000000000005"),
+                PizzaType = PizzaType.Medium
+            }
+        });
+        
+        _dbContext.Products.Add(new ProductEntity
+        {
+            Id = Guid.Parse("00000000-0000-0000-0000-000000000005"),
+            Name = "Drink",
+            Price = 7,
+            ProductType = ProductType.Drink,
+        });
+
+        _dbContext.SaveChanges();
+        
+        //Act
+        //Assert
+        var ex = Should.Throw<InvalidOperationException>(() => _orderService.Order(model));
+        ex.Message.ShouldBe("Entity is not a pizza type.");
     }
 }
