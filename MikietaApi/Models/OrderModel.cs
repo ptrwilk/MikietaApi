@@ -33,6 +33,9 @@ public class ProductQuantityModel
 {
     public Guid ProductId { get; set; }
     public int Quantity { get; set; }
+    
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public PizzaType? PizzaType { get; set; }
     public AdditionalIngredientModel[]? AdditionalIngredients { get; set; }
     public RemovedIngredientModel[]? RemovedIngredients { get; set; }
     public ReplacedIngredientModel[]? ReplacedIngredients { get; set; }

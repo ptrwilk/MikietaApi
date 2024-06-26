@@ -27,6 +27,7 @@ public class ProductsService : IProductsService
     public ProductModel[] Get(AddressModel address)
     {
         var products = _context.Products.Include(x => x.Ingredients)
+            .Include(x => x.Sizes)
             .Where(x => x.IsDeleted == false)
             .OrderBy(x => x.Index).ToList();
 
@@ -36,16 +37,17 @@ public class ProductsService : IProductsService
     public AdminProductModel[] GetAdminProducts(AddressModel address)
     {
         var products = _context.Products.Include(x => x.Ingredients)
+            .Include(x => x.Sizes)
             .Where(x => x.IsDeleted == false).OrderBy(x => x.Index).ToList();
 
         return products.Select(entity => new AdminProductModel
         {
             Id = entity.Id,
             ProductType = entity.ProductType,
-            PizzaType = entity.PizzaType,
+            PizzaSizePrice = entity.Sizes.ToDictionary(x => x.Size, x => x.Price),
             Description = entity.Description,
             Name = entity.Name,
-            Price = entity.Price,
+            Price = entity.Price ?? 0,
             ImageId = entity.ImageId,
             ImageUrl = ToImageUrl(entity, address),
             Ingredients = entity.Ingredients.Select(z => new IngredientModel
@@ -63,16 +65,19 @@ public class ProductsService : IProductsService
         {
             entity = new ProductEntity
             {
-                Ingredients = new List<IngredientEntity>()
+                Ingredients = new List<IngredientEntity>(),
+                Sizes = new List<PizzaSizeEntity>()
             };
 
             _context.Products.Add(entity);
             
             model.Id = entity.Id;
+            
+            
         }
         else
         {
-            entity = _context.Products.Include(x => x.Ingredients).First(x => x.Id == model.Id);
+            entity = _context.Products.Include(x => x.Ingredients).Include(x => x.Sizes).First(x => x.Id == model.Id);
         }
 
         var ingredients = _context.Ingredients.ToList();
@@ -82,7 +87,7 @@ public class ProductsService : IProductsService
         entity.Description = string.IsNullOrWhiteSpace(model.Description) ? null : model.Description;
         entity.Price = model.Price;
         entity.ProductType = model.ProductType;
-        entity.PizzaType = model.PizzaType;
+        AddOrUpdateSizes(entity, model);
         entity.Ingredients.Clear();
         entity.Ingredients = ingredients.Where(x => ingredientIds.Any(z => z == x.Id)).ToList();
         entity.ImageId = model.ImageId;
@@ -92,6 +97,34 @@ public class ProductsService : IProductsService
         model.ImageUrl = ToImageUrl(entity, address);
         
         return model;
+    }
+
+    private void AddOrUpdateSizes(ProductEntity entity, AdminProductModel model)
+    {
+        if (model.ProductType == ProductType.Pizza)
+        {
+            if (entity.Sizes.Count == 0)
+            {
+                entity.Sizes.Add(new PizzaSizeEntity
+                {
+                    Size = PizzaType.Small
+                });
+                
+                entity.Sizes.Add(new PizzaSizeEntity
+                {
+                    Size = PizzaType.Medium
+                });
+                
+                entity.Sizes.Add(new PizzaSizeEntity
+                {
+                    Size = PizzaType.Large
+                });
+            }
+            
+            entity.Sizes.First(x => x.Size == PizzaType.Small).Price = model.PizzaSizePrice[PizzaType.Small];
+            entity.Sizes.First(x => x.Size == PizzaType.Medium).Price = model.PizzaSizePrice[PizzaType.Medium];
+            entity.Sizes.First(x => x.Size == PizzaType.Large).Price = model.PizzaSizePrice[PizzaType.Large];
+        }
     }
 
     public bool Delete(Guid productId)
@@ -113,10 +146,10 @@ public class ProductsService : IProductsService
             Ingredients = entity.Ingredients.Select(Convert).ToArray(),
             Description = entity.Description,
             ProductType = entity.ProductType,
-            PizzaType = entity.PizzaType,
             Name = entity.Name,
-            Price = entity.Price,
-            ImageUrl = ToImageUrl(entity, address)
+            Price = entity.Price ?? entity.Sizes.First(x => x.Size == PizzaType.Small).Price,
+            ImageUrl = ToImageUrl(entity, address),
+            PizzaSizePrice = entity.Sizes.ToDictionary(x => x.Size, x => x.Price)
         };
     }
 

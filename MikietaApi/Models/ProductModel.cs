@@ -8,14 +8,12 @@ namespace MikietaApi.Models
         public string Name { get; set; }
         public IngredientModel[] Ingredients { get; set; }
         public string? Description { get; set; }
-        public double Price { get; set; }
+        public double? Price { get; set; }
         
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public ProductType ProductType { get; set; }
-        
-        [JsonConverter(typeof(JsonStringEnumConverter))]
-        public PizzaType? PizzaType { get; set; }
         public string? ImageUrl { get; set; }
+        public IReadOnlyDictionary<PizzaType, double> PizzaSizePrice { get; set; } = null!;
     }
 
     public class AdminOrderedProductModel
@@ -45,9 +43,7 @@ namespace MikietaApi.Models
         
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public ProductType ProductType { get; set; }
-        
-        [JsonConverter(typeof(JsonStringEnumConverter))]
-        public PizzaType? PizzaType { get; set; }
+        public IReadOnlyDictionary<PizzaType, double> PizzaSizePrice { get; set; } = null!;
         public IngredientModel[] Ingredients { get; set; } = null!;
         public Guid? ImageId { get; set; }
         public string? ImageUrl { get; set; }

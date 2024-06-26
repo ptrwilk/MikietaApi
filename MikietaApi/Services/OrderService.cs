@@ -156,15 +156,6 @@ public class OrderService : IOrderService
         });
     }
 
-    private T Owad<T>()
-        where T : EmailSenderModelBase, new()
-    {
-        var z = _context.Settings.ToArray();
-        var k = new T();
-
-        return k;
-    }
-
     public Guid OrderSuccess(string sessionId)
     {
         var entity = _context.Orders
@@ -380,6 +371,7 @@ public class OrderService : IOrderService
     private OrderedProductEntity[] CreateOrderedProducts(OrderModel model)
     {
         var products = _context.Products.Include(x => x.Ingredients)
+            .Include(x => x.Sizes)
             .Where(x => model.ProductQuantities.Select(g => g.ProductId).Any(z => x.Id == z)).ToArray();
 
         ValidateProducts(model, products);
@@ -429,14 +421,15 @@ public class OrderService : IOrderService
                 x => ingredients.First(z => z.Id == x.ToIngredientId));
 
         return products.Select(x =>
-            ToOrderedProduct(x, AdditionalIngredientEntities(x.Id), RemovedIngredientEntities(x.Id),
+            ToOrderedProduct(model, x, AdditionalIngredientEntities(x.Id), RemovedIngredientEntities(x.Id),
                 ReplacedIngredients(x.Id))).ToArray();
     }
 
     private static void ValidateProducts(OrderModel model, ProductEntity[] products)
     {
+        var productQuantities = model.ProductQuantities.GroupBy(x => x.ProductId).Select(x => x.First());
         if (!products.Select(x => x.Id).OrderBy(x => x)
-                .SequenceEqual(model.ProductQuantities.Select(x => x.ProductId).OrderBy(x => x)))
+                .SequenceEqual(productQuantities.Select(x => x.ProductId).OrderBy(x => x)))
         {
             throw new ArgumentException(
                 "One or more provided Product Ids are not included in the expected set of IDs.");
@@ -507,7 +500,9 @@ public class OrderService : IOrderService
         return entity.Price + sum;
     }
 
-    private OrderedProductEntity ToOrderedProduct(ProductEntity entity,
+    private OrderedProductEntity ToOrderedProduct(
+        OrderModel model,
+        ProductEntity entity,
         Dictionary<IngredientEntity, int> additionalIngredients,
         IngredientEntity[] removedIngredients,
         Dictionary<IngredientEntity, IngredientEntity> replacedIngredients)
@@ -536,12 +531,19 @@ public class OrderService : IOrderService
                 OrderedIngredient = ToOrderedIngredient(x.Key)
             })).ToArray();
 
+        var pizzaType = model.ProductQuantities.First(x => x.ProductId == entity.Id).PizzaType;
+
+        if (entity.ProductType != ProductType.Pizza && pizzaType.HasValue)
+        {
+            throw new InvalidOperationException("Entity is not a pizza type.");
+        }
+
         return new OrderedProductEntity
         {
             ProductId = entity.Id,
-            PizzaType = entity.PizzaType,
+            PizzaType = pizzaType,
             Name = entity.Name,
-            Price = entity.Price,
+            Price = entity.GetPrice(pizzaType) ?? 0,
             Description = entity.Description,
             ProductType = entity.ProductType,
             OrderedProductOrderedIngredients = orderedProductOrderedIngredients
