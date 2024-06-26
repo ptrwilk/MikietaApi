@@ -102,8 +102,8 @@ public class OrderService : IOrderService
         entity.OrderOrderedProducts = orderedProducts.Select(orderedProduct => new OrderOrderedProductEntity
         {
             Order = entity,
-            OrderedProduct = orderedProduct,
-            Quantity = model.ProductQuantities.First(z => z.ProductId == orderedProduct.ProductId).Quantity
+            OrderedProduct = orderedProduct.Value,
+            Quantity = orderedProduct.Key.Quantity
         }).ToList();
 
         _context.Orders.Add(entity);
@@ -368,11 +368,14 @@ public class OrderService : IOrderService
             .Sum(z => ToPrice(z.OrderedProduct) * z.Quantity) + (entity.DeliveryPrice ?? 0);
     }
 
-    private OrderedProductEntity[] CreateOrderedProducts(OrderModel model)
+    private IDictionary<ProductQuantityModel, OrderedProductEntity> CreateOrderedProducts(OrderModel model)
     {
+        var productIds = model.ProductQuantities.Select(q => q.ProductId).ToHashSet();
+
         var products = _context.Products.Include(x => x.Ingredients)
             .Include(x => x.Sizes)
-            .Where(x => model.ProductQuantities.Select(g => g.ProductId).Any(z => x.Id == z)).ToArray();
+            .Where(x => productIds.Contains(x.Id))
+            .ToArray();
 
         ValidateProducts(model, products);
         ValidateRemovedIngredients(model, products);
@@ -420,9 +423,11 @@ public class OrderService : IOrderService
             .ToDictionary(x => ingredients.First(z => z.Id == x.FromIngredientId),
                 x => ingredients.First(z => z.Id == x.ToIngredientId));
 
-        return products.Select(x =>
-            ToOrderedProduct(model, x, AdditionalIngredientEntities(x.Id), RemovedIngredientEntities(x.Id),
-                ReplacedIngredients(x.Id))).ToArray();
+
+        return model.ProductQuantities.ToDictionary(x => x, x => products.First(z => z.Id == x.ProductId))
+            .ToDictionary(x => x.Key, x => ToOrderedProduct(x.Key, x.Value, AdditionalIngredientEntities(x.Value.Id),
+                RemovedIngredientEntities(x.Value.Id),
+                ReplacedIngredients(x.Value.Id)));
     }
 
     private static void ValidateProducts(OrderModel model, ProductEntity[] products)
@@ -438,13 +443,12 @@ public class OrderService : IOrderService
 
     private void ValidateRemovedIngredients(OrderModel model, ProductEntity[] products)
     {
-        foreach (var product in products)
+        foreach (var productQuantity in model.ProductQuantities)
         {
-            var removedIngredientModels = model.ProductQuantities
-                .First(x => x.ProductId == product.Id).RemovedIngredients;
+            var product = products.First(x => x.Id == productQuantity.ProductId);
 
-            if (removedIngredientModels != null &&
-                !product.Ingredients.Any(x => removedIngredientModels.Any(z => z.IngredientId == x.Id)))
+            if (productQuantity.RemovedIngredients != null &&
+                !product.Ingredients.Any(x => productQuantity.RemovedIngredients.Any(z => z.IngredientId == x.Id)))
             {
                 throw new ArgumentException(
                     $"One or more provided RemovedIngredient Ids are not included in the expected Product Id: {product.Id}.");
@@ -457,7 +461,7 @@ public class OrderService : IOrderService
         var additionalIngredients = model.ProductQuantities.Where(g => g.AdditionalIngredients is not null)
             .SelectMany(z => z.AdditionalIngredients!).ToArray();
 
-        if (additionalIngredients.Any() && additionalIngredients.All(x => ingredients.All(z => z.Id != x.IngredientId)))
+        if (additionalIngredients.Any() && additionalIngredients.Any(x => ingredients.All(z => z.Id != x.IngredientId)))
         {
             throw new ArgumentException(
                 "One or more provided AdditionalIngredient Ids are not included in the expected set of Ingredient IDs.");
@@ -466,12 +470,12 @@ public class OrderService : IOrderService
 
     private void ValidateReplacedIngredients(OrderModel model, ProductEntity[] products, IngredientEntity[] ingredients)
     {
-        foreach (var product in products)
+        foreach (var productQuantity in model.ProductQuantities)
         {
-            var replacedIngredients = model.ProductQuantities.First(x => x.ProductId == product.Id).ReplacedIngredients;
+            var product = products.First(x => x.Id == productQuantity.ProductId);
 
-            if (replacedIngredients is not null &&
-                !product.Ingredients.Any(x => replacedIngredients.Any(z => z.FromIngredientId == x.Id)))
+            if (productQuantity.ReplacedIngredients is not null &&
+                !product.Ingredients.Any(x => productQuantity.ReplacedIngredients.Any(z => z.FromIngredientId == x.Id)))
             {
                 throw new ArgumentException(
                     $"One or more provided ReplacedFromIngredient Ids are not included in the expected Product Id: {product.Id}.");
@@ -481,7 +485,7 @@ public class OrderService : IOrderService
         var toIngredientIds = model.ProductQuantities.Where(x => x.ReplacedIngredients is not null)
             .SelectMany(x => x.ReplacedIngredients!).Select(x => x.ToIngredientId).ToArray();
 
-        if (toIngredientIds.Any() && toIngredientIds.All(x => ingredients.All(id => id.Id != x)))
+        if (toIngredientIds.Any() && toIngredientIds.Any(x => ingredients.All(id => id.Id != x)))
         {
             throw new ArgumentException(
                 "One or more provided ReplacedToIngredient Ids are not included in the expected set of Ingredient IDs.");
@@ -501,7 +505,7 @@ public class OrderService : IOrderService
     }
 
     private OrderedProductEntity ToOrderedProduct(
-        OrderModel model,
+        ProductQuantityModel model,
         ProductEntity entity,
         Dictionary<IngredientEntity, int> additionalIngredients,
         IngredientEntity[] removedIngredients,
@@ -531,9 +535,7 @@ public class OrderService : IOrderService
                 OrderedIngredient = ToOrderedIngredient(x.Key)
             })).ToArray();
 
-        var pizzaType = model.ProductQuantities.First(x => x.ProductId == entity.Id).PizzaType;
-
-        if (entity.ProductType != ProductType.Pizza && pizzaType.HasValue)
+        if (entity.ProductType != ProductType.Pizza && model.PizzaType.HasValue)
         {
             throw new InvalidOperationException("Entity is not a pizza type.");
         }
@@ -541,9 +543,9 @@ public class OrderService : IOrderService
         return new OrderedProductEntity
         {
             ProductId = entity.Id,
-            PizzaType = pizzaType,
+            PizzaType = model.PizzaType,
             Name = entity.Name,
-            Price = entity.GetPrice(pizzaType) ?? 0,
+            Price = entity.GetPrice(model.PizzaType) ?? 0,
             Description = entity.Description,
             ProductType = entity.ProductType,
             OrderedProductOrderedIngredients = orderedProductOrderedIngredients

@@ -64,7 +64,7 @@ public class OrderServiceTest
         _dbContext.Database.EnsureDeleted();
 
         _dbContext.Database.Migrate();
-        
+
         _dbContext.Settings.AddRange(settings);
 
         var ingredients = new List<IngredientEntity>
@@ -504,12 +504,88 @@ public class OrderServiceTest
                 }
             },
         }).SetName("CreateOrderedProducts 04");
+
+        yield return new TestCaseData(new OrderModel
+        {
+            ProductQuantities = new ProductQuantityModel[]
+            {
+                new()
+                {
+                    ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                    PizzaType = PizzaType.Medium
+                },
+                new()
+                {
+                    ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                    PizzaType = PizzaType.Large
+                }
+            }
+        }, new OrderedProductEntity[]
+        {
+            new()
+            {
+                ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                Name = "Pizza1",
+                PizzaType = PizzaType.Medium,
+                Price = 15d,
+                OrderedProductOrderedIngredients = new OrderedProductOrderedIngredientEntity[]
+                {
+                    new()
+                    {
+                        OrderedIngredient = new OrderedIngredientEntity()
+                        {
+                            IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000001"),
+                            Name = "Ingredient1"
+                        },
+                        Quantity = 1
+                    },
+                    new()
+                    {
+                        OrderedIngredient = new OrderedIngredientEntity()
+                        {
+                            IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000002"),
+                            Name = "Ingredient2"
+                        },
+                        Quantity = 1
+                    },
+                }
+            },
+            new()
+            {
+                ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                Name = "Pizza1",
+                PizzaType = PizzaType.Large,
+                Price = 20d,
+                OrderedProductOrderedIngredients = new OrderedProductOrderedIngredientEntity[]
+                {
+                    new()
+                    {
+                        OrderedIngredient = new OrderedIngredientEntity()
+                        {
+                            IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000001"),
+                            Name = "Ingredient1"
+                        },
+                        Quantity = 1
+                    },
+                    new()
+                    {
+                        OrderedIngredient = new OrderedIngredientEntity()
+                        {
+                            IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000002"),
+                            Name = "Ingredient2"
+                        },
+                        Quantity = 1
+                    },
+                }
+            },
+        }).SetName("CreateOrderedProducts 05");
     }
 
     [TestCaseSource(nameof(CreateOrderedProducts_Cases))]
     public void CreateOrderedProducts(OrderModel model, OrderedProductEntity[] expectedOrderedProductEntity)
     {
-        var res = Helpers.InvokePrivateMethod<OrderedProductEntity[]>(_orderService, "CreateOrderedProducts", model);
+        var res = Helpers.InvokePrivateMethod<IDictionary<ProductQuantityModel, OrderedProductEntity>>(_orderService,
+            "CreateOrderedProducts", model).Select(x => x.Value).ToArray();
 
         res.ShouldBeEquivalentTo(expectedOrderedProductEntity);
     }
@@ -640,7 +716,7 @@ public class OrderServiceTest
                 }
             }
         }, 1d, 27d).SetName("Order_TestCost 06");
-        
+
         yield return new TestCaseData(new OrderModel
         {
             Email = "test@test.test",
@@ -715,7 +791,7 @@ public class OrderServiceTest
                 }
             }
         });
-        
+
         _dbContext.Products.Add(new ProductEntity
         {
             Id = Guid.Parse("00000000-0000-0000-0000-000000000005"),
@@ -745,7 +821,7 @@ public class OrderServiceTest
 
     private static string ReplacedFromMessage(string productId) =>
         $"One or more provided ReplacedFromIngredient Ids are not included in the expected Product Id: {productId}.";
-    
+
     private static readonly string ReplacedToMessage =
         "One or more provided ReplacedToIngredient Ids are not included in the expected set of Ingredient IDs.";
 
@@ -912,25 +988,26 @@ public class OrderServiceTest
                     }
                 }
             }), true, "").SetName("Order_ProductsIdsValidationTest 10");
-        
+
         yield return new TestCaseData(
-            CreateModel(new ProductQuantityModel[]
-            {
-                new()
+                CreateModel(new ProductQuantityModel[]
                 {
-                    ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
-                    Quantity = 1,
-                    ReplacedIngredients = new ReplacedIngredientModel[]
+                    new()
                     {
-                        new()
+                        ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                        Quantity = 1,
+                        ReplacedIngredients = new ReplacedIngredientModel[]
                         {
-                            FromIngredientId = Guid.Parse("10000000-0000-0000-0000-000000000003"),
-                            ToIngredientId = Guid.Parse("10000000-0000-0000-0000-000000000004")
+                            new()
+                            {
+                                FromIngredientId = Guid.Parse("10000000-0000-0000-0000-000000000003"),
+                                ToIngredientId = Guid.Parse("10000000-0000-0000-0000-000000000004")
+                            }
                         }
                     }
-                }
-            }), false, ReplacedFromMessage("00000000-0000-0000-0000-000000000001")).SetName("Order_ProductsIdsValidationTest 11");
-        
+                }), false, ReplacedFromMessage("00000000-0000-0000-0000-000000000001"))
+            .SetName("Order_ProductsIdsValidationTest 11");
+
         yield return new TestCaseData(
             CreateModel(new ProductQuantityModel[]
             {
@@ -948,7 +1025,7 @@ public class OrderServiceTest
                     }
                 }
             }), true, "").SetName("Order_ProductsIdsValidationTest 12");
-        
+
         yield return new TestCaseData(
             CreateModel(new ProductQuantityModel[]
             {
@@ -966,7 +1043,7 @@ public class OrderServiceTest
                     }
                 }
             }), false, ReplacedToMessage).SetName("Order_ProductsIdsValidationTest 13");
-        
+
         yield return new TestCaseData(
             CreateModel(new ProductQuantityModel[]
             {
@@ -984,7 +1061,7 @@ public class OrderServiceTest
                     }
                 }
             }), true, "").SetName("Order_ProductsIdsValidationTest 14");
-        
+
         yield return new TestCaseData(
             CreateModel(new ProductQuantityModel[]
             {
@@ -999,7 +1076,7 @@ public class OrderServiceTest
                     Quantity = 1
                 }
             }), true, "").SetName("Order_ProductsIdsValidationTest 15");
-        
+
         yield return new TestCaseData(
             CreateModel(new ProductQuantityModel[]
             {
@@ -1015,6 +1092,130 @@ public class OrderServiceTest
                     PizzaType = PizzaType.Medium
                 }
             }), true, "").SetName("Order_ProductsIdsValidationTest 16");
+
+        yield return new TestCaseData(
+                CreateModel(new ProductQuantityModel[]
+                {
+                    new()
+                    {
+                        ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                        Quantity = 1,
+                        RemovedIngredients = new RemovedIngredientModel[]
+                        {
+                            new()
+                            {
+                                IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000001")
+                            }
+                        }
+                    },
+                    new()
+                    {
+                        ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                        Quantity = 1,
+                        RemovedIngredients = new RemovedIngredientModel[]
+                        {
+                            new()
+                            {
+                                IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000021")
+                            }
+                        }
+                    }
+                }), false, RemovedMessage("00000000-0000-0000-0000-000000000001"))
+            .SetName("Order_ProductsIdsValidationTest 17");
+
+        yield return new TestCaseData(
+            CreateModel(new ProductQuantityModel[]
+            {
+                new()
+                {
+                    ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                    Quantity = 1,
+                    AdditionalIngredients = new AdditionalIngredientModel[]
+                    {
+                        new()
+                        {
+                            IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000003"),
+                            Quantity = 1
+                        }
+                    }
+                },
+                new()
+                {
+                    ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                    Quantity = 1,
+                    AdditionalIngredients = new AdditionalIngredientModel[]
+                    {
+                        new()
+                        {
+                            IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000023"),
+                            Quantity = 1
+                        }
+                    }
+                }
+            }), false, AdditionalMessage).SetName("Order_ProductsIdsValidationTest 18");
+
+        yield return new TestCaseData(
+            CreateModel(new ProductQuantityModel[]
+            {
+                new()
+                {
+                    ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                    Quantity = 1,
+                    ReplacedIngredients = new ReplacedIngredientModel[]
+                    {
+                        new()
+                        {
+                            FromIngredientId = Guid.Parse("10000000-0000-0000-0000-000000000002"),
+                            ToIngredientId = Guid.Parse("10000000-0000-0000-0000-000000000001")
+                        }
+                    }
+                },
+                new()
+                {
+                    ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                    Quantity = 1,
+                    ReplacedIngredients = new ReplacedIngredientModel[]
+                    {
+                        new()
+                        {
+                            FromIngredientId = Guid.Parse("10000000-0000-0000-0000-000000000002"),
+                            ToIngredientId = Guid.Parse("10000000-0000-0000-0000-000000000021")
+                        }
+                    }
+                }
+            }), false, ReplacedToMessage).SetName("Order_ProductsIdsValidationTest 19");
+
+        yield return new TestCaseData(
+                CreateModel(new ProductQuantityModel[]
+                {
+                    new()
+                    {
+                        ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                        Quantity = 1,
+                        ReplacedIngredients = new ReplacedIngredientModel[]
+                        {
+                            new()
+                            {
+                                FromIngredientId = Guid.Parse("10000000-0000-0000-0000-000000000002"),
+                                ToIngredientId = Guid.Parse("10000000-0000-0000-0000-000000000004")
+                            }
+                        }
+                    },
+                    new()
+                    {
+                        ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                        Quantity = 1,
+                        ReplacedIngredients = new ReplacedIngredientModel[]
+                        {
+                            new()
+                            {
+                                FromIngredientId = Guid.Parse("10000000-0000-0000-0000-000000000003"),
+                                ToIngredientId = Guid.Parse("10000000-0000-0000-0000-000000000004")
+                            }
+                        }
+                    }
+                }), false, ReplacedFromMessage("00000000-0000-0000-0000-000000000001"))
+            .SetName("Order_ProductsIdsValidationTest 20");
     }
 
     private static OrderModel CreateModel(ProductQuantityModel[] models) => new()
@@ -1070,7 +1271,7 @@ public class OrderServiceTest
                 PizzaType = PizzaType.Medium
             }
         });
-        
+
         _dbContext.Products.Add(new ProductEntity
         {
             Id = Guid.Parse("00000000-0000-0000-0000-000000000005"),
@@ -1080,10 +1281,95 @@ public class OrderServiceTest
         });
 
         _dbContext.SaveChanges();
-        
+
         //Act
         //Assert
         var ex = Should.Throw<InvalidOperationException>(() => _orderService.Order(model));
         ex.Message.ShouldBe("Entity is not a pizza type.");
+    }
+
+    private static IEnumerable<TestCaseData> Order_TestQuantity_Cases()
+    {
+        yield return new TestCaseData(CreateModel(new ProductQuantityModel[]
+        {
+            new()
+            {
+                Quantity = 1,
+                PizzaType = PizzaType.Small,
+                ProductId = Guid.Parse("00000000-0000-0000-0000-000000000004")
+            },
+            new()
+            {
+                Quantity = 2,
+                PizzaType = PizzaType.Medium,
+                ProductId = Guid.Parse("00000000-0000-0000-0000-000000000004")
+            },
+            new()
+            {
+                Quantity = 3,
+                PizzaType = PizzaType.Large,
+                ProductId = Guid.Parse("00000000-0000-0000-0000-000000000004")
+            }
+        }), new[] { 3, 2, 1 }).SetName("Order_TestQuantity 01");
+    }
+
+    [TestCaseSource(nameof(Order_TestQuantity_Cases))]
+    public void Order_TestQuantity(OrderModel model, int[] expectedQuantities)
+    {
+        //Arrange
+        _deliveryServiceMock.CheckDistance(Arg.Any<DeliveryModel>()).Returns(new DeliveryResponseModel
+        {
+            DeliveryPrice = 1
+        });
+
+        var ingredients = new List<IngredientEntity>
+        {
+            new()
+            {
+                Id = Guid.Parse("10000000-0000-0000-0000-000000000005"),
+                Name = "Ingredient5",
+                PriceSmall = 1,
+                PriceMedium = 2,
+                PriceLarge = 3,
+            }
+        };
+
+        _dbContext.Ingredients.AddRange(ingredients);
+
+        _dbContext.Products.Add(new ProductEntity
+        {
+            Id = Guid.Parse("00000000-0000-0000-0000-000000000004"),
+            Name = "Pizza1",
+            Price = 12,
+            Ingredients = ingredients,
+            ProductType = ProductType.Pizza,
+            Sizes = new PizzaSizeEntity[]
+            {
+                new()
+                {
+                    Price = 12,
+                    Size = PizzaType.Small
+                },
+                new()
+                {
+                    Price = 15,
+                    Size = PizzaType.Medium
+                },
+                new()
+                {
+                    Price = 20,
+                    Size = PizzaType.Large
+                }
+            }
+        });
+
+        _dbContext.SaveChanges();
+
+        //Act
+        var orderId = _orderService.Order(model)?.OrderId!;
+        var quantities = _orderService.Get(orderId.Value).Select(x => x.Quantity);
+
+        //Assert
+        quantities.ShouldBe(expectedQuantities);
     }
 }
