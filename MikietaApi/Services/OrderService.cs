@@ -108,10 +108,10 @@ public class OrderService : IOrderService
 
         _context.Orders.Add(entity);
 
-        var res = _stripe.CreateSession(entity.OrderOrderedProducts.Select(_converter.Convert).ToArray(),
-            entity.DeliveryPrice);
+        var res = model.PaymentMethod == PaymentMethodType.Transfer ? _stripe.CreateSession(entity.OrderOrderedProducts.Select(_converter.Convert).ToArray(),
+             entity.DeliveryPrice) : null;
 
-        entity.SessionId = res.SessionId;
+        entity.SessionId = res?.SessionId;
 
         _context.SaveChanges();
 
@@ -129,8 +129,8 @@ public class OrderService : IOrderService
 
         return new OrderResponseModel2
         {
-            SessionId = res.SessionId,
-            Url = res.Url
+            SessionId = res?.SessionId,
+            Url = res?.Url
         };
     }
 
@@ -150,7 +150,9 @@ public class OrderService : IOrderService
                 Price = z.OrderedProduct.Price,
                 Quantity = z.Quantity,
                 Name = z.OrderedProduct.Name,
-                Ingredients = z.OrderedProduct.OrderedProductOrderedIngredients.Select(y => y.OrderedIngredient.Name)
+                Ingredients = z.OrderedProduct.OrderedProductOrderedIngredients
+                    .Where(y => y.IsIngredientRemoved == false)
+                    .Select(y => y.OrderedIngredient.Name)
                     .ToArray()
             }).ToArray();
         });
@@ -411,9 +413,8 @@ public class OrderService : IOrderService
                     x => AdditionalIngredientModels(productId).First(z => z.Key.IngredientId == x.Id).Value);
 
 
-        IngredientEntity[] RemovedIngredientEntities(Guid productId) => ingredients.Where(x =>
-            (model.ProductQuantities.First(p => p.ProductId == productId)
-                .RemovedIngredients ?? Array.Empty<RemovedIngredientModel>()).Any(z =>
+        IngredientEntity[] RemovedIngredientEntities(ProductQuantityModel m) => ingredients.Where(x =>
+            (m.RemovedIngredients ?? Array.Empty<RemovedIngredientModel>()).Any(z =>
                 z.IngredientId == x.Id)).ToArray();
 
 
@@ -426,7 +427,7 @@ public class OrderService : IOrderService
 
         return model.ProductQuantities.ToDictionary(x => x, x => products.First(z => z.Id == x.ProductId))
             .ToDictionary(x => x.Key, x => ToOrderedProduct(x.Key, x.Value, AdditionalIngredientEntities(x.Value.Id),
-                RemovedIngredientEntities(x.Value.Id),
+                RemovedIngredientEntities(x.Key),
                 ReplacedIngredients(x.Value.Id)));
     }
 
@@ -448,6 +449,7 @@ public class OrderService : IOrderService
             var product = products.First(x => x.Id == productQuantity.ProductId);
 
             if (productQuantity.RemovedIngredients != null &&
+                productQuantity.RemovedIngredients.Length > 0 &&
                 !product.Ingredients.Any(x => productQuantity.RemovedIngredients.Any(z => z.IngredientId == x.Id)))
             {
                 throw new ArgumentException(
@@ -562,5 +564,6 @@ public class OrderService : IOrderService
             PriceSmall = entity.PriceSmall,
             IngredientId = entity.Id,
         };
+
     }
 }

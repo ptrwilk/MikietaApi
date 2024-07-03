@@ -129,6 +129,24 @@ public class OrderServiceTest
             {
                 ingredients.First(x => x.Id == Guid.Parse("10000000-0000-0000-0000-000000000001")),
                 ingredients.First(x => x.Id == Guid.Parse("10000000-0000-0000-0000-000000000003"))
+            },
+            Sizes = new List<PizzaSizeEntity>()
+            {
+                new()
+                {
+                    Price = 13,
+                    Size = PizzaType.Small
+                },
+                new()
+                {
+                    Price = 14,
+                    Size = PizzaType.Medium
+                },
+                new()
+                {
+                    Price = 15,
+                    Size = PizzaType.Large
+                }
             }
         });
 
@@ -1216,6 +1234,18 @@ public class OrderServiceTest
                     }
                 }), false, ReplacedFromMessage("00000000-0000-0000-0000-000000000001"))
             .SetName("Order_ProductsIdsValidationTest 20");
+
+        yield return new TestCaseData(
+                CreateModel(new ProductQuantityModel[]
+                {
+                    new()
+                    {
+                        ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                        Quantity = 1,
+                        RemovedIngredients = Array.Empty<RemovedIngredientModel>()
+                    }
+                }), true, "")
+            .SetName("Order_ProductsIdsValidationTest 21");
     }
 
     private static OrderModel CreateModel(ProductQuantityModel[] models) => new()
@@ -1371,5 +1401,203 @@ public class OrderServiceTest
 
         //Assert
         quantities.ShouldBe(expectedQuantities);
+    }
+
+    private static IEnumerable<TestCaseData> Order_Cases()
+    {
+        yield return new TestCaseData(CreateModel(new ProductQuantityModel[]
+        {
+            new()
+            {
+                ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                Quantity = 1,
+                PizzaType = PizzaType.Small,
+                RemovedIngredients = new RemovedIngredientModel[]
+                {
+                    new()
+                    {
+                        IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000001")
+                    }
+                }
+            }
+        }), new AdminOrderedProductModel[]
+        {
+            new()
+            {
+                Name = "Pizza1",
+                PizzaType = PizzaType.Small,
+                Price = 12,
+                ProductType = ProductType.Pizza,
+                Quantity = 1,
+                AdditionalIngredients = Array.Empty<AdditionalIngredientModel>(),
+                ReplacedIngredients = Array.Empty<ReplacedIngredientModel>(),
+                RemovedIngredients = new RemovedIngredientModel[]
+                {
+                    new()
+                    {
+                        IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000001"),
+                        Name = "Ingredient1"
+                    }
+                }
+            }
+        }).SetName("Order 01");
+
+        yield return new TestCaseData(CreateModel(new ProductQuantityModel[]
+        {
+            new()
+            {
+                ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                Quantity = 1,
+                PizzaType = PizzaType.Small,
+                RemovedIngredients = new RemovedIngredientModel[]
+                {
+                    new()
+                    {
+                        IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000001")
+                    }
+                }
+            },
+            new()
+            {
+                ProductId = Guid.Parse("00000000-0000-0000-0000-000000000002"),
+                Quantity = 1,
+                PizzaType = PizzaType.Small,
+                RemovedIngredients = new RemovedIngredientModel[]
+                {
+                    new()
+                    {
+                        IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000001")
+                    }
+                }
+            }
+        }), new AdminOrderedProductModel[]
+        {
+            new()
+            {
+                Name = "Pizza1",
+                PizzaType = PizzaType.Small,
+                Price = 12,
+                ProductType = ProductType.Pizza,
+                Quantity = 1,
+                AdditionalIngredients = Array.Empty<AdditionalIngredientModel>(),
+                ReplacedIngredients = Array.Empty<ReplacedIngredientModel>(),
+                RemovedIngredients = new RemovedIngredientModel[]
+                {
+                    new()
+                    {
+                        IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000001"),
+                        Name = "Ingredient1"
+                    }
+                }
+            },
+            new()
+            {
+                Name = "Pizza2",
+                PizzaType = PizzaType.Small,
+                Price = 13,
+                ProductType = ProductType.Pizza,
+                Quantity = 1,
+                AdditionalIngredients = Array.Empty<AdditionalIngredientModel>(),
+                ReplacedIngredients = Array.Empty<ReplacedIngredientModel>(),
+                RemovedIngredients = new RemovedIngredientModel[]
+                {
+                    new()
+                    {
+                        IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000001"),
+                        Name = "Ingredient1"
+                    }
+                }
+            }
+        }).SetName("Order 02");
+
+        yield return new TestCaseData(CreateModel(new ProductQuantityModel[]
+        {
+            new()
+            {
+                ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                Quantity = 1,
+                PizzaType = PizzaType.Small,
+                RemovedIngredients = new RemovedIngredientModel[]
+                {
+                    new()
+                    {
+                        IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000001")
+                    }
+                }
+            },
+            new()
+            {
+                ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                Quantity = 1,
+                PizzaType = PizzaType.Small,
+                RemovedIngredients = new RemovedIngredientModel[]
+                {
+                    new()
+                    {
+                        IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000002")
+                    }
+                }
+            }
+        }), new AdminOrderedProductModel[]
+        {
+            new()
+            {
+                Name = "Pizza1",
+                PizzaType = PizzaType.Small,
+                Price = 12,
+                ProductType = ProductType.Pizza,
+                Quantity = 1,
+                AdditionalIngredients = Array.Empty<AdditionalIngredientModel>(),
+                ReplacedIngredients = Array.Empty<ReplacedIngredientModel>(),
+                RemovedIngredients = new RemovedIngredientModel[]
+                {
+                    new()
+                    {
+                        IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000001"),
+                        Name = "Ingredient1"
+                    }
+                }
+            },
+            new()
+            {
+                Name = "Pizza1",
+                PizzaType = PizzaType.Small,
+                Price = 12,
+                ProductType = ProductType.Pizza,
+                Quantity = 1,
+                AdditionalIngredients = Array.Empty<AdditionalIngredientModel>(),
+                ReplacedIngredients = Array.Empty<ReplacedIngredientModel>(),
+                RemovedIngredients = new RemovedIngredientModel[]
+                {
+                    new()
+                    {
+                        IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000002"),
+                        Name = "Ingredient2"
+                    }
+                }
+            }
+        }).SetName("Order 03");
+    }
+
+    [TestCaseSource(nameof(Order_Cases))]
+    public async Task Order(OrderModel model, AdminOrderedProductModel[] expectedModel)
+    {
+        //Arrange
+        _deliveryServiceMock.CheckDistance(Arg.Any<DeliveryModel>()).Returns(new DeliveryResponseModel
+        {
+            DeliveryPrice = 1
+        });
+
+        //Act
+        var orderResponse = await _client.PostAsync("order", model.ToStringContent()).As<OrderResponseModel2>();
+        var res = await _client.GetAsync($"order/{orderResponse.OrderId}/products").As<AdminOrderedProductModel[]>();
+
+        for (var i = 0; i < res.Length; i++)
+        {
+            expectedModel[i].Id = res[i].Id;
+        }
+
+        //Assert
+        res.ShouldBeEquivalentTo(expectedModel);
     }
 }
