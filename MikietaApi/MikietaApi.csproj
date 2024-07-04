@@ -67,6 +67,9 @@
       <None Update="SendEmail\Templates\recipient_fragment.html">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="SendEmail\Order\Templates\additional_ingredients_fragment.html">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

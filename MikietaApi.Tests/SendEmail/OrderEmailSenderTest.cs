@@ -35,12 +35,38 @@ public class OrderEmailSenderTest
                 {
                     Name = "Some Name",
                     Price = 12.341,
-                    Ingredients = new[] { "Ser", "Kurczak" }
+                    Ingredients = new[] { "Ser", "Kurczak" },
+                    AdditionalIngredients = new OrderProductAdditionalIngredientModel[]
+                    {
+                        new ()
+                        {
+                            Name = "Ser",
+                            Quantity = 1
+                        },
+                        new ()
+                        {
+                            Name = "Boczek",
+                            Quantity = 2
+                        }
+                    }
                 },
                 new()
                 {
                     Name = "Some Name 2",
                     Price = 2.331,
+                    AdditionalIngredients = new OrderProductAdditionalIngredientModel[]
+                    {
+                        new ()
+                        {
+                            Name = "Ser",
+                            Quantity = 0
+                        },
+                        new ()
+                        {
+                            Name = "Boczek",
+                            Quantity = 2
+                        }
+                    }
                 },
                 new()
                 {

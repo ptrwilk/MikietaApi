@@ -7,6 +7,7 @@ public class OrderEmailSender : EmailSenderBase<OrderEmailSenderModel>
     private const string Path = "SendEmail/Order/Templates/send_order_email_template.html";
     private const string ProductFragmentPath = "SendEmail/Order/Templates/product_fragment.html";
     private const string IngredientsFragmentPath = "SendEmail/Order/Templates/ingredients_fragment.html";
+    private const string AdditionalIngredientsFragmentPath = "SendEmail/Order/Templates/additional_ingredients_fragment.html";
     private const string DeliveryCostFragmentPath = "SendEmail/Order/Templates/delivery_cost_fragment.html";
     
     protected override string Subject => "Zamówienie w Pizzerii Mikieta";
@@ -39,6 +40,7 @@ public class OrderEmailSender : EmailSenderBase<OrderEmailSenderModel>
         content = content.Replace("[NAME]", model.Name);
         content = content.Replace("[PRICE]", ToString(model.Price));
         content = content.Replace("[INGREDIENT_FRAGMENT]", ReadFromIngredientsFragment(model.Ingredients));
+        content = content.Replace("[ADDITIONAL_INGREDIENT_FRAGMENT]", ReadFromAdditionalIngredientsFragment(model.AdditionalIngredients));
 
         return content;
     }
@@ -53,6 +55,21 @@ public class OrderEmailSender : EmailSenderBase<OrderEmailSenderModel>
         var content = File.ReadAllText(IngredientsFragmentPath);
         
         content = content.Replace("[INGREDIENTS]", string.Join(", ", ingredients));
+
+        return content;
+    }
+    
+    private string ReadFromAdditionalIngredientsFragment(OrderProductAdditionalIngredientModel[]? additionalIngredients)
+    {
+        if (additionalIngredients is null || additionalIngredients.Length == 0)
+        {
+            return "";
+        }
+        
+        var content = File.ReadAllText(AdditionalIngredientsFragmentPath);
+
+        var items = additionalIngredients.Select(x => x.Quantity > 1 ? $"{x.Name} x{x.Quantity}" : x.Name);
+        content = content.Replace("[ADDITIONAL_INGREDIENTS]", string.Join(", ", items));
 
         return content;
     }

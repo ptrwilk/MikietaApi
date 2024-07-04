@@ -147,12 +147,20 @@ public class OrderService : IOrderService
             x.RecipientEmail = entity.Email;
             x.Products = entity.OrderOrderedProducts.Select(z => new OrderProductFragmentModel
             {
-                Price = z.OrderedProduct.Price,
+                Price = ToPrice(z),
                 Quantity = z.Quantity,
                 Name = z.OrderedProduct.Name,
                 Ingredients = z.OrderedProduct.OrderedProductOrderedIngredients
-                    .Where(y => y.IsIngredientRemoved == false)
+                    .Where(y => y is { IsIngredientRemoved: false, IsAdditionalIngredient: false })
                     .Select(y => y.OrderedIngredient.Name)
+                    .ToArray(),
+                AdditionalIngredients = z.OrderedProduct.OrderedProductOrderedIngredients
+                    .Where(y => y.IsAdditionalIngredient)
+                    .Select(y => new OrderProductAdditionalIngredientModel
+                    {
+                        Name = y.OrderedIngredient.Name,
+                        Quantity = y.Quantity
+                    })
                     .ToArray()
             }).ToArray();
         });
@@ -308,7 +316,7 @@ public class OrderService : IOrderService
         {
             Id = entity.OrderedProduct.Id,
             Name = entity.OrderedProduct.Name,
-            Price = ToPrice(entity.OrderedProduct) * entity.Quantity,
+            Price = ToPrice(entity),
             ProductType = entity.OrderedProduct.ProductType,
             PizzaType = entity.OrderedProduct.PizzaType,
             Quantity = entity.Quantity,
@@ -367,7 +375,7 @@ public class OrderService : IOrderService
     private double GetOrderPrice(OrderEntity entity)
     {
         return entity.OrderOrderedProducts.Where(z => z.OrderId == entity.Id)
-            .Sum(z => ToPrice(z.OrderedProduct) * z.Quantity) + (entity.DeliveryPrice ?? 0);
+            .Sum(ToPrice) + (entity.DeliveryPrice ?? 0);
     }
 
     private IDictionary<ProductQuantityModel, OrderedProductEntity> CreateOrderedProducts(OrderModel model)
@@ -402,15 +410,14 @@ public class OrderService : IOrderService
             .Where(x => additionalIngredients.Concat(removedIngredients)
                 .Concat(fromIngredients).Concat(toIngredients).Any(z => z == x.Id)).ToArray();
 
-        Dictionary<AdditionalIngredientModel, int> AdditionalIngredientModels(Guid productId) =>
-            (model.ProductQuantities.First(x => x.ProductId == productId).AdditionalIngredients ??
-             Array.Empty<AdditionalIngredientModel>())
+        Dictionary<AdditionalIngredientModel, int> AdditionalIngredientModels(ProductQuantityModel m) =>
+            (m.AdditionalIngredients ?? Array.Empty<AdditionalIngredientModel>())
             .ToDictionary(x => x, x => x.Quantity);
 
-        Dictionary<IngredientEntity, int> AdditionalIngredientEntities(Guid productId) =>
-            ingredients.Where(x => AdditionalIngredientModels(productId).Any(z => z.Key.IngredientId == x.Id))
+        Dictionary<IngredientEntity, int> AdditionalIngredientEntities(ProductQuantityModel m) =>
+            ingredients.Where(x => AdditionalIngredientModels(m).Any(z => z.Key.IngredientId == x.Id))
                 .ToDictionary(x => x,
-                    x => AdditionalIngredientModels(productId).First(z => z.Key.IngredientId == x.Id).Value);
+                    x => AdditionalIngredientModels(m).First(z => z.Key.IngredientId == x.Id).Value);
 
 
         IngredientEntity[] RemovedIngredientEntities(ProductQuantityModel m) => ingredients.Where(x =>
@@ -426,7 +433,7 @@ public class OrderService : IOrderService
 
 
         return model.ProductQuantities.ToDictionary(x => x, x => products.First(z => z.Id == x.ProductId))
-            .ToDictionary(x => x.Key, x => ToOrderedProduct(x.Key, x.Value, AdditionalIngredientEntities(x.Value.Id),
+            .ToDictionary(x => x.Key, x => ToOrderedProduct(x.Key, x.Value, AdditionalIngredientEntities(x.Key),
                 RemovedIngredientEntities(x.Key),
                 ReplacedIngredients(x.Value.Id)));
     }
@@ -494,16 +501,17 @@ public class OrderService : IOrderService
         }
     }
 
-    private double ToPrice(OrderedProductEntity entity)
+    private double ToPrice(OrderOrderedProductEntity entity)
     {
-        var sum = entity.OrderedProductOrderedIngredients.Sum(x =>
-            entity.PizzaType is null || x.IsIngredientRemoved
+        var product = entity.OrderedProduct;
+        var sum = product.OrderedProductOrderedIngredients.Sum(x =>
+            product.PizzaType is null || x.IsIngredientRemoved
                 ? 0
                 : x.ReplacedIngredient is not null
-                    ? x.ReplacedIngredient.Prices[(int)entity.PizzaType] * x.Quantity
-                    : x.OrderedIngredient.Prices[(int)entity.PizzaType] * x.Quantity);
+                    ? x.ReplacedIngredient.Prices[(int)product.PizzaType] * x.Quantity
+                    : x.OrderedIngredient.Prices[(int)product.PizzaType] * x.Quantity);
 
-        return entity.Price + sum;
+        return (product.Price + sum) * entity.Quantity;
     }
 
     private OrderedProductEntity ToOrderedProduct(

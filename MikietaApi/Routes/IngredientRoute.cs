@@ -15,7 +15,6 @@ public static class IngredientRoute
         return app;
     }
     
-    [Authorize]
     private static IResult Get(IIngredientService service)
     {
         return Results.Ok(service.Get());

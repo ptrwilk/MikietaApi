@@ -1577,6 +1577,156 @@ public class OrderServiceTest
                 }
             }
         }).SetName("Order 03");
+        
+        yield return new TestCaseData(CreateModel(new ProductQuantityModel[]
+        {
+            new()
+            {
+                ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                Quantity = 1,
+                PizzaType = PizzaType.Small,
+                AdditionalIngredients = new AdditionalIngredientModel[]
+                {
+                    new()
+                    {
+                        IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000003"),
+                        Quantity = 1
+                    }
+                }
+            }
+        }), new AdminOrderedProductModel[]
+        {
+            new()
+            {
+                Name = "Pizza1",
+                PizzaType = PizzaType.Small,
+                Price = 12,
+                ProductType = ProductType.Pizza,
+                Quantity = 1,
+                AdditionalIngredients = new AdditionalIngredientModel[]
+                {
+                    new ()
+                    {
+                        IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000003"),
+                        Quantity = 1,
+                        Name = "Ingredient3"
+                    }
+                },
+                ReplacedIngredients = Array.Empty<ReplacedIngredientModel>(),
+                RemovedIngredients = Array.Empty<RemovedIngredientModel>()
+            }
+        }).SetName("Order 04");
+        
+        yield return new TestCaseData(CreateModel(new ProductQuantityModel[]
+        {
+            new()
+            {
+                ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                Quantity = 1,
+                PizzaType = PizzaType.Small,
+                AdditionalIngredients = new AdditionalIngredientModel[]
+                {
+                    new()
+                    {
+                        IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000001"),
+                        Quantity = 2
+                    }
+                }
+            }
+        }), new AdminOrderedProductModel[]
+        {
+            new()
+            {
+                Name = "Pizza1",
+                PizzaType = PizzaType.Small,
+                Price = 12,
+                ProductType = ProductType.Pizza,
+                Quantity = 1,
+                AdditionalIngredients = new AdditionalIngredientModel[]
+                {
+                    new ()
+                    {
+                        IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000001"),
+                        Quantity = 2,
+                        Name = "Ingredient1"
+                    }
+                },
+                ReplacedIngredients = Array.Empty<ReplacedIngredientModel>(),
+                RemovedIngredients = Array.Empty<RemovedIngredientModel>()
+            }
+        }).SetName("Order 05");
+        
+        yield return new TestCaseData(CreateModel(new ProductQuantityModel[]
+        {
+            new()
+            {
+                ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
+                Quantity = 1,
+                PizzaType = PizzaType.Small,
+                AdditionalIngredients = new AdditionalIngredientModel[]
+                {
+                    new()
+                    {
+                        IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000001"),
+                        Quantity = 2
+                    }
+                }
+            },
+            new()
+            {
+                ProductId = Guid.Parse("00000000-0000-0000-0000-000000000002"),
+                Quantity = 1,
+                PizzaType = PizzaType.Small,
+                AdditionalIngredients = new AdditionalIngredientModel[]
+                {
+                    new()
+                    {
+                        IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000002"),
+                        Quantity = 1
+                    }
+                }
+            }
+        }), new AdminOrderedProductModel[]
+        {
+            new()
+            {
+                Name = "Pizza1",
+                PizzaType = PizzaType.Small,
+                Price = 12,
+                ProductType = ProductType.Pizza,
+                Quantity = 1,
+                AdditionalIngredients = new AdditionalIngredientModel[]
+                {
+                    new ()
+                    {
+                        IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000001"),
+                        Quantity = 2,
+                        Name = "Ingredient1"
+                    }
+                },
+                ReplacedIngredients = Array.Empty<ReplacedIngredientModel>(),
+                RemovedIngredients = Array.Empty<RemovedIngredientModel>()
+            },
+            new()
+            {
+                Name = "Pizza2",
+                PizzaType = PizzaType.Small,
+                Price = 13,
+                ProductType = ProductType.Pizza,
+                Quantity = 1,
+                AdditionalIngredients = new AdditionalIngredientModel[]
+                {
+                    new ()
+                    {
+                        IngredientId = Guid.Parse("10000000-0000-0000-0000-000000000002"),
+                        Quantity = 1,
+                        Name = "Ingredient2"
+                    }
+                },
+                ReplacedIngredients = Array.Empty<ReplacedIngredientModel>(),
+                RemovedIngredients = Array.Empty<RemovedIngredientModel>()
+            }
+        }).SetName("Order 06");
     }
 
     [TestCaseSource(nameof(Order_Cases))]
