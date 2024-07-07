@@ -1,14 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using MikietaApi.Data;
 
 namespace MikietaApi.Tests;
 
 public class WebAppFactory : WebApplicationFactory<Program>
 {
     private Action<IServiceCollection>? ConfigureServices { get; set; }
+    private InMemoryDatabaseRoot _memoryRoot = new();
+
     
     protected override IHost CreateHost(IHostBuilder builder)
     {
@@ -39,6 +44,13 @@ public class WebAppFactory : WebApplicationFactory<Program>
         builder.ConfigureServices(services =>
         {
             ConfigureServices?.Invoke(services);
+
+            services.RemoveAll<DbContextOptions<DataContext>>();
+            
+            services.AddDbContext<DataContext>(options =>
+            {
+                options.UseInMemoryDatabase("Testing", _memoryRoot);
+            });
         });
 
         return base.CreateHost(builder);
