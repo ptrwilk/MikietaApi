@@ -34,7 +34,7 @@ public class OrderServiceTest
     private IDeliveryService _deliveryServiceMock = null!;
     private HttpClient _client = null!;
 
-    [SetUp]
+    [OneTimeSetUp]
     public void SetUp()
     {
         _deliveryServiceMock = Substitute.For<IDeliveryService>();
@@ -63,8 +63,6 @@ public class OrderServiceTest
 
         _dbContext.Database.EnsureDeleted();
 
-        _dbContext.Database.Migrate();
-
         _dbContext.Settings.AddRange(settings);
 
         var ingredients = new List<IngredientEntity>
@@ -88,6 +86,22 @@ public class OrderServiceTest
             {
                 Id = Guid.Parse("10000000-0000-0000-0000-000000000004"),
                 Name = "Ingredient4"
+            },
+            new()
+            {
+                Id = Guid.Parse("10000000-0000-0000-0000-000000000005"),
+                Name = "Ingredient5",
+                PriceSmall = 1,
+                PriceMedium = 2,
+                PriceLarge = 3,
+            },
+            new()
+            {
+                Id = Guid.Parse("10000000-0000-0000-0000-000000000006"),
+                Name = "Ingredient6",
+                PriceSmall = 0.5,
+                PriceMedium = 1.25,
+                PriceLarge = 2.5,
             }
         };
         _dbContext.Ingredients.AddRange(ingredients);
@@ -159,6 +173,41 @@ public class OrderServiceTest
                 ingredients.First(x => x.Id == Guid.Parse("10000000-0000-0000-0000-000000000001")),
                 ingredients.First(x => x.Id == Guid.Parse("10000000-0000-0000-0000-000000000003"))
             }
+        });
+        
+        _dbContext.Products.Add(new ProductEntity
+        {
+            Id = Guid.Parse("00000000-0000-0000-0000-000000000004"),
+            Name = "Pizza1",
+            Price = 12,
+            Ingredients = ingredients,
+            ProductType = ProductType.Pizza,
+            Sizes = new PizzaSizeEntity[]
+            {
+                new()
+                {
+                    Price = 12,
+                    Size = PizzaType.Small
+                },
+                new()
+                {
+                    Price = 15,
+                    Size = PizzaType.Medium
+                },
+                new()
+                {
+                    Price = 20,
+                    Size = PizzaType.Large
+                }
+            }
+        });
+        
+        _dbContext.Products.Add(new ProductEntity
+        {
+            Id = Guid.Parse("00000000-0000-0000-0000-000000000005"),
+            Name = "Drink",
+            Price = 7,
+            ProductType = ProductType.Drink,
         });
 
         _dbContext.SaveChanges();
@@ -756,69 +805,11 @@ public class OrderServiceTest
     public void Order_TestCost(OrderModel model, double deliveryPrice, double expectedCost)
     {
         //Arrange
+        
         _deliveryServiceMock.CheckDistance(Arg.Any<DeliveryModel>()).Returns(new DeliveryResponseModel
         {
             DeliveryPrice = deliveryPrice
         });
-
-        var ingredients = new List<IngredientEntity>
-        {
-            new()
-            {
-                Id = Guid.Parse("10000000-0000-0000-0000-000000000005"),
-                Name = "Ingredient5",
-                PriceSmall = 1,
-                PriceMedium = 2,
-                PriceLarge = 3,
-            },
-            new()
-            {
-                Id = Guid.Parse("10000000-0000-0000-0000-000000000006"),
-                Name = "Ingredient6",
-                PriceSmall = 0.5,
-                PriceMedium = 1.25,
-                PriceLarge = 2.5,
-            },
-        };
-
-        _dbContext.Ingredients.AddRange(ingredients);
-
-        _dbContext.Products.Add(new ProductEntity
-        {
-            Id = Guid.Parse("00000000-0000-0000-0000-000000000004"),
-            Name = "Pizza1",
-            Price = 12,
-            Ingredients = ingredients,
-            ProductType = ProductType.Pizza,
-            Sizes = new PizzaSizeEntity[]
-            {
-                new()
-                {
-                    Price = 12,
-                    Size = PizzaType.Small
-                },
-                new()
-                {
-                    Price = 15,
-                    Size = PizzaType.Medium
-                },
-                new()
-                {
-                    Price = 20,
-                    Size = PizzaType.Large
-                }
-            }
-        });
-
-        _dbContext.Products.Add(new ProductEntity
-        {
-            Id = Guid.Parse("00000000-0000-0000-0000-000000000005"),
-            Name = "Drink",
-            Price = 7,
-            ProductType = ProductType.Drink,
-        });
-
-        _dbContext.SaveChanges();
 
         //Act
         var orderId = _orderService.Order(model)?.OrderId!;
@@ -1302,16 +1293,6 @@ public class OrderServiceTest
             }
         });
 
-        _dbContext.Products.Add(new ProductEntity
-        {
-            Id = Guid.Parse("00000000-0000-0000-0000-000000000005"),
-            Name = "Drink",
-            Price = 7,
-            ProductType = ProductType.Drink,
-        });
-
-        _dbContext.SaveChanges();
-
         //Act
         //Assert
         var ex = Should.Throw<InvalidOperationException>(() => _orderService.Order(model));
@@ -1351,49 +1332,6 @@ public class OrderServiceTest
         {
             DeliveryPrice = 1
         });
-
-        var ingredients = new List<IngredientEntity>
-        {
-            new()
-            {
-                Id = Guid.Parse("10000000-0000-0000-0000-000000000005"),
-                Name = "Ingredient5",
-                PriceSmall = 1,
-                PriceMedium = 2,
-                PriceLarge = 3,
-            }
-        };
-
-        _dbContext.Ingredients.AddRange(ingredients);
-
-        _dbContext.Products.Add(new ProductEntity
-        {
-            Id = Guid.Parse("00000000-0000-0000-0000-000000000004"),
-            Name = "Pizza1",
-            Price = 12,
-            Ingredients = ingredients,
-            ProductType = ProductType.Pizza,
-            Sizes = new PizzaSizeEntity[]
-            {
-                new()
-                {
-                    Price = 12,
-                    Size = PizzaType.Small
-                },
-                new()
-                {
-                    Price = 15,
-                    Size = PizzaType.Medium
-                },
-                new()
-                {
-                    Price = 20,
-                    Size = PizzaType.Large
-                }
-            }
-        });
-
-        _dbContext.SaveChanges();
 
         //Act
         var orderId = _orderService.Order(model)?.OrderId!;

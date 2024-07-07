@@ -93,6 +93,11 @@ public class DataContext : DbContext
             .HasConversion<string>();
     }
 
+    public bool IsInMemoryProvider()
+    {
+        return Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory";
+    }
+
     public override int SaveChanges()
     {
         var entries = ChangeTracker.Entries()

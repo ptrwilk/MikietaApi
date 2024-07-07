@@ -16,7 +16,10 @@ public class DbSeeder
 
     public void Seed()
     {
-        _context.Database.Migrate();
+        if (!_context.IsInMemoryProvider())
+        {
+            _context.Database.Migrate();
+        }
 
         if (!_context.Ingredients.Any())
         {
