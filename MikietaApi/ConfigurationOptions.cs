@@ -9,12 +9,12 @@ public class ConfigurationOptions
     public string GoogleApiKey { get; }
     public string AdminWebsiteUrl { get; }
 
-    public ConfigurationOptions(IConfiguration configuration, IWebHostEnvironment environment,
-        ILogger<ConfigurationOptions> logger)
+    public ConfigurationOptions(IConfiguration configuration, IWebHostEnvironment environment)
     {
         Database = environment.IsDevelopment()
             ? configuration["ConnectionStrings:Database"]!
-            : Environment.GetEnvironmentVariable("Database")!;
+            //DATABASE_URL - key  for heroku environment variable
+            : Environment.GetEnvironmentVariable("DATABASE_URL")!;
         SecretKey = environment.IsDevelopment()
             ? configuration["Stripe:SecretKey"]!
             : Environment.GetEnvironmentVariable("SecretKey")!;

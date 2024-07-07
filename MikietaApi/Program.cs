@@ -22,6 +22,7 @@ using Serilog;
 using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -32,7 +33,7 @@ builder.Services.AddSingleton<IJwtTokenFactory>(_ => new JwtTokenFactory(builder
     : Environment.GetEnvironmentVariable("Jwt_Key")!));
 
 builder.Services.AddDbContext<DataContext>((provider, options) =>
-    options.UseSqlite(provider.GetService<ConfigurationOptions>()!.Database));
+    options.UseNpgsql(provider.GetService<ConfigurationOptions>()!.Database));
 builder.Services.AddScoped<IProductsService, ProductsService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
