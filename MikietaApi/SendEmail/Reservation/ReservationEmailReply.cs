@@ -6,7 +6,7 @@ public class ReservationEmailReply : EmailReplyBase<ReservationEmailReplyModel>
 {
     private const string Path = "SendEmail/Reservation/Templates/reply_email_template.html";
     
-    protected override string Subject => "Rezerwacja w Pizzerii Mikieta";
+    protected override string Subject => "Rezerwacja w Pizzerii Miketa";
 
     public ReservationEmailReply(EmailSenderOption option) : base(option)
     {

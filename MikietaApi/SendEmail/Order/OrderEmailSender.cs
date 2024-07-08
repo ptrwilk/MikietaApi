@@ -10,7 +10,7 @@ public class OrderEmailSender : EmailSenderBase<OrderEmailSenderModel>
     private const string AdditionalIngredientsFragmentPath = "SendEmail/Order/Templates/additional_ingredients_fragment.html";
     private const string DeliveryCostFragmentPath = "SendEmail/Order/Templates/delivery_cost_fragment.html";
     
-    protected override string Subject => "Zamówienie w Pizzerii Mikieta";
+    protected override string Subject => "Zamówienie w Pizzerii Miketa";
 
     public OrderEmailSender(EmailSenderOption option) : base(option)
     {
