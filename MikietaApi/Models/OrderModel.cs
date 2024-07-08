@@ -102,6 +102,7 @@ public class OrderStatusModel
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public OrderStatusType Status { get; set; }
+    public int OrderNumber { get; set; }
     public DateTime DeliveryAt { get; set; }
     
     [JsonConverter(typeof(JsonStringEnumConverter))]

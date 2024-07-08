@@ -14,7 +14,7 @@ public class ConfigurationOptions
         Database = environment.IsDevelopment()
             ? ConvertPostgresConnectionString(configuration["ConnectionStrings:Database"]!)
             //DATABASE_URL - key  for heroku environment variable
-            : ConvertPostgresConnectionString(Environment.GetEnvironmentVariable("DATABASE_URL"))!;
+            : ConvertPostgresConnectionString(Environment.GetEnvironmentVariable("DATABASE_URL")!);
         SecretKey = environment.IsDevelopment()
             ? configuration["Stripe:SecretKey"]!
             : Environment.GetEnvironmentVariable("SecretKey")!;
@@ -34,7 +34,7 @@ public class ConfigurationOptions
     {
         try
         {
-            var uri = new Uri(postgresUrl!);
+            var uri = new Uri(postgresUrl);
             var userInfo = uri.UserInfo.Split(':');
 
             var host = uri.Host;
