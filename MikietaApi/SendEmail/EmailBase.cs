@@ -29,7 +29,7 @@ public abstract class EmailBase<T>
     protected MailMessage CreateMailMessage(T model, string subject, string messageId)
     {
         var message = new MailMessage();
-        message.From = new MailAddress(_option.Email, "Pizzeria Mikieta");
+        message.From = new MailAddress(_option.Email, "Pizzeria Miketa");
         message.To.Add(new MailAddress(model.RecipientEmail, "Klient"));    
         message.Subject = subject;
 

@@ -26,7 +26,7 @@ public class EmailSenderModelFactory: IEmailSenderModelFactory
             Phone = phone,
             //TODO: brac to potem najprawdopodbiniej z configu, nie z settingsów
             Link = "http://google.pl",
-            LinkText = "www.pizzeriamikieta.pl"
+            LinkText = "www.pizzeriamiketa.pl"
         };
 
         action(res);
