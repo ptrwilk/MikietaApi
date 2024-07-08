@@ -8,4 +8,17 @@ public class OrderOrderedProductEntity
     public OrderedProductEntity OrderedProduct { get; set; } = null!;
     public int Quantity { get; set; }
     public bool Ready { get; set; }
+
+    public double CalculatePrice()
+    {
+        var product = OrderedProduct;
+        var sum = product.OrderedProductOrderedIngredients.Sum(x =>
+            product.PizzaType is null || x.IsIngredientRemoved
+                ? 0
+                : x.ReplacedIngredient is not null
+                    ? x.ReplacedIngredient.Prices[(int)product.PizzaType] * x.Quantity
+                    : x.OrderedIngredient.Prices[(int)product.PizzaType] * x.Quantity);
+
+        return (product.Price + sum) * Quantity;
+    }
 }
