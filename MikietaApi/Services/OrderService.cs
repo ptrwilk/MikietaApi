@@ -139,6 +139,7 @@ public class OrderService : IOrderService
         var settings = _context.Settings.ToArray();
         return _emailSenderFactory.Create<OrderEmailSenderModel>(settings, x =>
         {
+            x.OrderNumber = entity.Number;
             x.Delivery = entity.DeliveryMethod == DeliveryMethodType.Delivery;
             x.TransferPaid = false;
             x.Link = $"{_options.WebsiteUrl}/zamowienie/{entity.Id}";
@@ -244,10 +245,11 @@ public class OrderService : IOrderService
     public OrderStatusModel GetStatus(Guid orderId)
     {
         var entity = _context.Orders.First(x => x.Id == orderId);
-
+        
         return new OrderStatusModel
         {
             Status = entity.Status,
+            OrderNumber = entity.Number,
             DeliveryAt = entity.DeliveryTiming,
             DeliveryMethod = entity.DeliveryMethod,
             CanClearBasket = entity.CanClearBasket

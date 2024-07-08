@@ -21,6 +21,7 @@ public class OrderEmailSender : EmailSenderBase<OrderEmailSenderModel>
         var content = File.ReadAllText(Path);
         
         content = content.Replace("[LINK]", model.Link);
+        content = content.Replace("[ORDER_NUMBER]", model.OrderNumber.ToString());
         content = content.Replace("[DATE]", model.OrderDate.ToString("yyyy-MM-dd"));
         content = content.Replace("[TIME]", model.OrderDate.ToString("HH:mm"));
         content = content.Replace("[DELIVERY_METHOD]", model.Delivery ? "Dostawa" : "Odbiór własny");
