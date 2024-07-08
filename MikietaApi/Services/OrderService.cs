@@ -148,7 +148,7 @@ public class OrderService : IOrderService
             x.RecipientEmail = entity.Email;
             x.Products = entity.OrderOrderedProducts.Select(z => new OrderProductFragmentModel
             {
-                Price = ToPrice(z),
+                Price = z.CalculatePrice(),
                 Quantity = z.Quantity,
                 Name = z.OrderedProduct.Name,
                 Ingredients = z.OrderedProduct.OrderedProductOrderedIngredients
@@ -318,7 +318,7 @@ public class OrderService : IOrderService
         {
             Id = entity.OrderedProduct.Id,
             Name = entity.OrderedProduct.Name,
-            Price = ToPrice(entity),
+            Price = entity.CalculatePrice(),
             ProductType = entity.OrderedProduct.ProductType,
             PizzaType = entity.OrderedProduct.PizzaType,
             Quantity = entity.Quantity,
@@ -377,7 +377,7 @@ public class OrderService : IOrderService
     private double GetOrderPrice(OrderEntity entity)
     {
         return entity.OrderOrderedProducts.Where(z => z.OrderId == entity.Id)
-            .Sum(ToPrice) + (entity.DeliveryPrice ?? 0);
+            .Sum(x => x.CalculatePrice()) + (entity.DeliveryPrice ?? 0);
     }
 
     private IDictionary<ProductQuantityModel, OrderedProductEntity> CreateOrderedProducts(OrderModel model)
@@ -501,19 +501,6 @@ public class OrderService : IOrderService
             throw new ArgumentException(
                 "One or more provided ReplacedToIngredient Ids are not included in the expected set of Ingredient IDs.");
         }
-    }
-
-    private double ToPrice(OrderOrderedProductEntity entity)
-    {
-        var product = entity.OrderedProduct;
-        var sum = product.OrderedProductOrderedIngredients.Sum(x =>
-            product.PizzaType is null || x.IsIngredientRemoved
-                ? 0
-                : x.ReplacedIngredient is not null
-                    ? x.ReplacedIngredient.Prices[(int)product.PizzaType] * x.Quantity
-                    : x.OrderedIngredient.Prices[(int)product.PizzaType] * x.Quantity);
-
-        return (product.Price + sum) * entity.Quantity;
     }
 
     private OrderedProductEntity ToOrderedProduct(

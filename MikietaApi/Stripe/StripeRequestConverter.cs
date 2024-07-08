@@ -9,7 +9,7 @@ public class StripeRequestConverter : IConverter<OrderOrderedProductEntity, Stri
     {
         return new StripeRequestModel
         {
-            Price = (int)(source.OrderedProduct.Price * 100),
+            Price = (int)(source.CalculatePrice() / source.Quantity * 100),
             Quantity = source.Quantity,
             Name = source.OrderedProduct.Name
         };
