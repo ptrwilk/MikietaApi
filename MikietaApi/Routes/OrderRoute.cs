@@ -41,11 +41,11 @@ public static class OrderRoute
         }
     }
 
-    private static IResult Success(IOrderService service, ConfigurationOptions options, string sessionId)
+    private static async Task<IResult> Success(IOrderService service, ConfigurationOptions options, string sessionId)
     {
         try
         {
-            var id = service.OrderSuccess(sessionId);
+            var id = await service.OrderSuccess(sessionId);
             return Results.Redirect($"{options.WebsiteUrl}/zamowienie/{id}");
         }
         catch (Exception ex)
