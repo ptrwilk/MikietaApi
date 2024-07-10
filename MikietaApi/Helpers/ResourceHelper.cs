@@ -14,9 +14,11 @@
             }
         }
 
-        public static byte[] GetImage(string name)
+        public static byte[]? GetImage(string name)
         {
-            return File.ReadAllBytes(Path.Combine(ImagesPath, $"{name}.png"));
+            var file = Path.Combine(ImagesPath, $"{name}.png");
+            
+            return File.Exists(file) ? File.ReadAllBytes(file) : null;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MikietaApi.Data;
 using MikietaApi.Data.Entities;
+using MikietaApi.Helpers;
 using MikietaApi.Models;
 
 namespace MikietaApi;
@@ -14,11 +15,57 @@ public class DbSeeder
         _context = context;
     }
 
+    private bool TryUpdateImagesForProducts()
+    {
+        if (!ImagesTableExists())
+        {
+            var products = _context.Products.Where(x => x.ImageId != null);
+            if (products.Any())
+            {
+                var productImages = products.ToDictionary(x => x.Id, x => x.ImageId.Value);
+
+                foreach (var product in products)
+                {
+                    product.ImageId = null;
+                }
+
+                _context.SaveChanges();
+                Migrate();
+
+                foreach (var productImage in productImages)
+                {
+                    var imageId = productImage.Value;
+                    var image = ResourceHelper.GetImage(imageId.ToString());
+
+                    if (image is not null)
+                    {
+                        _context.Images.Add(new ImageEntity
+                        {
+                            Id = imageId,
+                            Bytes = image
+                        });
+
+                        var product = _context.Products.First(x => x.Id == productImage.Key);
+                        product.ImageId = imageId;
+                    }
+                }
+
+                _context.SaveChanges();
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public void Seed()
     {
-        if (!_context.IsInMemoryProvider())
+        using var transaction = _context.Database.BeginTransaction();
+        
+        if (!TryUpdateImagesForProducts())
         {
-            _context.Database.Migrate();
+            Migrate();
         }
 
         if (!_context.Ingredients.Any())
@@ -86,6 +133,25 @@ public class DbSeeder
         {
             _context.SaveChanges();
         }
+
+        transaction.Commit();
+    }
+
+    private void Migrate()
+    {
+        if (!_context.IsInMemoryProvider())
+        {
+            _context.Database.Migrate();
+        }
+    }
+    
+    private bool ImagesTableExists()
+    {
+        return _context.Images.FromSqlRaw(@"
+        SELECT 1 AS Exists
+        FROM information_schema.tables 
+        WHERE table_name = 'Images'
+    ").Any();
     }
 
     private void AddDrink(string name, double price)

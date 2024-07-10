@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using MikietaApi.Models;
 
 namespace MikietaApi.Data.Entities;
@@ -14,7 +15,9 @@ public class ProductEntity
     public ProductType ProductType { get; set; }
     public string? Description { get; set; }
     public bool IsDeleted { get; set; }
+    [ForeignKey(nameof(ImageId))]
     public Guid? ImageId { get; set; }
+    public ImageEntity? Image { get; set; }
     public int Index { get; set; }
 
     public double? GetPrice(PizzaType? type)
