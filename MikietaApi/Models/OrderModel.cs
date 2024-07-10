@@ -90,6 +90,8 @@ public class AdminOrderModel
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public OrderStatusType Status { get; set; }
     public double Cost { get; set; }
+    public double CostIncludingFee { get; set; }
+    public double Fee { get; set; }
     public DateTime DeliveryAt { get; set; }
     public DateTime CreatedAt { get; set; }
     

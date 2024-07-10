@@ -22,7 +22,7 @@ public class OrderResponseModel2
 public interface IOrderService
 {
     OrderResponseModel2 Order(OrderModel model);
-    Guid OrderSuccess(string sessionId);
+    Task<Guid> OrderSuccess(string sessionId);
     void OrderCanceled();
     AdminOrderModel[] GetAll();
     AdminOrderedProductModel[] Get(Guid orderId);
@@ -167,7 +167,7 @@ public class OrderService : IOrderService
         });
     }
 
-    public Guid OrderSuccess(string sessionId)
+    public async Task<Guid> OrderSuccess(string sessionId)
     {
         var entity = _context.Orders
             .Include(x => x.OrderOrderedProducts).ThenInclude(x => x.OrderedProduct)
@@ -184,16 +184,19 @@ public class OrderService : IOrderService
         {
             throw new Exception("SessionId is no longer valid.");
         }
+        
+        var transactionFee = await _stripe.GetTransactionFee(sessionId);
 
         entity.Paid = true;
         entity.Visible = true;
         entity.CanClearBasket = true;
+        entity.TransactionFee = transactionFee;
 
         _context.SaveChanges();
 
         _emailSender.Send(ConvertToEmailSender(entity));
 
-        _hub.Clients.All.OrderMade();
+        await _hub.Clients.All.OrderMade();
 
         return entity.Id;
     }
@@ -348,6 +351,8 @@ public class OrderService : IOrderService
 
     private AdminOrderModel Convert(OrderEntity entity)
     {
+        var cost = GetOrderPrice(entity);
+        var fee = (double)(entity.TransactionFee ?? 0);
         return new AdminOrderModel
         {
             Id = entity.Id,
@@ -360,7 +365,9 @@ public class OrderService : IOrderService
                 Floor = entity.Floor,
                 HomeNumber = entity.HomeNumber
             },
-            Cost = GetOrderPrice(entity),
+            Cost = cost,
+            CostIncludingFee = cost - fee,
+            Fee = fee,
             Phone = entity.Phone,
             Number = entity.Number,
             Payed = entity.Paid,
