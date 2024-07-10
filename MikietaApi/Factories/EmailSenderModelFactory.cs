@@ -12,6 +12,13 @@ public interface IEmailSenderModelFactory
 
 public class EmailSenderModelFactory: IEmailSenderModelFactory
 {
+    private readonly ConfigurationOptions _options;
+
+    public EmailSenderModelFactory(ConfigurationOptions options)
+    {
+        _options = options;
+    }
+    
     public T Create<T>(SettingEntity[] settings, Action<T> action)
         where T : EmailSenderModelBase, new()
     {
@@ -24,8 +31,7 @@ public class EmailSenderModelFactory: IEmailSenderModelFactory
         {
             Address = $"{street}, {zipCode} {city}",
             Phone = phone,
-            //TODO: brac to potem najprawdopodbiniej z configu, nie z settingsów
-            Link = "http://google.pl",
+            Link = _options.WebsiteUrl,
             LinkText = "www.pizzeriamiketa.pl"
         };
 
