@@ -15,6 +15,7 @@ public class DataContext : DbContext
     public DbSet<OrderedProductOrderedIngredientEntity> OrderedProductOrderedIngredients { get; set; }
     public DbSet<SettingEntity> Settings { get; set; }
     public DbSet<PizzaSizeEntity> PizzaSizes { get; set; }
+    public DbSet<ImageEntity> Images { get; set; }
     
     public DataContext(DbContextOptions<DataContext> options) : base(options)
     {
