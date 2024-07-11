@@ -30,9 +30,15 @@ public static class ReservationRoute
     }
     
     [Authorize]
-    private static IResult GetAll(IReservationService service)
+    private static IResult GetAll(IReservationService service, int? limit, int? page,
+        ReservationStatusType? reservationStatus)
     {
-        return Results.Ok(service.GetAll());
+        return Results.Ok(service.GetAll(new ReservationModelQuery
+        {
+            Limit = limit,
+            Page = page,
+            ReservationStatus = reservationStatus
+        }));
     }
     
     [Authorize]

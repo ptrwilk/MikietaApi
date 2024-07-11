@@ -80,7 +80,6 @@ public class AdminOrderModel
     public Guid Id { get; set; }
     public int Number { get; set; }
     public string Name { get; set; } = null!;
-    public string AddressText { get; set; } = null!;
     public AdminAddressModel Address { get; set; } = null!;
     public string Phone { get; set; } = null!;
     public bool Payed { get; set; }
@@ -98,6 +97,13 @@ public class AdminOrderModel
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public DeliveryMethodType DeliveryMethod { get; set; }
     public double? DeliveryPrice { get; set; }
+}
+
+public class AdminOrderModelQuery
+{
+    public int? Limit { get; set; }
+    public int? Page { get; set; }
+    public OrderStatusType? OrderStatus { get; set; }
 }
 
 public class OrderStatusModel

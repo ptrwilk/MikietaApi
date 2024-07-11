@@ -12,7 +12,7 @@ namespace MikietaApi.Services;
 public interface IReservationService
 {
     bool Reserve(ReservationModel model);
-    ReservationModel[] GetAll();
+    PagedResult<ReservationModel> GetAll(ReservationModelQuery query);
     ReservationModel Update(ReservationModel model);
     ReservationModel SendEmail(SendEmailModel model);
 }
@@ -66,12 +66,32 @@ public class ReservationService : IReservationService
         return true;
     }
 
-    public ReservationModel[] GetAll()
+    public PagedResult<ReservationModel> GetAll(ReservationModelQuery query)
     {
-        return _context.Reservations.ToList()
-            .Select(Convert)
+        var reservations = _context.Reservations
             .OrderByDescending(x => x.Number)
-            .ToArray();
+            .AsEnumerable();
+        
+        if (query.ReservationStatus.HasValue)
+        {
+            reservations = reservations.Where(x => x.Status == query.ReservationStatus);
+        }
+        
+        var count = reservations.Count();
+        
+        if (query.Limit.HasValue && query.Page.HasValue)
+        {
+            var skip = (query.Page.Value - 1) * query.Limit.Value;
+            reservations = reservations.Skip(skip).Take(query.Limit.Value);
+        }
+        else if (query.Limit.HasValue)
+        {
+            reservations = reservations.Take(query.Limit.Value);
+        }
+        
+        var res = reservations.ToArray();
+        return PagedResult<ReservationModel>
+            .Create(res.Select(Convert).ToArray(), count);
     }
 
     public ReservationModel Update(ReservationModel model)
