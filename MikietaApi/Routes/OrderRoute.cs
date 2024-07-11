@@ -68,9 +68,14 @@ public static class OrderRoute
     }
 
     [Authorize]
-    private static IResult GetAll(IOrderService service)
+    private static IResult GetAll(IOrderService service, int? limit, int? page, OrderStatusType? orderStatus)
     {
-        return Results.Ok(service.GetAll());
+        return Results.Ok(service.GetAll(new AdminOrderModelQuery
+        {
+            Limit = limit,
+            Page = page,
+            OrderStatus = orderStatus
+        }));
     }
 
     [Authorize]

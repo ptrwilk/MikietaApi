@@ -24,7 +24,7 @@ public interface IOrderService
     OrderResponseModel2 Order(OrderModel model);
     Task<Guid> OrderSuccess(string sessionId);
     void OrderCanceled();
-    AdminOrderModel[] GetAll();
+    PagedResult<AdminOrderModel> GetAll(AdminOrderModelQuery query);
     AdminOrderedProductModel[] Get(Guid orderId);
     AdminOrderModel GetSingle(Guid orderId);
     OrderStatusModel GetStatus(Guid orderId);
@@ -206,17 +206,36 @@ public class OrderService : IOrderService
         _hub.Clients.All.OrderMade();
     }
 
-    public AdminOrderModel[] GetAll()
+    public PagedResult<AdminOrderModel> GetAll(AdminOrderModelQuery query)
     {
-        return _context.Orders.Include(x => x.OrderOrderedProducts)
+        var orders = _context.Orders.Include(x => x.OrderOrderedProducts)
             .ThenInclude(x => x.OrderedProduct)
             .ThenInclude(x => x.OrderedProductOrderedIngredients)
             .ThenInclude(x => x.OrderedIngredient)
             .Where(x => x.Visible)
-            .ToList()
-            .Select(Convert)
             .OrderByDescending(x => x.Number)
-            .ToArray();
+            .AsEnumerable();
+
+        if (query.OrderStatus.HasValue)
+        {
+            orders = orders.Where(x => x.Status == query.OrderStatus);
+        }
+
+        var count = orders.Count();
+        
+        if (query.Limit.HasValue && query.Page.HasValue)
+        {
+            var skip = (query.Page.Value - 1) * query.Limit.Value;
+            orders = orders.Skip(skip).Take(query.Limit.Value);
+        }
+        else if (query.Limit.HasValue)
+        {
+            orders = orders.Take(query.Limit.Value);
+        }
+
+        var res = orders.ToArray();
+        return PagedResult<AdminOrderModel>
+            .Create(res.Select(Convert).ToArray(), count);
     }
 
     public AdminOrderedProductModel[] Get(Guid orderId)

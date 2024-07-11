@@ -19,6 +19,13 @@ public class ReservationModel
     public bool EmailSent { get; set; }
 }
 
+public class ReservationModelQuery
+{
+    public int? Limit { get; set; }
+    public int? Page { get; set; }
+    public ReservationStatusType? ReservationStatus { get; set; }
+}
+
 public class SendEmailModel
 {
     public Guid ReservationId { get; set; }
