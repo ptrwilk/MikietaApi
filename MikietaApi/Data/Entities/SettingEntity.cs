@@ -45,6 +45,7 @@
         public const string DeliveryFridayTo = nameof(DeliveryFridayTo);
         public const string DeliverySaturdayTo = nameof(DeliverySaturdayTo);
         public const string DeliverySundayTo = nameof(DeliverySundayTo);
+        public const string Closures = nameof(Closures);
 
         public static readonly string[] OpensFrom =
             { OpenMondayFrom, OpenTuesdayFrom, OpenWednesdayFrom, OpenThursdayFrom, OpenFridayFrom, OpenSaturdayFrom, OpenSundayFrom };
@@ -60,7 +61,7 @@
 
         public static readonly string[] Times = OpensFrom.Concat(OpensTo).Concat(DeliveriesFrom).Concat(DeliveriesTo).ToArray();
     
-        public static readonly string[] Keys = new[] { Street, City, ZipCode, Phone, Facebook, DeliveryRange, DeliveryPrice, Email }
+        public static readonly string[] Keys = new[] { Street, City, ZipCode, Phone, Facebook, DeliveryRange, DeliveryPrice, Email, Closures }
             .Concat(OpensFrom).Concat(OpensTo).Concat(DeliveriesFrom).Concat(DeliveriesTo).ToArray();
 
     }

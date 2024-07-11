@@ -1,4 +1,5 @@
-﻿using MikietaApi.Data;
+﻿using System.Text.Json;
+using MikietaApi.Data;
 using MikietaApi.Data.Entities;
 using MikietaApi.Models;
 
@@ -49,7 +50,8 @@ public class SettingService : ISettingService
             Email = DataContext.GetValue<string?>(settings, SettingEntity.Email),
             OpeningHours = openingHours,
             DeliveryHours = deliveryHours,
-            AdminWebsiteUrl = _configurationOptions.AdminWebsiteUrl
+            AdminWebsiteUrl = _configurationOptions.AdminWebsiteUrl,
+            Closures = GetClosures(settings)
         };
     }
 
@@ -65,6 +67,7 @@ public class SettingService : ISettingService
         Update(settings, SettingEntity.DeliveryPrice, model.DeliveryPrice.ToString());
         Update(settings, SettingEntity.DeliveryRange, model.DeliveryRange.ToString());
         Update(settings, SettingEntity.Email, model.Email);
+        UpdateArray(settings, SettingEntity.Closures, model.Closures.Select(x => x.ClosedOn.ToString()).ToArray());
 
         for (var i = 0; i < SettingEntity.OpensFrom.Length; i++)
         {
@@ -84,5 +87,26 @@ public class SettingService : ISettingService
     {
         var setting = settings.First(x => x.Key == key);
         setting.Value = value;
+    }
+
+    private void UpdateArray(SettingEntity[] settings, string key, string[] values)
+    {
+        var setting = settings.First(x => x.Key == key);
+
+        setting.Value = JsonSerializer.Serialize(values);
+    }
+
+    private ClosureModel[] GetClosures(SettingEntity[] settings)
+    {
+        var setting = settings.First(x => x.Key == SettingEntity.Closures);
+
+        var values = string.IsNullOrEmpty(setting.Value)
+            ? Array.Empty<string>()
+            : JsonSerializer.Deserialize<string[]>(setting.Value);
+
+        return values!.Select(x => new ClosureModel
+        {
+            ClosedOn = (DayOfTheWeek)Enum.Parse(typeof(DayOfTheWeek), x)
+        }).ToArray();
     }
 }

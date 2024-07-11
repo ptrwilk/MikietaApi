@@ -1,4 +1,6 @@
-﻿namespace MikietaApi.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace MikietaApi.Models;
 
 public class SettingModel
 {
@@ -11,9 +13,15 @@ public class SettingModel
     public double? DeliveryPrice { get; set; }
     public string? Email { get; set; }
     public string AdminWebsiteUrl { get; set; } = null!;
-
     public SettingHoursModel[] OpeningHours { get; set; } = null!;
     public SettingHoursModel[] DeliveryHours { get; set; } = null!;
+    public ClosureModel[] Closures { get; set; } = null!;
+}
+
+public class ClosureModel
+{
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public DayOfTheWeek ClosedOn { get; set; }
 }
 
 public class SettingHoursModel
