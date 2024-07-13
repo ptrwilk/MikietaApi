@@ -96,7 +96,8 @@ public class OrderService : IOrderService
             CreatedAt = DateTime.Now,
             Visible = model.PaymentMethod == PaymentMethodType.Cash,
             DeliveryPrice = deliveryPrice,
-            CanClearBasket = model.PaymentMethod == PaymentMethodType.Cash
+            CanClearBasket = model.PaymentMethod == PaymentMethodType.Cash,
+            Status = OrderStatusType.Waiting
         };
 
         entity.OrderOrderedProducts = orderedProducts.Select(orderedProduct => new OrderOrderedProductEntity
