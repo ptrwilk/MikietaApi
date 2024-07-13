@@ -97,6 +97,7 @@ public class AdminOrderModel
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public DeliveryMethodType DeliveryMethod { get; set; }
     public decimal? DeliveryPrice { get; set; }
+    public bool ShouldCalculateFee { get; set; }
 }
 
 public class AdminOrderModelQuery

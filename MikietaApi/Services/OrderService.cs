@@ -31,6 +31,7 @@ public interface IOrderService
     AdminOrderModel Update(AdminOrderModel model);
     AdminOrderedProductModel UpdateProduct(Guid orderId, AdminOrderedProductModel model);
     bool ClearCanClearBasket(Guid orderId);
+    Task CalculateTransactionFee(Guid orderId);
 }
 
 public class OrderService : IOrderService
@@ -185,8 +186,19 @@ public class OrderService : IOrderService
         {
             throw new Exception("SessionId is no longer valid.");
         }
-        
-        var transactionFee = await _stripe.GetTransactionFee(sessionId);
+
+        decimal? transactionFee;
+
+        try
+        {
+            transactionFee = await _stripe.GetTransactionFee(sessionId);
+            throw new Exception("TEST");
+        }
+        //If any error occurs transaction fee can be manually calculated from admin
+        catch
+        {
+            transactionFee = null;
+        }
 
         entity.Paid = true;
         entity.Visible = true;
@@ -333,6 +345,22 @@ public class OrderService : IOrderService
         return flagCleared;
     }
 
+    public async Task CalculateTransactionFee(Guid orderId)
+    {
+        var order = _context.Orders.First(x => x.Id == orderId);
+
+        if (order.TransactionFee is not null)
+        {
+            throw new InvalidOperationException("TransactionFee was already calculated.");
+        }
+        
+        var fee = await _stripe.GetTransactionFee(order.SessionId!);
+
+        order.TransactionFee = fee;
+
+        await _context.SaveChangesAsync();
+    }
+
     private AdminOrderedProductModel Convert(OrderOrderedProductEntity entity)
     {
         var items = entity.OrderedProduct.OrderedProductOrderedIngredients.ToArray();
@@ -388,6 +416,7 @@ public class OrderService : IOrderService
             Cost = cost,
             CostIncludingFee = cost - fee,
             Fee = fee,
+            ShouldCalculateFee = entity.TransactionFee is null && entity.PaymentMethod == PaymentMethodType.Transfer,
             Phone = entity.Phone,
             Number = entity.Number,
             Payed = entity.Paid,
@@ -397,7 +426,7 @@ public class OrderService : IOrderService
             CompletedProducts = entity.OrderOrderedProducts.Count(z => z.Ready),
             CreatedAt = entity.CreatedAt,
             DeliveryAt = entity.DeliveryTiming,
-            DeliveryPrice = entity.DeliveryPrice
+            DeliveryPrice = entity.DeliveryPrice,
         };
     }
 
