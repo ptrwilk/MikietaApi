@@ -372,7 +372,7 @@ public class OrderService : IOrderService
     private AdminOrderModel Convert(OrderEntity entity)
     {
         var cost = GetOrderPrice(entity);
-        var fee = (double)(entity.TransactionFee ?? 0);
+        var fee = entity.TransactionFee ?? 0;
         return new AdminOrderModel
         {
             Id = entity.Id,
@@ -401,7 +401,7 @@ public class OrderService : IOrderService
         };
     }
 
-    private double GetOrderPrice(OrderEntity entity)
+    private decimal GetOrderPrice(OrderEntity entity)
     {
         return entity.OrderOrderedProducts.Where(z => z.OrderId == entity.Id)
             .Sum(x => x.CalculatePrice()) + (entity.DeliveryPrice ?? 0);

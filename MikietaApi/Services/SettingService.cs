@@ -45,7 +45,7 @@ public class SettingService : ISettingService
             ZipCode = DataContext.GetValue<string?>(settings, SettingEntity.ZipCode),
             Phone = DataContext.GetValue<string?>(settings, SettingEntity.Phone),
             Facebook = DataContext.GetValue<string?>(settings, SettingEntity.Facebook),
-            DeliveryPrice = DataContext.GetValue<double?>(settings, SettingEntity.DeliveryPrice),
+            DeliveryPrice = DataContext.GetValue<decimal?>(settings, SettingEntity.DeliveryPrice),
             DeliveryRange = DataContext.GetValue<double?>(settings, SettingEntity.DeliveryRange),
             Email = DataContext.GetValue<string?>(settings, SettingEntity.Email),
             OpeningHours = openingHours,

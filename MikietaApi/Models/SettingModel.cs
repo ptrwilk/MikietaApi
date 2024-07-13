@@ -10,7 +10,7 @@ public class SettingModel
     public string? Phone { get; set; }
     public string? Facebook { get; set; }
     public double? DeliveryRange { get; set; }
-    public double? DeliveryPrice { get; set; }
+    public decimal? DeliveryPrice { get; set; }
     public string? Email { get; set; }
     public string AdminWebsiteUrl { get; set; } = null!;
     public SettingHoursModel[] OpeningHours { get; set; } = null!;

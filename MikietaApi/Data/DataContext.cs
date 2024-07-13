@@ -171,6 +171,11 @@ public class DataContext : DbContext
         {
             return (T)(object)double.Parse(value);
         }
+        
+        if (typeof(T) == typeof(decimal) || typeof(T) == typeof(decimal?))
+        {
+            return (T)(object)decimal.Parse(value);
+        }
 
         throw new ArgumentException($"Case not specified for type {typeof(T)}");
     }

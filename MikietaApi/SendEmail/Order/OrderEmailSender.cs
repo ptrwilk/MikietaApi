@@ -89,7 +89,7 @@ public class OrderEmailSender : EmailSenderBase<OrderEmailSenderModel>
         return content;
     }
 
-    private string ToString(double value)
+    private string ToString(decimal value)
     {
         return Math.Round(value, 2, MidpointRounding.AwayFromZero).ToString(CultureInfo.InvariantCulture);
     }

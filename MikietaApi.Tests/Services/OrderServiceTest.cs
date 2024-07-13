@@ -23,7 +23,7 @@ public class OrderServiceTest
         {
         }
 
-        public override StripeResponseModel CreateSession(StripeRequestModel[] models, double? deliveryPrice)
+        public override StripeResponseModel CreateSession(StripeRequestModel[] models, decimal? deliveryPrice)
         {
             return new StripeResponseModel();
         }
@@ -99,9 +99,9 @@ public class OrderServiceTest
             {
                 Id = Guid.Parse("10000000-0000-0000-0000-000000000006"),
                 Name = "Ingredient6",
-                PriceSmall = 0.5,
-                PriceMedium = 1.25,
-                PriceLarge = 2.5,
+                PriceSmall = 0.5m,
+                PriceMedium = 1.25m,
+                PriceLarge = 2.5m,
             }
         };
         _dbContext.Ingredients.AddRange(ingredients);
@@ -241,7 +241,7 @@ public class OrderServiceTest
                 ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                 Name = "Pizza1",
                 PizzaType = PizzaType.Medium,
-                Price = 15d,
+                Price = 15m,
                 OrderedProductOrderedIngredients = new OrderedProductOrderedIngredientEntity[]
                 {
                     new()
@@ -594,7 +594,7 @@ public class OrderServiceTest
                 ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                 Name = "Pizza1",
                 PizzaType = PizzaType.Medium,
-                Price = 15d,
+                Price = 15m,
                 OrderedProductOrderedIngredients = new OrderedProductOrderedIngredientEntity[]
                 {
                     new()
@@ -622,7 +622,7 @@ public class OrderServiceTest
                 ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                 Name = "Pizza1",
                 PizzaType = PizzaType.Large,
-                Price = 20d,
+                Price = 20m,
                 OrderedProductOrderedIngredients = new OrderedProductOrderedIngredientEntity[]
                 {
                     new()
@@ -674,7 +674,7 @@ public class OrderServiceTest
                     PizzaType = PizzaType.Small,
                 }
             }
-        }, 1d, 28d).SetName("Order_TestCost 01");
+        }, 1m, 28m).SetName("Order_TestCost 01");
 
         yield return new TestCaseData(new OrderModel
         {
@@ -691,7 +691,7 @@ public class OrderServiceTest
                     PizzaType = PizzaType.Medium,
                 }
             }
-        }, 1d, 19.25d).SetName("Order_TestCost 02");
+        }, 1m, 19.25m).SetName("Order_TestCost 02");
 
         yield return new TestCaseData(new OrderModel
         {
@@ -708,7 +708,7 @@ public class OrderServiceTest
                     PizzaType = PizzaType.Large,
                 }
             }
-        }, 1d, 26.5d).SetName("Order_TestCost 03");
+        }, 1m, 26.5m).SetName("Order_TestCost 03");
 
         yield return new TestCaseData(new OrderModel
         {
@@ -732,7 +732,7 @@ public class OrderServiceTest
                     }
                 }
             }
-        }, 1d, 23.5d).SetName("Order_TestCost 04");
+        }, 1m, 23.5m).SetName("Order_TestCost 04");
 
         yield return new TestCaseData(new OrderModel
         {
@@ -757,7 +757,7 @@ public class OrderServiceTest
                     }
                 }
             }
-        }, 1d, 31.5d).SetName("Order_TestCost 05");
+        }, 1m, 31.5m).SetName("Order_TestCost 05");
 
         yield return new TestCaseData(new OrderModel
         {
@@ -782,7 +782,7 @@ public class OrderServiceTest
                     }
                 }
             }
-        }, 1d, 27d).SetName("Order_TestCost 06");
+        }, 1m, 27m).SetName("Order_TestCost 06");
 
         yield return new TestCaseData(new OrderModel
         {
@@ -798,14 +798,13 @@ public class OrderServiceTest
                     Quantity = 2
                 }
             }
-        }, 1d, 15d).SetName("Order_TestCost 07");
+        }, 1m, 15m).SetName("Order_TestCost 07");
     }
 
     [TestCaseSource(nameof(Order_TestCost_Cases))]
-    public void Order_TestCost(OrderModel model, double deliveryPrice, double expectedCost)
+    public void Order_TestCost(OrderModel model, decimal deliveryPrice, decimal expectedCost)
     {
         //Arrange
-        
         _deliveryServiceMock.CheckDistance(Arg.Any<DeliveryModel>()).Returns(new DeliveryResponseModel
         {
             DeliveryPrice = deliveryPrice

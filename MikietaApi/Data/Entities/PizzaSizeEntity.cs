@@ -10,5 +10,5 @@ public class PizzaSizeEntity
     public Guid ProductId { get; set; }
     public ProductEntity Product { get; set; } = null!;
     public PizzaType Size { get; set; }
-    public double Price { get; set; }
+    public decimal Price { get; set; }
 }

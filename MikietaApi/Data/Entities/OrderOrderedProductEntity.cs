@@ -9,7 +9,7 @@ public class OrderOrderedProductEntity
     public int Quantity { get; set; }
     public bool Ready { get; set; }
 
-    public double CalculatePrice()
+    public decimal CalculatePrice()
     {
         var product = OrderedProduct;
         var sum = product.OrderedProductOrderedIngredients.Sum(x =>
