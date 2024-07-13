@@ -19,6 +19,7 @@ public static class OrderRoute
         app.MapPut("order", Update);
         app.MapPut("order/{orderId}/product", UpdateProduct);
         app.MapPut("order/{orderId}/clear-can-clear-basket", ClearCanClearBasket);
+        app.MapPut("order/{orderId}/calculate-transaction-fee", CalculateTransactionFee);
 
         return app;
     }
@@ -110,5 +111,20 @@ public static class OrderRoute
     private static IResult ClearCanClearBasket(IOrderService service, Guid orderId)
     {
         return Results.Ok(service.ClearCanClearBasket(orderId));
+    }
+    
+    [Authorize]
+    private static async Task<IResult> CalculateTransactionFee(IOrderService service, Guid orderId)
+    {
+        try
+        {
+            await service.CalculateTransactionFee(orderId);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Results.Conflict(ex.Message);
+        }
+        
+        return Results.Ok(true);
     }
 }
