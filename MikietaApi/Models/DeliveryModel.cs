@@ -15,7 +15,7 @@ public class DeliveryResponseModel
     public DeliveryCheckErrorType? ErrorType { get; set; }
     public bool HasError { get; set; }
     public string? ErrorMessage { get; set; }
-    public double? DeliveryPrice { get; set; }
+    public decimal? DeliveryPrice { get; set; }
 }
 
 public class DeliveryCheckError

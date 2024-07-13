@@ -48,11 +48,11 @@ public class DbSeeder
             AddProduct("Frytki Belgijskie Duże", "Porcja chrupiących frytek, ketchup", 10,
                 ProductType.Snack);
 
-            AddMargherita(new[] { 17d, 22d, 33d });
-            AddCipolla(new[] { 18d, 23d, 34d });
-            AddFunghi(new[] { 18d, 23d, 34d });
-            AddFunghi(new[] { 18d, 26d, 36d });
-            AddFunghiEProsciutto(new[] { 18d, 26d, 36d });
+            AddMargherita(new[] { 17m, 22m, 33m });
+            AddCipolla(new[] { 18m, 23m, 34m });
+            AddFunghi(new[] { 18m, 23m, 34m });
+            AddFunghi(new[] { 18m, 26m, 36m });
+            AddFunghiEProsciutto(new[] { 18m, 26m, 36m });
 
             AddProduct("Czosnkowy", "firmowy sos XXX idealnie komponujący się ze smakiem każdej naszej pizzy",
                 4, ProductType.Sauce);
@@ -88,7 +88,7 @@ public class DbSeeder
         }
     }
 
-    private void AddDrink(string name, double price)
+    private void AddDrink(string name, decimal price)
     {
         _context.Products.Add(new ProductEntity
         {
@@ -98,7 +98,7 @@ public class DbSeeder
         });
     }
 
-    private void AddProduct(string name, string? description, double price, ProductType type)
+    private void AddProduct(string name, string? description, decimal price, ProductType type)
     {
         _context.Products.Add(new ProductEntity
         {
@@ -109,7 +109,7 @@ public class DbSeeder
         });
     }
 
-    private void AddPizza(string name, string[] ingredients, double[] prices)
+    private void AddPizza(string name, string[] ingredients, decimal[] prices)
     {
         var ingredient = _context.Ingredients.Where(x => ingredients.Any(i => i == x.Name)).ToArray();
         _context.Products.Add(new ProductEntity
@@ -130,18 +130,18 @@ public class DbSeeder
         });
     }
 
-    private void AddMargherita(double[] prices) =>
+    private void AddMargherita(decimal[] prices) =>
         AddPizza("Margherita", new[] { "Ser", "Sos pomidorowy" }, prices);
 
-    private void AddFunghi(double[] prices) =>
+    private void AddFunghi(decimal[] prices) =>
         AddPizza("Funghi", new[] { "Ser", "Sos pomidorowy", "Pieczarki" }, prices);
 
-    private void AddFunghiEProsciutto(double[] prices) =>
+    private void AddFunghiEProsciutto(decimal[] prices) =>
         AddPizza("FunghiEProsciutto", new[] { "Ser", "Sos pomidorowy", "Szynka", "Pieczarki" }, prices);
 
-    private void AddCipolla(double[] prices) =>
+    private void AddCipolla(decimal[] prices) =>
         AddPizza("Cipolla", new[] { "Ser", "Sos pomidorowy", "Cebula" }, prices);
 
-    private void AddSalami(double[] prices) =>
+    private void AddSalami(decimal[] prices) =>
         AddPizza("Salami", new[] { "Ser", "Sos pomidorowy", "Salami" }, prices);
 }

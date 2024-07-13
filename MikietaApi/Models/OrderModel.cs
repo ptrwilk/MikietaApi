@@ -88,15 +88,15 @@ public class AdminOrderModel
     
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public OrderStatusType Status { get; set; }
-    public double Cost { get; set; }
-    public double CostIncludingFee { get; set; }
-    public double Fee { get; set; }
+    public decimal Cost { get; set; }
+    public decimal CostIncludingFee { get; set; }
+    public decimal Fee { get; set; }
     public DateTime DeliveryAt { get; set; }
     public DateTime CreatedAt { get; set; }
     
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public DeliveryMethodType DeliveryMethod { get; set; }
-    public double? DeliveryPrice { get; set; }
+    public decimal? DeliveryPrice { get; set; }
 }
 
 public class AdminOrderModelQuery

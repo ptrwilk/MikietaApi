@@ -51,7 +51,7 @@ public class DeliveryService : IDeliveryService
                     "Out of delivery range.");
             }
 
-            var deliveryPrice = _context.GetValue<double?>(SettingEntity.DeliveryPrice) ?? 0;
+            var deliveryPrice = _context.GetValue<decimal?>(SettingEntity.DeliveryPrice) ?? 0;
 
             return new DeliveryResponseModel
             {
@@ -72,7 +72,7 @@ public class DeliveryService : IDeliveryService
         }
     }
 
-    private double CalculateDeliveryPrice(double distance, double deliveryPrice)
+    private decimal CalculateDeliveryPrice(double distance, decimal deliveryPrice)
     {
         return (int)distance * deliveryPrice;
     }

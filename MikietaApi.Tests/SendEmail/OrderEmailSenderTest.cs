@@ -34,7 +34,7 @@ public class OrderEmailSenderTest
                 new()
                 {
                     Name = "Some Name",
-                    Price = 12.341,
+                    Price = 12.341m,
                     Ingredients = new[] { "Ser", "Kurczak" },
                     AdditionalIngredients = new OrderProductAdditionalIngredientModel[]
                     {
@@ -53,7 +53,7 @@ public class OrderEmailSenderTest
                 new()
                 {
                     Name = "Some Name 2",
-                    Price = 2.331,
+                    Price = 2.331m,
                     AdditionalIngredients = new OrderProductAdditionalIngredientModel[]
                     {
                         new ()
@@ -71,7 +71,7 @@ public class OrderEmailSenderTest
                 new()
                 {
                     Name = "Some Name 3",
-                    Price = 4.331,
+                    Price = 4.331m,
                     Ingredients = Array.Empty<string>()
                 }
             }

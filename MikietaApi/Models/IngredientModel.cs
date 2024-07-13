@@ -4,8 +4,8 @@ public class IngredientModel
 {
     public Guid? Id { get; set; }
     public string? Name { get; set; }
-    public double PriceSmall { get; set; }
-    public double PriceMedium { get; set; }
-    public double PriceLarge { get; set; }
-    public double[] Prices => new []{ PriceSmall, PriceMedium, PriceLarge };
+    public decimal PriceSmall { get; set; }
+    public decimal PriceMedium { get; set; }
+    public decimal PriceLarge { get; set; }
+    public decimal[] Prices => new []{ PriceSmall, PriceMedium, PriceLarge };
 }

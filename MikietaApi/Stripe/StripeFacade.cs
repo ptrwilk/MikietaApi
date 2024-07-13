@@ -27,7 +27,7 @@ public class StripeFacade
         _cancelUrl = cancelUrl;
     }
 
-    public virtual StripeResponseModel CreateSession(StripeRequestModel[] models, double? deliveryPrice)
+    public virtual StripeResponseModel CreateSession(StripeRequestModel[] models, decimal? deliveryPrice)
     {
         var options = new SessionCreateOptions
         {

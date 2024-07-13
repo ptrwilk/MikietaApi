@@ -10,7 +10,7 @@ public class OrderedProductEntity
     public Guid ProductId { get; set; }
     public ProductEntity? Product { get; set; }
     public string Name { get; set; } = null!;
-    public double Price { get; set; }
+    public decimal Price { get; set; }
     public ProductType ProductType { get; set; }
     public PizzaType? PizzaType { get; set; }
     public string? Description { get; set; }
