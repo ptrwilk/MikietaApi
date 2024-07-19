@@ -5,7 +5,7 @@ namespace MikietaApi.Hubs;
 
 public interface IMessageHub
 {
-    Task OrderMade();
+    Task OrderMade(string message);
     Task OrderChanged();
     Task ReservationMade();
     Task Join(int id);
