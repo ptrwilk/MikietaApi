@@ -121,7 +121,7 @@ public class OrderService : IOrderService
         {
             _emailSender.Send(ConvertToEmailSender(entity));
 
-            _hub.Clients.All.OrderMade();
+            _hub.Clients.All.OrderMade("");
 
             return new OrderResponseModel2
             {
@@ -209,14 +209,14 @@ public class OrderService : IOrderService
 
         _emailSender.Send(ConvertToEmailSender(entity));
 
-        await _hub.Clients.All.OrderMade();
+        await _hub.Clients.All.OrderMade("");
 
         return entity.Id;
     }
 
     public void OrderCanceled()
     {
-        _hub.Clients.All.OrderMade();
+        _hub.Clients.All.OrderMade("");
     }
 
     public PagedResult<AdminOrderModel> GetAll(AdminOrderModelQuery query)
