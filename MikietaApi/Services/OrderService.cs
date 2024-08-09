@@ -192,7 +192,6 @@ public class OrderService : IOrderService
         try
         {
             transactionFee = await _stripe.GetTransactionFee(sessionId);
-            throw new Exception("TEST");
         }
         //If any error occurs transaction fee can be manually calculated from admin
         catch
@@ -614,7 +613,6 @@ public class OrderService : IOrderService
             Name = entity.Name,
             PriceLarge = entity.PriceLarge,
             PriceMedium = entity.PriceMedium,
-            PriceSmall = entity.PriceSmall,
             IngredientId = entity.Id,
         };
 

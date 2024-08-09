@@ -123,7 +123,7 @@ public class DataContext : DbContext
 
                 reservationEntity.Number = number;              
             }
-            else if (entry.Entity is ProductEntity productEntity)
+            else if (entry.Entity is ProductEntity { Index: 0 } productEntity)
             {
                 productEntity.Index = maxProductsIndex;
                 maxProductsIndex++;

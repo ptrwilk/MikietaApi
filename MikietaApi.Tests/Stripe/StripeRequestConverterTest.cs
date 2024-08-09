@@ -8,14 +8,13 @@ namespace MikietaApi.Tests.Stripe;
 public class StripeRequestConverterTest
 {
     private static OrderedProductOrderedIngredientEntity CreateOrderedProductOrderedIngredient(int quantity,
-        decimal small, decimal medium, decimal large)
+        decimal medium, decimal large)
     {
         return new OrderedProductOrderedIngredientEntity
         {
             Quantity = quantity,
             OrderedIngredient = new OrderedIngredientEntity()
             {
-                PriceSmall = small,
                 PriceMedium = medium,
                 PriceLarge = large
             }
@@ -24,28 +23,28 @@ public class StripeRequestConverterTest
 
     private static IEnumerable<TestCaseData> Convert_Cases()
     {
-        yield return new TestCaseData(12m, 1, PizzaType.Small,
-                new[] { CreateOrderedProductOrderedIngredient(1, 1, 2, 3) }, 1300)
+        yield return new TestCaseData(12m, 1, PizzaType.Medium,
+                new[] { CreateOrderedProductOrderedIngredient(1, 2, 3) }, 1400)
             .SetName("Convert 01");
 
-        yield return new TestCaseData(12m, 2, PizzaType.Small,
-                new[] { CreateOrderedProductOrderedIngredient(1, 1, 2, 3) }, 1300)
+        yield return new TestCaseData(12m, 2, PizzaType.Medium,
+                new[] { CreateOrderedProductOrderedIngredient(1, 2, 3) }, 1400)
             .SetName("Convert 02");
 
         yield return new TestCaseData(12.54m, 1, PizzaType.Medium,
-                new[] { CreateOrderedProductOrderedIngredient(1, 1, 2, 3) }, 1454)
+                new[] { CreateOrderedProductOrderedIngredient(1, 2, 3) }, 1454)
             .SetName("Convert 03");
 
         yield return new TestCaseData(1m, 1, PizzaType.Large,
-                new[] { CreateOrderedProductOrderedIngredient(1, 1, 2, 3) }, 400)
+                new[] { CreateOrderedProductOrderedIngredient(1, 2, 3) }, 400)
             .SetName("Convert 04");
 
         yield return new TestCaseData(1m, 1, null,
-                new[] { CreateOrderedProductOrderedIngredient(1, 1, 2, 3) }, 100)
+                new[] { CreateOrderedProductOrderedIngredient(1, 2, 3) }, 100)
             .SetName("Convert 05");
-        
-        yield return new TestCaseData(1m, 1, PizzaType.Small,
-                new[] { CreateOrderedProductOrderedIngredient(2, 1, 2, 3) }, 300)
+
+        yield return new TestCaseData(1m, 1, PizzaType.Medium,
+                new[] { CreateOrderedProductOrderedIngredient(1, 2, 3) }, 300)
             .SetName("Convert 06");
     }
 

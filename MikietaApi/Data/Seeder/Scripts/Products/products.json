@@ -1,0 +1,526 @@
+{
+  "pizzas": [
+    {
+      "name": "MARGHERITA",
+      "ingredients": "sos z pomidorów, mozarella, oregano, bazylia",
+      "medium_price": "30.00",
+      "large_price": "38.00"
+    },
+    {
+      "name": "PROSCIUTTO",
+      "ingredients": "sos z pomidorów, mozarella, oregano, bazylia, szynka włoska gotowana",
+      "medium_price": "34.00",
+      "large_price": "43.00"
+    },
+    {
+      "name": "PROSCIUTTO E FUNGHI",
+      "ingredients": "sos z pomidorów, mozarella, oregano, bazylia, szynka włoska gotowana, pieczarki, cebula",
+      "medium_price": "42.00",
+      "large_price": "53.00"
+    },
+    {
+      "name": "CALZONE (CIASTO ZWIJANE W PIERÓG)",
+      "ingredients": "sos z pomidorów, mozarella, oregano, bazylia, szynka włoska gotowana",
+      "medium_price": "34.00",
+      "large_price": "43.00"
+    },
+    {
+      "name": "TONNO E CIPOLLA",
+      "ingredients": "sos z pomidorów, mozarella, oregano, bazylia, tuńczyk, cebula, pieczarki",
+      "medium_price": "43.00",
+      "large_price": "54.00"
+    },
+    {
+      "name": "DIAVOLA",
+      "ingredients": "sos z pomidorów, mozzarella, ser, oregano, bazylia, pikantne salami, papryczka chilli",
+      "medium_price": "44.00",
+      "large_price": "54.00"
+    },
+    {
+      "name": "HAWAII",
+      "ingredients": "sos z pomidorów, mozzarella, oregano, bazylia, szynka włoska gotowana, ananas",
+      "medium_price": "40.00",
+      "large_price": "48.00"
+    },
+    {
+      "name": "QUATTRO FORMAGGI",
+      "ingredients": "sos z pomidorów, mozzarella, oregano, bazylia, ser wędzony, feta, camembert",
+      "medium_price": "44.00",
+      "large_price": "56.00"
+    },
+    {
+      "name": "PARMA E RUCOLA",
+      "ingredients": "sos z pomidorów, ser, oregano, bazylia, szynka parmeńska, rukola",
+      "medium_price": "45.00",
+      "large_price": "56.00"
+    },
+    {
+      "name": "CALZONE FARCITO (CIASTO ZWIJANE W PIERÓG)",
+      "ingredients": "sos z pomidorów, ser, oregano, bazylia, szynka włoska gotowana, salami (pikantne/łagodne), cebula, oliwki",
+      "medium_price": "47.00",
+      "large_price": "58.00"
+    },
+    {
+      "name": "PIEMONTESE",
+      "ingredients": "sos z pomidorów, ser, oregano, bazylia, pieczarki, salami (pikantne/łagodne), camembert, kukurydza",
+      "medium_price": "47.00",
+      "large_price": "58.00"
+    },
+    {
+      "name": "CIPOLLA E CARCIOFINI",
+      "ingredients": "sos z pomidorów, mozzarella, bazylia, oregano, cebula, karczochy, szynka włoska gotowana, salami pikantne",
+      "medium_price": "47.00",
+      "large_price": "58.00"
+    },
+    {
+      "name": "VEGETARIANA",
+      "ingredients": "sos z pomidorów, mozzarella, oregano, bazylia, papryka, cebula, brukuł, cukinia",
+      "medium_price": "44.00",
+      "large_price": "55.00"
+    },
+    {
+      "name": "FIORENTINA",
+      "ingredients": "sos z pomidorów, mozzarella, oregano, bazylia, szpinak, jajko, feta, czosnek",
+      "medium_price": "45.00",
+      "large_price": "56.00"
+    },
+    {
+      "name": "CAPRICCIOSA",
+      "ingredients": "sos z pomidorów, mozzarella, oregano, bazylia, papryka, salami (pikantne/łagodne), szynka włoska gotowana, pieczarki, oliwki",
+      "medium_price": "50.00",
+      "large_price": "63.00"
+    },
+    {
+      "name": "DIAVOLA CON OLIVE VERDI",
+      "ingredients": "sos z pomidorów, mozzarella, oregano, bazylia, kabanosy, ostre papryczki, oliwki, bekon",
+      "medium_price": "47.00",
+      "large_price": "58.00"
+    },
+    {
+      "name": "IMMAGINAZIONE",
+      "ingredients": "sos z pomidorów, ser, bazylia, oregano, suszone pomidory, szynka gotowana włoska, cebula, rukola",
+      "medium_price": "45.00",
+      "large_price": "57.00"
+    },
+    {
+      "name": "POLLO REALE",
+      "ingredients": "sos z pomidorów, ser, oregano, bazylia, kurczak, kukurydza, pieczarki, papryka",
+      "medium_price": "46.00",
+      "large_price": "57.00"
+    },
+    {
+      "name": "SALMONE AFFUMICATA",
+      "ingredients": "sos z pomidorów, ser, bazylia, oregano, łosoś, feta, cebula",
+      "medium_price": "44.00",
+      "large_price": "54.00"
+    },
+    {
+      "name": "PIZZA PERE E RUKOLA",
+      "ingredients": "sos z pomidorów, ser, ser fetta, gruszka, suszone pomidory, rukola, słonecznik",
+      "medium_price": "49.00",
+      "large_price": "61.00"
+    },
+    {
+      "name": "CIPOLLA ARROSTITA",
+      "ingredients": "sos z pomidorów, mozzarella, oregano, bazylia, salami łagodne, prażona cebulka, ser",
+      "medium_price": "44.00",
+      "large_price": "54.00"
+    },
+    {
+      "name": "POLLO SOTTACETI",
+      "ingredients": "sos z pomidorów, ser, oregano, bazylia, ogórek konserwowy, kurczak, camembert",
+      "medium_price": "44.00",
+      "large_price": "54.00"
+    },
+    {
+      "name": "POMODORO SU FORMAGGIO",
+      "ingredients": "sos z pomidorów, mozzarella, oregano, bazylia, szynka włoska gotowana, pomidor, feta",
+      "medium_price": "44.00",
+      "large_price": "54.00"
+    },
+    {
+      "name": "BACONE NELLE VERDURE",
+      "ingredients": "sos z pomidorów, ser, oregano, bazylia, bekon, suszone pomidory, pieczarki, cebula",
+      "medium_price": "45.00",
+      "large_price": "56.00"
+    },
+    {
+      "name": "SŁONECZKO",
+      "ingredients": "sos z pomidorów, ser, oregano, bazylia, szynka gotowana włoska lub salami ( pikantne lub łagodne )",
+      "medium_price": "-",
+      "large_price": "54.00"
+    },
+    {
+      "name": "PIZZA CON PERA",
+      "ingredients": "sos czosnkowy, bekon, gruszka, ser, rukola",
+      "medium_price": "44.00",
+      "large_price": "54.00"
+    },
+    {
+      "name": "PIZZA WIEJSKA",
+      "ingredients": "sos z pomidorów, ser, oregano, bazylia, kiełbasa, pieczarki, cebula",
+      "medium_price": "42.00",
+      "large_price": "53.00"
+    },
+    {
+      "name": "PIZZA SLASKA",
+      "ingredients": "sos z pomidorów, ser, bazylia,oregano, krupniok, ogórek kiszony, cebula",
+      "medium_price": "42.00",
+      "large_price": "53.00"
+    },
+    {
+      "name": "PIZZA GUSTO DELLA TRADIZIONE",
+      "ingredients": "NOWOSC sos z pomidorów, mozzarella, bekon, kiełbasa, cukinia, cebula, pomidorki koktajlowe,  papryka, oregano, bazylia",
+      "medium_price": "51.00",
+      "large_price": "62.00"
+    },
+    {
+      "name": "PRIOPRIA COMPOSIZIONE",
+      "ingredients": "kompozycja własna, liczona według wybranych składników",
+      "medium_price": "-",
+      "large_price": "-"
+    }
+  ],
+  "dinners": [
+    {
+      "name": "TORTILLA",
+      "description": "sałatka, ogórek, pomidor, kurczak, cebulka prażona, sos czosnkowy",
+      "price": "27.00"
+    },
+    {
+      "name": "GOŁABKI ZAPIEKANE W PIECU",
+      "description": "sos z pomidorów, gołąbki ( 2 szt. ), ser",
+      "price": "31.00"
+    },
+    {
+      "name": "PIEROGI Z PIECA LUB Z SKWARKAMI",
+      "description": "pierogi ( 7 szt ) z mięsem, z kapustą i z grzybami, czy ruskie, sos serowy lub skwarki",
+      "price": "26.00"
+    },
+    {
+      "name": "PIEROGI NA SŁODKO",
+      "description": "pierogi  na słodko z serem lub jabłkami, podawane z masłem i cukrem - 7 szt.",
+      "price": "26.00"
+    },
+    {
+      "name": "CAMEMBERT CON MIELE",
+      "description": "Ser camembert, pomidorki koktailowe, pistacje zalane oliwą z miodem i sezamem",
+      "price": "26.00"
+    },
+    {
+      "name": "GRATION ZAPIEKANY",
+      "description": "ziemniak Gration, gofry ziemniaczane, paluszki mozzarelli, żurawina",
+      "price": "15.00"
+    },
+    {
+      "name": "FRYTKI",
+      "description": "frytki tradycyjne lub belgijskie - 200 g",
+      "price": "10.00"
+    },
+    {
+      "name": "KRAZKI CEBULOWE",
+      "description": "180 g",
+      "price": "14.00"
+    },
+    {
+      "name": "NUGETTSY",
+      "description": "6 szt.",
+      "price": "13.00"
+    },
+    {
+      "name": "NACHOSY",
+      "description": "Nachosy z sosem ( do wyboru ) - 180g",
+      "price": "12.00"
+    },
+    {
+      "name": "GIT BURGER",
+      "description": "wołowina 200g, ser wędzony, bekon, żurawina, sałata, ogórek, kiełki rzodkiewki, sos miodowo- musztardowy",
+      "price": "43.00"
+    },
+    {
+      "name": "MOCARZ BURGER",
+      "description": "wołowina 200g, bekon, camembert, konfitura z czerwonej cebuli, sałata, ogórek,  kiełki rzodkiewki, sos barbecue łagodny.",
+      "price": "43.00"
+    },
+    {
+      "name": "HARDKOR BURGER",
+      "description": "wołowina 200g, bekon, ser chadder, konfitura z czerwonej cebuli, sałata, kiełki rzodkiewki,  papryczki jalapeno, ogórek, sos barbecue pikantny",
+      "price": "43.00"
+    },
+    {
+      "name": "GREKOS BURGER",
+      "description": "wołowina 200g, salami pikantne, ser cheddar, sałata, pomidor, ogórek zielony,sos tzatziki",
+      "price": "43.00"
+    },
+    {
+      "name": "FARMER BURGER",
+      "description": "wołowina 200g, bekon, smażony ementaler, czerwona cebula, sałata, prażona cebulka, pomidor kiełki rzodkiewki, domowy sos tysiąca wysp.",
+      "price": "43.00"
+    },
+    {
+      "name": "MONSTER BURGER",
+      "description": "wołowina 200g, ser gouda pieczony, bekon, sałatą, pomidor, konfitura z cebuli, jajko sadzone, smażony ser gouda w panierce, kiełki rzodkiewki, sos majonezowo - czosnkowy",
+      "price": "43.00"
+    },
+    {
+      "name": "KUROZAUR",
+      "description": "pałeczki kurczaka w chrupiącej panierce, sałata, ogórek konserwowy, pomidor, ser, kiełki rzodkiewki, sos tysiąca wysp",
+      "price": "43.00"
+    },
+    {
+      "name": "HAJER BURGER",
+      "description": "czarna bułka, wołowina 200g, sałata, ser cheddar, ogórek kiszony, krążki cebuli, kiełki rzodkiewki, sos serowy chili",
+      "price": "43.00"
+    },
+    {
+      "name": "JACEK PLACEK",
+      "description": "wołowina 200g, ser wędzony, placek ziemniaczany, kiełbasa grillowana, pomidor, czerwona cebula, sałata, kiełki rzodkiewki, sos  tysiąca wysp.",
+      "price": "43.00"
+    },
+    {
+      "name": "TARZAN",
+      "description": "wołowina 200g, ser cheddar, bekon, ananas, papryka, ogórek zielony, rukola, sałata,  sos miodowo- musztardowy",
+      "price": "43.00"
+    },
+    {
+      "name": "BURGER BOX",
+      "description": "dwa mini burgery,  frytki belgijskie, krążki cebulowe, sos",
+      "price": "64.00"
+    }
+  ],
+  "macarons": [
+    {
+      "name": "SPAGHETTI BOLOGNESE",
+      "description": "spaghetti z mięsem w sosie pomidorowym",
+      "price": "31.00"
+    },
+    {
+      "name": "SPAGHETTI CON SPINACI",
+      "description": "spaghetti z serem camembert w sosie szpinakowym",
+      "price": "31.00"
+    },
+    {
+      "name": "SPAGHETTI CARBONARA",
+      "description": "spaghetti z boczkiem i cebulą w sosie carbonara",
+      "price": "32.00"
+    },
+    {
+      "name": "LASAGNE ALLA BOLOGNES",
+      "description": "tradycyjna lasagne z mięsem, sos z pomidorów, ser",
+      "price": "36.00"
+    },
+    {
+      "name": "MAKARON PENNE",
+      "description": "makaron Penne, sos carbonara , dodatkowo do wyboru 1 składnik: kurczak, szynka włoska gotowana, łosoś lub szpinak",
+      "price": "32.00"
+    },
+    {
+      "name": "RAVIOLI",
+      "description": "ravioli z szpinakiem, szynką parmeńską - 11 szt",
+      "price": "26.00"
+    }
+  ],
+  "salads": [
+    {
+      "name": "SAŁATKA Z KURCZAKIEM",
+      "description": "sałata mix, kurczak, papryka, ogórek zielony, kukurydza, pomidorki koktailowe, sos winegret",
+      "price": "31.00"
+    },
+    {
+      "name": "SAŁATKA WEGETARIAŃSKA",
+      "description": "sałata mix, papryka, pomidorki koktailowe, ogórek zielony, kukurydza sos winegret, mozarellki",
+      "price": "31.00"
+    },
+    {
+      "name": "SAŁATKA Z TUŃCZYKIEM",
+      "description": "sałata mix, tuńczyk, papryka, pomidorki kiktailowe, ogórek zielony, kukurydza, sos winegret",
+      "price": "31.00"
+    },
+    {
+      "name": "SAŁATKA GRECKA",
+      "description": "Sałata lodowa, ogórek zielony, ser feta, pomidorki  koktajlowe, czerwona cebula, papryka, czarne oliwki, sos winegret,",
+      "price": "31.00"
+    },
+    {
+      "name": "SAŁATKA CON PERA",
+      "description": "rukola, gruszka konferencja, szynka parmeńska, słonecznik prażony, sos, parmezan",
+      "price": "31.00"
+    }
+  ],
+  "deserts": [
+    {
+      "name": "SZARLOTKA NA GORĄCO",
+      "description": "szarlotka na gorąco, śmietana",
+      "price": "15.00"
+    },
+    {
+      "name": "SZARLOTKA NA GORĄCO",
+      "description": "szarlotka na gorąco, śmietana, gałka lodów",
+      "price": "20.00"
+    },
+    {
+      "name": "BANOFFEE",
+      "description": "Banany oblane karmelem w połączeniu ze śmietaną i  biszkopcikami.",
+      "price": "14.00"
+    },
+    {
+      "name": "DESER SZWARDZWALDZKI",
+      "description": "Biszkopciki oblane wiśniami w połączeniu ze śmietaną.",
+      "price": "14.00"
+    },
+    {
+      "name": "SUFLET CZEKOLADOWY",
+      "description": "",
+      "price": "15.00"
+    },
+    {
+      "name": "SUFLET CZEKOLADOWY",
+      "description": "suflet czekoladowy, śmietana, gałka lodów",
+      "price": "20.00"
+    },
+    {
+      "name": "PANNA COTTA",
+      "description": "",
+      "price": "14.00"
+    },
+    {
+      "name": "BEZOWA CHMURKA",
+      "description": "Beza, śmietana, świeże owoce",
+      "price": "16.00"
+    }
+  ],
+  "drinks": [
+    {
+      "name": "pepsi",
+      "price": "7.00"
+    },
+    {
+      "name": "mirinda",
+      "price": "7.00"
+    },
+    {
+      "name": "7 UP",
+      "price": "7.00"
+    },
+    {
+      "name": "Lipton Tee",
+      "price": "7.00"
+    },
+    {
+      "name": "Schweppes",
+      "price": "7.00"
+    },
+    {
+      "name": "Woda mineralna gaz/ngaz",
+      "price": "5.00"
+    },
+    {
+      "name": "sok jabłkowy/ pomaranczowy/ porzeczkowy",
+      "price": "8.00"
+    },
+    {
+      "name": "kawa",
+      "price": "10.00"
+    },
+    {
+      "name": "kawa biała",
+      "price": "11.00"
+    },
+    {
+      "name": "Espresso",
+      "price": "10.00"
+    },
+    {
+      "name": "Cappuccino",
+      "price": "14.00"
+    },
+    {
+      "name": "Latte",
+      "price": "14.00"
+    },
+    {
+      "name": "Latte smakowe",
+      "price": "15.00"
+    },
+    {
+      "name": "Kawa mrozona",
+      "price": "18.00"
+    },
+    {
+      "name": "Goraca czekolada",
+      "price": "18.00"
+    },
+    {
+      "name": "Czekolada mrozona",
+      "price": "18.00"
+    },
+    {
+      "name": "Kawa po koreanski",
+      "price": "15.00"
+    },
+    {
+      "name": "Kawa po wiedensku",
+      "price": "15.00"
+    },
+    {
+      "name": "Herbata zimowa - rozne rodzaje",
+      "price": "14.00"
+    },
+    {
+      "name": "Herbata ",
+      "price": "9.00"
+    },
+    {
+      "name": "Zywiec lane 0,33",
+      "price": "9.00"
+    },
+    {
+      "name": "Zywiec lane 0,5",
+      "price": "12.00"
+    },
+    {
+      "name": " Tyskie / Kozel",
+      "price": "12.00"
+    },
+    {
+      "name": "Raciborskie klasyczne/ miodowe",
+      "price": "12.00"
+    },
+    {
+      "name": "Warka Radler",
+      "price": "12.00"
+    },
+    {
+      "name": "Karmi",
+      "price": "12.00"
+    },
+    {
+      "name": "Grzaniec ( piwo )",
+      "price": "16.00"
+    },
+    {
+      "name": "Wino ( 100 ml )",
+      "price": "12.00"
+    },
+    {
+      "name": "Grzaniec ( wino )",
+      "price": "15.00"
+    },
+    {
+      "name": "Zywiec biale lane 0,5",
+      "price": "13.00"
+    },
+    {
+      "name": "Zywiec biale lane 0,33",
+      "price": "10.00"
+    },
+    {
+      "name": "Prosecco",
+      "price": "18.00"
+    },
+    {
+      "name": "Martini",
+      "price": "16.00"
+    }
+  ]
+}

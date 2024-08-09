@@ -1,0 +1,75 @@
+<div class="elements single">
+
+
+	<div class="row">
+
+		<h2>1.</h2>
+		<div class="left">
+			<h2>SAŁATKA Z KURCZAKIEM</h2>
+			<h4>sałata mix, kurczak, papryka, ogórek zielony, kukurydza, pomidorki koktailowe, sos winegret</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	31,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>2.</h2>
+		<div class="left">
+			<h2>SAŁATKA WEGETARIAŃSKA</h2>
+			<h4>sałata mix, papryka, pomidorki koktailowe, ogórek zielony, kukurydza sos winegret, mozarellki</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	31,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>3.</h2>
+		<div class="left">
+			<h2>SAŁATKA Z TUŃCZYKIEM</h2>
+			<h4>sałata mix, tuńczyk, papryka, pomidorki kiktailowe, ogórek zielony, kukurydza, sos winegret</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	31,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>4.</h2>
+		<div class="left">
+			<h2>SAŁATKA GRECKA</h2>
+			<h4>Sałata lodowa, ogórek zielony, ser feta, pomidorki  koktajlowe, czerwona cebula, papryka, czarne oliwki, sos winegret,</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	31,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>5.</h2>
+		<div class="left">
+			<h2>SAŁATKA CON PERA</h2>
+			<h4>rukola, gruszka konferencja, szynka parmeńska, słonecznik prażony, sos, parmezan</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	31,00
+			</h2>
+		</div>
+	</div>
+
+
+</div>

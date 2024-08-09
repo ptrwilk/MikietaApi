@@ -91,7 +91,6 @@ public class OrderServiceTest
             {
                 Id = Guid.Parse("10000000-0000-0000-0000-000000000005"),
                 Name = "Ingredient5",
-                PriceSmall = 1,
                 PriceMedium = 2,
                 PriceLarge = 3,
             },
@@ -99,7 +98,6 @@ public class OrderServiceTest
             {
                 Id = Guid.Parse("10000000-0000-0000-0000-000000000006"),
                 Name = "Ingredient6",
-                PriceSmall = 0.5m,
                 PriceMedium = 1.25m,
                 PriceLarge = 2.5m,
             }
@@ -120,7 +118,7 @@ public class OrderServiceTest
                 new()
                 {
                     Price = 12,
-                    Size = PizzaType.Small
+                    Size = PizzaType.Medium
                 },
                 new()
                 {
@@ -149,7 +147,7 @@ public class OrderServiceTest
                 new()
                 {
                     Price = 13,
-                    Size = PizzaType.Small
+                    Size = PizzaType.Medium
                 },
                 new()
                 {
@@ -187,7 +185,7 @@ public class OrderServiceTest
                 new()
                 {
                     Price = 12,
-                    Size = PizzaType.Small
+                    Size = PizzaType.Medium
                 },
                 new()
                 {
@@ -241,7 +239,7 @@ public class OrderServiceTest
                 ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                 Name = "Pizza1",
                 PizzaType = PizzaType.Medium,
-                Price = 15m,
+                Price = 12m,
                 OrderedProductOrderedIngredients = new OrderedProductOrderedIngredientEntity[]
                 {
                     new()
@@ -594,7 +592,7 @@ public class OrderServiceTest
                 ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                 Name = "Pizza1",
                 PizzaType = PizzaType.Medium,
-                Price = 15m,
+                Price = 12m,
                 OrderedProductOrderedIngredients = new OrderedProductOrderedIngredientEntity[]
                 {
                     new()
@@ -671,10 +669,10 @@ public class OrderServiceTest
                 {
                     ProductId = Guid.Parse("00000000-0000-0000-0000-000000000004"),
                     Quantity = 2,
-                    PizzaType = PizzaType.Small,
+                    PizzaType = PizzaType.Medium,
                 }
             }
-        }, 1m, 28m).SetName("Order_TestCost 01");
+        }, 1m, 31.50m).SetName("Order_TestCost 01");
 
         yield return new TestCaseData(new OrderModel
         {
@@ -691,7 +689,7 @@ public class OrderServiceTest
                     PizzaType = PizzaType.Medium,
                 }
             }
-        }, 1m, 19.25m).SetName("Order_TestCost 02");
+        }, 1m, 16.25m).SetName("Order_TestCost 02");
 
         yield return new TestCaseData(new OrderModel
         {
@@ -1305,7 +1303,7 @@ public class OrderServiceTest
             new()
             {
                 Quantity = 1,
-                PizzaType = PizzaType.Small,
+                PizzaType = PizzaType.Medium,
                 ProductId = Guid.Parse("00000000-0000-0000-0000-000000000004")
             },
             new()
@@ -1348,7 +1346,7 @@ public class OrderServiceTest
             {
                 ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                 Quantity = 1,
-                PizzaType = PizzaType.Small,
+                PizzaType = PizzaType.Medium,
                 RemovedIngredients = new RemovedIngredientModel[]
                 {
                     new()
@@ -1362,7 +1360,7 @@ public class OrderServiceTest
             new()
             {
                 Name = "Pizza1",
-                PizzaType = PizzaType.Small,
+                PizzaType = PizzaType.Medium,
                 Price = 12,
                 ProductType = ProductType.Pizza,
                 Quantity = 1,
@@ -1385,7 +1383,7 @@ public class OrderServiceTest
             {
                 ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                 Quantity = 1,
-                PizzaType = PizzaType.Small,
+                PizzaType = PizzaType.Medium,
                 RemovedIngredients = new RemovedIngredientModel[]
                 {
                     new()
@@ -1398,7 +1396,7 @@ public class OrderServiceTest
             {
                 ProductId = Guid.Parse("00000000-0000-0000-0000-000000000002"),
                 Quantity = 1,
-                PizzaType = PizzaType.Small,
+                PizzaType = PizzaType.Medium,
                 RemovedIngredients = new RemovedIngredientModel[]
                 {
                     new()
@@ -1412,7 +1410,7 @@ public class OrderServiceTest
             new()
             {
                 Name = "Pizza1",
-                PizzaType = PizzaType.Small,
+                PizzaType = PizzaType.Medium,
                 Price = 12,
                 ProductType = ProductType.Pizza,
                 Quantity = 1,
@@ -1430,7 +1428,7 @@ public class OrderServiceTest
             new()
             {
                 Name = "Pizza2",
-                PizzaType = PizzaType.Small,
+                PizzaType = PizzaType.Medium,
                 Price = 13,
                 ProductType = ProductType.Pizza,
                 Quantity = 1,
@@ -1453,7 +1451,7 @@ public class OrderServiceTest
             {
                 ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                 Quantity = 1,
-                PizzaType = PizzaType.Small,
+                PizzaType = PizzaType.Medium,
                 RemovedIngredients = new RemovedIngredientModel[]
                 {
                     new()
@@ -1466,7 +1464,7 @@ public class OrderServiceTest
             {
                 ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                 Quantity = 1,
-                PizzaType = PizzaType.Small,
+                PizzaType = PizzaType.Medium,
                 RemovedIngredients = new RemovedIngredientModel[]
                 {
                     new()
@@ -1480,7 +1478,7 @@ public class OrderServiceTest
             new()
             {
                 Name = "Pizza1",
-                PizzaType = PizzaType.Small,
+                PizzaType = PizzaType.Medium,
                 Price = 12,
                 ProductType = ProductType.Pizza,
                 Quantity = 1,
@@ -1498,7 +1496,7 @@ public class OrderServiceTest
             new()
             {
                 Name = "Pizza1",
-                PizzaType = PizzaType.Small,
+                PizzaType = PizzaType.Medium,
                 Price = 12,
                 ProductType = ProductType.Pizza,
                 Quantity = 1,
@@ -1521,7 +1519,7 @@ public class OrderServiceTest
             {
                 ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                 Quantity = 1,
-                PizzaType = PizzaType.Small,
+                PizzaType = PizzaType.Medium,
                 AdditionalIngredients = new AdditionalIngredientModel[]
                 {
                     new()
@@ -1536,7 +1534,7 @@ public class OrderServiceTest
             new()
             {
                 Name = "Pizza1",
-                PizzaType = PizzaType.Small,
+                PizzaType = PizzaType.Medium,
                 Price = 12,
                 ProductType = ProductType.Pizza,
                 Quantity = 1,
@@ -1560,7 +1558,7 @@ public class OrderServiceTest
             {
                 ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                 Quantity = 1,
-                PizzaType = PizzaType.Small,
+                PizzaType = PizzaType.Medium,
                 AdditionalIngredients = new AdditionalIngredientModel[]
                 {
                     new()
@@ -1575,7 +1573,7 @@ public class OrderServiceTest
             new()
             {
                 Name = "Pizza1",
-                PizzaType = PizzaType.Small,
+                PizzaType = PizzaType.Medium,
                 Price = 12,
                 ProductType = ProductType.Pizza,
                 Quantity = 1,
@@ -1599,7 +1597,7 @@ public class OrderServiceTest
             {
                 ProductId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
                 Quantity = 1,
-                PizzaType = PizzaType.Small,
+                PizzaType = PizzaType.Medium,
                 AdditionalIngredients = new AdditionalIngredientModel[]
                 {
                     new()
@@ -1613,7 +1611,7 @@ public class OrderServiceTest
             {
                 ProductId = Guid.Parse("00000000-0000-0000-0000-000000000002"),
                 Quantity = 1,
-                PizzaType = PizzaType.Small,
+                PizzaType = PizzaType.Medium,
                 AdditionalIngredients = new AdditionalIngredientModel[]
                 {
                     new()
@@ -1628,7 +1626,7 @@ public class OrderServiceTest
             new()
             {
                 Name = "Pizza1",
-                PizzaType = PizzaType.Small,
+                PizzaType = PizzaType.Medium,
                 Price = 12,
                 ProductType = ProductType.Pizza,
                 Quantity = 1,
@@ -1647,7 +1645,7 @@ public class OrderServiceTest
             new()
             {
                 Name = "Pizza2",
-                PizzaType = PizzaType.Small,
+                PizzaType = PizzaType.Medium,
                 Price = 13,
                 ProductType = ProductType.Pizza,
                 Quantity = 1,

@@ -1,0 +1,299 @@
+<div class="elements single">
+
+
+	<div class="row">
+
+		<h2>1.</h2>
+		<div class="left">
+			<h2>TORTILLA</h2>
+			<h4>sałatka, ogórek, pomidor, kurczak, cebulka prażona, sos czosnkowy </h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	27,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>2.</h2>
+		<div class="left">
+			<h2>GOŁABKI ZAPIEKANE W PIECU</h2>
+			<h4>sos z pomidorów, gołąbki ( 2 szt. ), ser</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	31,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>3.</h2>
+		<div class="left">
+			<h2>PIEROGI Z PIECA LUB Z SKWARKAMI</h2>
+			<h4>pierogi ( 7 szt ) z mięsem, z kapustą i z grzybami, czy ruskie, sos serowy lub skwarki</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	26,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>4.</h2>
+		<div class="left">
+			<h2>PIEROGI NA SŁODKO</h2>
+			<h4>pierogi  na słodko z serem lub jabłkami, podawane z masłem i cukrem - 7 szt.</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	26,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>5.</h2>
+		<div class="left">
+			<h2>CAMEMBERT CON MIELE</h2>
+			<h4>Ser camembert, pomidorki koktailowe, pistacje zalane oliwą z miodem i sezamem</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	26,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>6.</h2>
+		<div class="left">
+			<h2>GRATION ZAPIEKANY</h2>
+			<h4>ziemniak Gration, gofry ziemniaczane, paluszki mozzarelli, żurawina</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	15,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>7.</h2>
+		<div class="left">
+			<h2>FRYTKI</h2>
+			<h4>frytki tradycyjne lub belgijskie - 200 g</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	10,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>8.</h2>
+		<div class="left">
+			<h2>KRAZKI CEBULOWE</h2>
+			<h4>180 g</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	14,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>9.</h2>
+		<div class="left">
+			<h2>NUGETTSY</h2>
+			<h4>6 szt.</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	13,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>10.</h2>
+		<div class="left">
+			<h2>NACHOSY</h2>
+			<h4>Nachosy z sosem ( do wyboru ) - 180g</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	12,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>11.</h2>
+		<div class="left">
+			<h2>GIT BURGER</h2>
+			<h4>wołowina 200g, ser wędzony, bekon, żurawina, sałata, ogórek, kiełki rzodkiewki, sos miodowo- musztardowy</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	43,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>12.</h2>
+		<div class="left">
+			<h2>MOCARZ BURGER</h2>
+			<h4>wołowina 200g, bekon, camembert, konfitura z czerwonej cebuli, sałata, ogórek,  kiełki rzodkiewki, sos barbecue łagodny.</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	43,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>13.</h2>
+		<div class="left">
+			<h2>HARDKOR BURGER</h2>
+			<h4>wołowina 200g, bekon, ser chadder, konfitura z czerwonej cebuli, sałata, kiełki rzodkiewki,  papryczki jalapeno, ogórek, sos barbecue pikantny </h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	43,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>14.</h2>
+		<div class="left">
+			<h2>GREKOS BURGER</h2>
+			<h4>wołowina 200g, salami pikantne, ser cheddar, sałata, pomidor, ogórek zielony,sos tzatziki</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	43,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>15.</h2>
+		<div class="left">
+			<h2>FARMER BURGER</h2>
+			<h4>wołowina 200g, bekon, smażony ementaler, czerwona cebula, sałata, prażona cebulka, pomidor kiełki rzodkiewki, domowy sos tysiąca wysp.</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	43,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>16.</h2>
+		<div class="left">
+			<h2>MONSTER BURGER</h2>
+			<h4>wołowina 200g, ser gouda pieczony, bekon, sałatą, pomidor, konfitura z cebuli, jajko sadzone, smażony ser gouda w panierce, kiełki rzodkiewki, sos majonezowo - czosnkowy</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	43,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>17.</h2>
+		<div class="left">
+			<h2>KUROZAUR</h2>
+			<h4>pałeczki kurczaka w chrupiącej panierce, sałata, ogórek konserwowy, pomidor, ser, kiełki rzodkiewki, sos tysiąca wysp</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	43,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>18.</h2>
+		<div class="left">
+			<h2>HAJER BURGER</h2>
+			<h4>czarna bułka, wołowina 200g, sałata, ser cheddar, ogórek kiszony, krążki cebuli, kiełki rzodkiewki, sos serowy chili</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	43,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>19.</h2>
+		<div class="left">
+			<h2>JACEK PLACEK</h2>
+			<h4>wołowina 200g, ser wędzony, placek ziemniaczany, kiełbasa grillowana, pomidor, czerwona cebula, sałata, kiełki rzodkiewki, sos  tysiąca wysp.</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	43,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>20.</h2>
+		<div class="left">
+			<h2>TARZAN</h2>
+			<h4>wołowina 200g, ser cheddar, bekon, ananas, papryka, ogórek zielony, rukola, sałata,  sos miodowo- musztardowy</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	43,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>21.</h2>
+		<div class="left">
+			<h2>BURGER BOX</h2>
+			<h4>dwa mini burgery,  frytki belgijskie, krążki cebulowe, sos</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	64,00
+			</h2>
+		</div>
+	</div>
+
+
+</div>

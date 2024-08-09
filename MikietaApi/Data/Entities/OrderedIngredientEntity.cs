@@ -10,10 +10,9 @@ public class OrderedIngredientEntity
     public IngredientEntity? Ingredient { get; set; }
     public string Name { get; set; } = null!;
     public int Index { get; set; }
-    public decimal PriceSmall { get; set; }
     public decimal PriceMedium { get; set; }
     public decimal PriceLarge { get; set; }
-    public decimal[] Prices => new []{ PriceSmall, PriceMedium, PriceLarge };
+    public decimal[] Prices => new []{ PriceMedium, PriceLarge };
     public ICollection<OrderedProductEntity> OrderedProducts { get; set; }
     public ICollection<OrderedProductOrderedIngredientEntity> OrderedProductOrderedIngredients { get; set; }
 }
