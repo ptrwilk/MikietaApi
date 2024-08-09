@@ -12,7 +12,7 @@ public class ConfigurationOptions
     public ConfigurationOptions(IConfiguration configuration, IWebHostEnvironment environment)
     {
         Database = environment.IsDevelopment()
-            ? ConvertPostgresConnectionString(configuration["ConnectionStrings:Database"]!)
+            ? configuration["ConnectionStrings:Database"]!
             //DATABASE_URL - key  for heroku environment variable
             : ConvertPostgresConnectionString(Environment.GetEnvironmentVariable("DATABASE_URL")!);
         SecretKey = environment.IsDevelopment()
