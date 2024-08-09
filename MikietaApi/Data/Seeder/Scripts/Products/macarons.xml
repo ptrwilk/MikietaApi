@@ -1,0 +1,89 @@
+<div class="elements single">
+
+
+	<div class="row">
+
+		<h2>1.</h2>
+		<div class="left">
+			<h2>SPAGHETTI BOLOGNESE</h2>
+			<h4>spaghetti z mięsem w sosie pomidorowym</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	31,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>2.</h2>
+		<div class="left">
+			<h2>SPAGHETTI CON SPINACI</h2>
+			<h4>spaghetti z serem camembert w sosie szpinakowym</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	31,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>3.</h2>
+		<div class="left">
+			<h2>SPAGHETTI CARBONARA</h2>
+			<h4>spaghetti z boczkiem i cebulą w sosie carbonara</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	32,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>4.</h2>
+		<div class="left">
+			<h2>LASAGNE ALLA BOLOGNES</h2>
+			<h4>tradycyjna lasagne z mięsem, sos z pomidorów, ser </h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	36,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>5.</h2>
+		<div class="left">
+			<h2>MAKARON PENNE</h2>
+			<h4>makaron Penne, sos carbonara , dodatkowo do wyboru 1 składnik: kurczak, szynka włoska gotowana, łosoś lub szpinak</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	32,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>6.</h2>
+		<div class="left">
+			<h2>RAVIOLI</h2>
+			<h4>ravioli z szpinakiem, szynką parmeńską - 11 szt</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	26,00
+			</h2>
+		</div>
+	</div>
+
+
+</div>

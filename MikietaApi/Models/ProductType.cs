@@ -5,5 +5,8 @@ public enum ProductType
     Pizza,
     Drink,
     Sauce,
-    Snack
+    Desert,
+    Salad,
+    Macaron,
+    Dinner
 }

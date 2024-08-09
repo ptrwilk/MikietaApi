@@ -107,11 +107,6 @@ public class ProductsService : IProductsService
             {
                 entity.Sizes.Add(new PizzaSizeEntity
                 {
-                    Size = PizzaType.Small
-                });
-                
-                entity.Sizes.Add(new PizzaSizeEntity
-                {
                     Size = PizzaType.Medium
                 });
                 
@@ -121,7 +116,6 @@ public class ProductsService : IProductsService
                 });
             }
             
-            entity.Sizes.First(x => x.Size == PizzaType.Small).Price = model.PizzaSizePrice[PizzaType.Small];
             entity.Sizes.First(x => x.Size == PizzaType.Medium).Price = model.PizzaSizePrice[PizzaType.Medium];
             entity.Sizes.First(x => x.Size == PizzaType.Large).Price = model.PizzaSizePrice[PizzaType.Large];
         }
@@ -147,7 +141,7 @@ public class ProductsService : IProductsService
             Description = entity.Description,
             ProductType = entity.ProductType,
             Name = entity.Name,
-            Price = entity.Price ?? entity.Sizes.First(x => x.Size == PizzaType.Small).Price,
+            Price = entity.Price ?? entity.Sizes.FirstOrDefault(x => x.Size == PizzaType.Medium)?.Price,
             ImageUrl = ToImageUrl(entity, address),
             PizzaSizePrice = entity.Sizes.ToDictionary(x => x.Size, x => x.Price)
         };
@@ -159,7 +153,6 @@ public class ProductsService : IProductsService
         {
             Id = entity.Id,
             Name = entity.Name,
-            PriceSmall = entity.PriceSmall,
             PriceLarge = entity.PriceLarge,
             PriceMedium = entity.PriceMedium
         };

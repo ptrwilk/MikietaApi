@@ -28,7 +28,6 @@ public class IngredientService : IIngredientService
             {
                 Id = x.Id,
                 Name = x.Name,
-                PriceSmall = x.PriceSmall,
                 PriceLarge = x.PriceLarge,
                 PriceMedium = x.PriceMedium
             }).ToArray();
@@ -51,7 +50,6 @@ public class IngredientService : IIngredientService
         }
 
         entity.Name = model.Name ?? "";
-        entity.PriceSmall = model.PriceSmall;
         entity.PriceMedium = model.PriceMedium;
         entity.PriceLarge = model.PriceLarge;
 

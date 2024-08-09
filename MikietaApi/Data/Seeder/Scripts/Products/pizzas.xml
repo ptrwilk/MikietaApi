@@ -1,0 +1,635 @@
+<div class="elements zestawy">
+
+
+	<div class="row">
+
+		<h2>1.</h2>
+		<div class="left">
+			<h2>MARGHERITA</h2>
+			<h4>sos z pomidorów, mozarella, oregano, bazylia</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	30,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	38,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>2.</h2>
+		<div class="left">
+			<h2>PROSCIUTTO</h2>
+			<h4>sos z pomidorów, mozarella, oregano, bazylia, szynka włoska gotowana</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	34,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	43,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>3.</h2>
+		<div class="left">
+			<h2>PROSCIUTTO E FUNGHI</h2>
+			<h4>sos z pomidorów, mozarella, oregano, bazylia, szynka włoska gotowana, pieczarki, cebula</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	42,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	53,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>4.</h2>
+		<div class="left">
+			<h2>CALZONE (CIASTO ZWIJANE W PIERÓG)</h2>
+			<h4>sos z pomidorów, mozarella, oregano, bazylia, szynka włoska gotowana</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	34,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	43,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>5.</h2>
+		<div class="left">
+			<h2>TONNO E CIPOLLA</h2>
+			<h4>sos z pomidorów, mozarella, oregano, bazylia, tuńczyk, cebula, pieczarki</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	43,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	54,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>6.</h2>
+		<div class="left">
+			<h2>DIAVOLA</h2>
+			<h4>sos z pomidorów, mozzarella, ser, oregano, bazylia, pikantne salami, papryczka chilli</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	44,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	54,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>7.</h2>
+		<div class="left">
+			<h2>HAWAII</h2>
+			<h4>sos z pomidorów, mozzarella, oregano, bazylia, szynka włoska gotowana, ananas</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	40,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	48,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>8.</h2>
+		<div class="left">
+			<h2>QUATTRO FORMAGGI</h2>
+			<h4>sos z pomidorów, mozzarella, oregano, bazylia, ser wędzony, feta, camembert</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	44,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	56,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>9.</h2>
+		<div class="left">
+			<h2>PARMA E RUCOLA</h2>
+			<h4>sos z pomidorów, ser, oregano, bazylia, szynka parmeńska, rukola</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	45,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	56,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>10.</h2>
+		<div class="left">
+			<h2>CALZONE FARCITO (CIASTO ZWIJANE W PIERÓG)</h2>
+			<h4>sos z pomidorów, ser, oregano, bazylia, szynka włoska gotowana, salami (pikantne/łagodne), cebula, oliwki</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	47,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	58,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>11.</h2>
+		<div class="left">
+			<h2>PIEMONTESE</h2>
+			<h4>sos z pomidorów, ser, oregano, bazylia, pieczarki, salami (pikantne/łagodne), camembert, kukurydza</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	47,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	58,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>12.</h2>
+		<div class="left">
+			<h2>CIPOLLA E CARCIOFINI</h2>
+			<h4>sos z pomidorów, mozzarella, bazylia, oregano, cebula, karczochy, szynka włoska gotowana, salami pikantne</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	47,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	58,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>13.</h2>
+		<div class="left">
+			<h2>VEGETARIANA</h2>
+			<h4>sos z pomidorów, mozzarella, oregano, bazylia, papryka, cebula, brukuł, cukinia</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	44,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	55,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>14.</h2>
+		<div class="left">
+			<h2>FIORENTINA</h2>
+			<h4>sos z pomidorów, mozzarella, oregano, bazylia, szpinak, jajko, feta, czosnek</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	45,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	56,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>15.</h2>
+		<div class="left">
+			<h2>CAPRICCIOSA</h2>
+			<h4>sos z pomidorów, mozzarella, oregano, bazylia, papryka, salami (pikantne/łagodne), szynka włoska gotowana, pieczarki, oliwki</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	50,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	63,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>16.</h2>
+		<div class="left">
+			<h2>DIAVOLA CON OLIVE VERDI</h2>
+			<h4>sos z pomidorów, mozzarella, oregano, bazylia, kabanosy, ostre papryczki, oliwki, bekon</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	47,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	58,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>17.</h2>
+		<div class="left">
+			<h2>IMMAGINAZIONE</h2>
+			<h4>sos z pomidorów, ser, bazylia, oregano, suszone pomidory, szynka gotowana włoska, cebula, rukola</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	45,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	57,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>18.</h2>
+		<div class="left">
+			<h2>POLLO REALE</h2>
+			<h4>sos z pomidorów, ser, oregano, bazylia, kurczak, kukurydza, pieczarki, papryka</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	46,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	57,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>19.</h2>
+		<div class="left">
+			<h2>SALMONE AFFUMICATA</h2>
+			<h4>sos z pomidorów, ser, bazylia, oregano, łosoś, feta, cebula</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	44,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	54,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>20.</h2>
+		<div class="left">
+			<h2>PIZZA PERE E RUKOLA</h2>
+			<h4>sos z pomidorów, ser, ser fetta, gruszka, suszone pomidory, rukola, słonecznik</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	49,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	61,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>21.</h2>
+		<div class="left">
+			<h2>CIPOLLA ARROSTITA</h2>
+			<h4>sos z pomidorów, mozzarella, oregano, bazylia, salami łagodne, prażona cebulka, ser</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	44,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	54,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>22.</h2>
+		<div class="left">
+			<h2>POLLO SOTTACETI</h2>
+			<h4>sos z pomidorów, ser, oregano, bazylia, ogórek konserwowy, kurczak, camembert</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	44,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	54,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>23.</h2>
+		<div class="left">
+			<h2>POMODORO SU FORMAGGIO</h2>
+			<h4>sos z pomidorów, mozzarella, oregano, bazylia, szynka włoska gotowana, pomidor, feta</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	44,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	54,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>24.</h2>
+		<div class="left">
+			<h2>BACONE NELLE VERDURE</h2>
+			<h4>sos z pomidorów, ser, oregano, bazylia, bekon, suszone pomidory, pieczarki, cebula</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	45,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	56,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>25.</h2>
+		<div class="left">
+			<h2>SŁONECZKO</h2>
+			<h4>sos z pomidorów, ser, oregano, bazylia, szynka gotowana włoska lub salami ( pikantne lub łagodne )</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	-
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	54,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>26.</h2>
+		<div class="left">
+			<h2>PIZZA CON PERA</h2>
+			<h4>sos czosnkowy, bekon, gruszka, ser, rukola</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	44,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	54,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>27.</h2>
+		<div class="left">
+			<h2>PIZZA WIEJSKA</h2>
+			<h4>sos z pomidorów, ser, oregano, bazylia, kiełbasa, pieczarki, cebula</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	42,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	53,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>28.</h2>
+		<div class="left">
+			<h2>PIZZA SLASKA</h2>
+			<h4>sos z pomidorów, ser, bazylia,oregano, krupniok, ogórek kiszony, cebula</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	42,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	53,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>29.</h2>
+		<div class="left">
+			<h2>PIZZA GUSTO DELLA TRADIZIONE</h2>
+			<h4>NOWOSC sos z pomidorów, mozzarella, bekon, kiełbasa, cukinia, cebula, pomidorki koktajlowe,  papryka, oregano, bazylia</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	51,00
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	62,00
+                                
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>30.</h2>
+		<div class="left">
+			<h2>PRIOPRIA COMPOSIZIONE</h2>
+			<h4>kompozycja własna, liczona według wybranych składników</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	
+                                	-
+                                
+			</h2>
+			<h2 class="price">
+                            	
+                                	-
+                                
+			</h2>
+		</div>
+	</div>
+
+
+</div>

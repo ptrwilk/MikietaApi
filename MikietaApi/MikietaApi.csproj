@@ -87,6 +87,9 @@
 
     <ItemGroup>
       <Content Remove="logs\**" />
+      <Content Update="Data\Seeder\Scripts\Products\products.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

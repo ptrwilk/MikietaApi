@@ -1,0 +1,202 @@
+<div class="columns drink">
+	<div class="left">
+		<div class="elements">
+			<div class="header drink">
+				<h2 class="name">zimne napoje</h2>
+				<h2 class="price">cena</h2>
+			</div>
+
+
+
+			<div class="row drink">
+				<h2 class="left">pepsi</h2>
+				<h2 class="price">7,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">mirinda</h2>
+				<h2 class="price">7,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">7 UP</h2>
+				<h2 class="price">7,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Lipton Tee</h2>
+				<h2 class="price">7,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Schweppes</h2>
+				<h2 class="price">7,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Woda mineralna gaz/ngaz</h2>
+				<h2 class="price">5,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">sok jabłkowy/ pomaranczowy/ porzeczkowy</h2>
+				<h2 class="price">8,00 zł</h2>
+			</div>
+
+
+		</div>
+
+		<div class="elements">
+			<div class="header drink">
+				<h2 class="name">gorące napoje</h2>
+				<h2 class="price">cena</h2>
+			</div>
+
+
+
+			<div class="row drink">
+				<h2 class="left">kawa</h2>
+				<h2 class="price">10,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">kawa biała</h2>
+				<h2 class="price">11,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Espresso</h2>
+				<h2 class="price">10,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Cappuccino</h2>
+				<h2 class="price">14,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Latte</h2>
+				<h2 class="price">14,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Latte smakowe</h2>
+				<h2 class="price">15,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Kawa mrozona</h2>
+				<h2 class="price">18,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Goraca czekolada</h2>
+				<h2 class="price">18,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Czekolada mrozona</h2>
+				<h2 class="price">18,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Kawa po koreanski</h2>
+				<h2 class="price">15,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Kawa po wiedensku</h2>
+				<h2 class="price">15,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Herbata zimowa - rozne rodzaje</h2>
+				<h2 class="price">14,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Herbata </h2>
+				<h2 class="price">9,00 zł</h2>
+			</div>
+
+
+		</div>
+	</div>
+	<div class="right">
+		<div class="elements">
+			<div class="header drink">
+				<h2 class="name">piwa</h2>
+				<h2 class="price">cena</h2>
+			</div>
+
+
+
+			<div class="row drink">
+				<h2 class="left">Zywiec lane 0,33</h2>
+				<h2 class="price">9,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Zywiec lane 0,5</h2>
+				<h2 class="price">12,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left"> Tyskie / Kozel</h2>
+				<h2 class="price">12,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Raciborskie klasyczne/ miodowe</h2>
+				<h2 class="price">12,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Warka Radler</h2>
+				<h2 class="price">12,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Karmi</h2>
+				<h2 class="price">12,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Grzaniec ( piwo )</h2>
+				<h2 class="price">16,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Wino ( 100 ml )</h2>
+				<h2 class="price">12,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Grzaniec ( wino )</h2>
+				<h2 class="price">15,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Zywiec biale lane 0,5</h2>
+				<h2 class="price">13,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Zywiec biale lane 0,33</h2>
+				<h2 class="price">10,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Prosecco</h2>
+				<h2 class="price">18,00 zł</h2>
+			</div>
+
+			<div class="row drink">
+				<h2 class="left">Martini</h2>
+				<h2 class="price">16,00 zł</h2>
+			</div>
+
+
+		</div>
+	</div>
+</div>

@@ -2,7 +2,6 @@
 
 public enum PizzaType
 {
-    Small,
     Medium,
     Large,
 }

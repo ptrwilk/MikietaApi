@@ -1,0 +1,117 @@
+<div class="elements single">
+
+
+	<div class="row">
+
+		<h2>1.</h2>
+		<div class="left">
+			<h2>SZARLOTKA NA GORĄCO</h2>
+			<h4>szarlotka na gorąco, śmietana</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	15,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>2.</h2>
+		<div class="left">
+			<h2>SZARLOTKA NA GORĄCO</h2>
+			<h4>szarlotka na gorąco, śmietana, gałka lodów</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	20,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>3.</h2>
+		<div class="left">
+			<h2>BANOFFEE</h2>
+			<h4>Banany oblane karmelem w połączeniu ze śmietaną i  biszkopcikami.</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	14,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>4.</h2>
+		<div class="left">
+			<h2>DESER SZWARDZWALDZKI</h2>
+			<h4>Biszkopciki oblane wiśniami w połączeniu ze śmietaną.</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	14,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>5.</h2>
+		<div class="left">
+			<h2>SUFLET CZEKOLADOWY</h2>
+			<h4></h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	15,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>6.</h2>
+		<div class="left">
+			<h2>SUFLET CZEKOLADOWY</h2>
+			<h4>suflet czekoladowy, śmietana, gałka lodów</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	20,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>7.</h2>
+		<div class="left">
+			<h2>PANNA COTTA</h2>
+			<h4></h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	14,00
+			</h2>
+		</div>
+	</div>
+
+	<div class="row">
+
+		<h2>8.</h2>
+		<div class="left">
+			<h2>BEZOWA CHMURKA</h2>
+			<h4>Beza, śmietana, świeże owoce</h4>
+		</div>
+		<div class="right">
+			<h2 class="price">
+                            	16,00
+			</h2>
+		</div>
+	</div>
+
+
+</div>
