@@ -9,11 +9,13 @@ public class DbSeeder
 {
     private readonly DataContext _context;
     private readonly ProductsParser _productsParser;
+    private readonly SettingsParser _settingsParser;
 
-    public DbSeeder(DataContext context, ProductsParser productsParser)
+    public DbSeeder(DataContext context, ProductsParser productsParser, SettingsParser settingsParser)
     {
         _context = context;
         _productsParser = productsParser;
+        _settingsParser = settingsParser;
     }
 
     public void Seed()
@@ -79,22 +81,20 @@ public class DbSeeder
             _context.SaveChanges();
         }
 
+        var settings = _settingsParser.Parse();
         var keyAdded = false;
         foreach (var key in SettingEntity.Keys)
         {
             if (_context.Settings.All(x => x.Key != key))
             {
-                string? value = null;
-                if (SettingEntity.Times.Any(z => z.Equals(key)))
-                {
-                    value = "00:00:00";
-                }
-
+                var setting = settings.First(x => x.Key == key);
+                
                 _context.Settings.Add(new SettingEntity
                 {
-                    Key = key,
-                    Value = value
+                    Key = setting.Key,
+                    Value = setting.Value
                 });
+                
                 keyAdded = true;
             }
         }

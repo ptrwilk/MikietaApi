@@ -52,6 +52,7 @@ builder.Services.AddScoped<IValidator<DeliveryModel>, DeliveryModelValidator>();
 builder.Services.AddSingleton<ConfigurationOptions, ConfigurationOptions>();
 builder.Services.AddSingleton<IEmailSenderModelFactory, EmailSenderModelFactory>();
 builder.Services.AddSingleton<ProductsParser, ProductsParser>();
+builder.Services.AddSingleton<SettingsParser, SettingsParser>();
 builder.Services.AddSingleton<EmailSenderOption, EmailSenderOption>(provider =>
 {
     var smtpClient = provider.GetService<ConfigurationOptions>()!.SmtpClient;

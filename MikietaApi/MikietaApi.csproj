@@ -90,6 +90,9 @@
       <Content Update="Data\Seeder\Scripts\Products\products.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Content>
+      <Content Update="Data\Seeder\Settings\settings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
