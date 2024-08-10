@@ -8,6 +8,9 @@ public class ConfigurationOptions
     public SmtpModel SmtpClient { get; }
     public string GoogleApiKey { get; }
     public string AdminWebsiteUrl { get; }
+    
+    public string AdminLogin { get; }
+    public string AdminPassword { get; }
 
     public ConfigurationOptions(IConfiguration configuration, IWebHostEnvironment environment)
     {
@@ -28,6 +31,12 @@ public class ConfigurationOptions
         AdminWebsiteUrl = environment.IsDevelopment()
             ? configuration["AdminWebsiteUrl"]!
             : Environment.GetEnvironmentVariable("AdminWebsiteUrl")!;
+        AdminLogin= environment.IsDevelopment()
+            ? configuration["Admin:Login"]!
+            : Environment.GetEnvironmentVariable("AdminLogin")!;
+        AdminPassword= environment.IsDevelopment()
+            ? configuration["Admin:Password"]!
+            : Environment.GetEnvironmentVariable("AdminPassword")!;
     }
 
     public static string ConvertPostgresConnectionString(string postgresUrl)
