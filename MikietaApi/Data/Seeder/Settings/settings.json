@@ -1,0 +1,29 @@
+﻿{
+  "street": "Tuwima 2",
+  "city": "Leszczyny",
+  "zipCode": "44-238",
+  "phone": "570 033 339",
+  "email": "cafe.amalio@onet.pl",
+  "facebook": "https://www.facebook.com/p/Pizzeria-Amalio-100090014173405",
+  "pricePerKm": "2",
+  "distanceInKm": "10",
+  "openingHours": {
+    "monday": { "from": "12:00:00", "to": "22:00:00" },
+    "tuesday": { "from": "12:00:00", "to": "22:00:00" },
+    "wednesday": { "from": "12:00:00", "to": "22:00:00" },
+    "thursday": { "from": "12:00:00", "to": "22:00:00" },
+    "friday": { "from": "12:00:00", "to": "23:00:00" },
+    "saturday": { "from": "12:00:00", "to": "23:00:00" },
+    "sunday": { "from": "12:00:00", "to": "22:00:00" }
+  },
+  "deliveryHours": {
+    "monday": { "from": "12:00:00", "to": "22:00:00" },
+    "tuesday": { "from": "12:00:00", "to": "22:00:00" },
+    "wednesday": { "from": "12:00:00", "to": "22:00:00" },
+    "thursday": { "from": "12:00:00", "to": "22:00:00" },
+    "friday": { "from": "12:00:00", "to": "23:00:00" },
+    "saturday": { "from": "12:00:00", "to": "23:00:00" },
+    "sunday": { "from": "12:00:00", "to": "22:00:00" }
+  },
+  "closed": []
+}
