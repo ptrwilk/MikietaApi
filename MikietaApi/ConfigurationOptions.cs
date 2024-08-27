@@ -14,29 +14,29 @@ public class ConfigurationOptions
 
     public ConfigurationOptions(IConfiguration configuration, IWebHostEnvironment environment)
     {
-        Database = environment.IsDevelopment()
-            ? configuration["ConnectionStrings:Database"]!
-            //DATABASE_URL - key  for heroku environment variable
-            : ConvertPostgresConnectionString(Environment.GetEnvironmentVariable("DATABASE_URL")!);
-        SecretKey = environment.IsDevelopment()
-            ? configuration["Stripe:SecretKey"]!
-            : Environment.GetEnvironmentVariable("SecretKey")!;
-        WebsiteUrl = environment.IsDevelopment()
-            ? configuration["WebsiteUrl"]!
-            : Environment.GetEnvironmentVariable("WebsiteUrl")!;
-        SmtpClient = SmtpModel.Create(configuration, environment);
-        GoogleApiKey = environment.IsDevelopment()
-            ? configuration["GoogleApiKey"]!
-            : Environment.GetEnvironmentVariable("GoogleApiKey")!;
-        AdminWebsiteUrl = environment.IsDevelopment()
-            ? configuration["AdminWebsiteUrl"]!
-            : Environment.GetEnvironmentVariable("AdminWebsiteUrl")!;
-        AdminLogin= environment.IsDevelopment()
-            ? configuration["Admin:Login"]!
-            : Environment.GetEnvironmentVariable("AdminLogin")!;
-        AdminPassword= environment.IsDevelopment()
-            ? configuration["Admin:Password"]!
-            : Environment.GetEnvironmentVariable("AdminPassword")!;
+        // Database = environment.IsDevelopment()
+        //     ? configuration["ConnectionStrings:Database"]!
+        //     //DATABASE_URL - key  for heroku environment variable
+        //     : ConvertPostgresConnectionString(Environment.GetEnvironmentVariable("DATABASE_URL")!);
+        // SecretKey = environment.IsDevelopment()
+        //     ? configuration["Stripe:SecretKey"]!
+        //     : Environment.GetEnvironmentVariable("SecretKey")!;
+        // WebsiteUrl = environment.IsDevelopment()
+        //     ? configuration["WebsiteUrl"]!
+        //     : Environment.GetEnvironmentVariable("WebsiteUrl")!;
+        // SmtpClient = SmtpModel.Create(configuration, environment);
+        // GoogleApiKey = environment.IsDevelopment()
+        //     ? configuration["GoogleApiKey"]!
+        //     : Environment.GetEnvironmentVariable("GoogleApiKey")!;
+        // AdminWebsiteUrl = environment.IsDevelopment()
+        //     ? configuration["AdminWebsiteUrl"]!
+        //     : Environment.GetEnvironmentVariable("AdminWebsiteUrl")!;
+        // AdminLogin= environment.IsDevelopment()
+        //     ? configuration["Admin:Login"]!
+        //     : Environment.GetEnvironmentVariable("AdminLogin")!;
+        // AdminPassword= environment.IsDevelopment()
+        //     ? configuration["Admin:Password"]!
+        //     : Environment.GetEnvironmentVariable("AdminPassword")!;
     }
 
     public static string ConvertPostgresConnectionString(string postgresUrl)

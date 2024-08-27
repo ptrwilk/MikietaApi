@@ -148,9 +148,9 @@ DeliveryRoute.RegisterEndpoints(app);
 SettingRoute.RegisterEndpoints(app);
 LoginRoute.RegisterEndpoints(app);
 
-var scope = app.Services.CreateScope();
-var seeder = scope.ServiceProvider.GetService<DbSeeder>();
-seeder!.Seed();
+// var scope = app.Services.CreateScope();
+// var seeder = scope.ServiceProvider.GetService<DbSeeder>();
+// seeder!.Seed();
 
 app.Run();
 

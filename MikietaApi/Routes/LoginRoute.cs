@@ -26,7 +26,7 @@ public static class LoginRoute
         }
     }
     
-    [Authorize]
+    // [Authorize]
     private static IResult Authenticated(ILoginService service)
     {
         return Results.Ok(true);
