@@ -139,6 +139,11 @@ app.UseExceptionHandler(appError =>
     });
 });
 
+app.MapGet("", () =>
+{
+
+    return Results.Ok("GOOD");
+});
 ProductsRoute.RegisterEndpoints(app);
 OrderRoute.RegisterEndpoints(app);
 ReservationRoute.RegisterEndpoints(app);
