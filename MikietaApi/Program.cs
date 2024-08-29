@@ -25,17 +25,6 @@ using File = System.IO.File;
 var builder = WebApplication.CreateBuilder(args);
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
-if (!builder.Environment.IsDevelopment())
-{
-    builder.WebHost.ConfigureKestrel(options =>
-    {
-        options.ListenAnyIP(443, listenOptions =>
-        {
-            listenOptions.UseHttps("/etc/ssl/certs/fullchain.pem", "/etc/ssl/certs/privkey.pem");
-        });
-    });
-}
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerWithJwt();

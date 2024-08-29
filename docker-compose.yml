@@ -20,5 +20,6 @@ services:
     environment:
       Jwt_Key: ${Jwt_Key}
       ASPNETCORE_URLS: http://+:80;https://+:443  # Dodanie HTTPS
+      ASPNETCORE_ENVIRONMENT: Production
     volumes:
       - /etc/ssl/certs:/etc/ssl/certs
