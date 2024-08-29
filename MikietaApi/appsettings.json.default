@@ -1,0 +1,54 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "Database" : "Host=host;Port=port;Database=db;Username=username;Password=password;"
+  },
+  "Stripe" : {
+    "SecretKey" : "",
+    "PublishableKey" : ""
+  },
+  "WebsiteUrl" : "",
+  "AdminWebsiteUrl" : "",
+  "SmtpClient" : {
+    "Host" : "",
+    "Port" : 0,
+    "Email" : "",
+    "Password" : ""
+  },
+  "GoogleApiKey" : "",
+  "Jwt": {
+    "Key": ""
+  },
+  "Serilog" : {
+    "Using" : [ "Serilog.Sinks.Console", "Serilog.Sinks.File"],
+    "WriteTo" : [
+      { "Name" :  "Console" },
+      { "Name" :  "File",
+      "Args": {
+        "path" : "logs/log-.txt",
+        "rollingInterval" : "Day"
+      }}
+    ]
+  },
+  "Admin" : {
+    "Login" : "",
+    "Password" : ""
+  },
+  "Kestrel": {
+    "Endpoints": {
+      "Https": {
+        "Url": "",
+        "Certificate": {
+          "Path": "",
+          "KeyPath": ""
+        }
+      }
+    }
+  }
+}

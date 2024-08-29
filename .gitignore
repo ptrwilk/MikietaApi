@@ -40,6 +40,7 @@ msbuild.wrn
 
 # Files
 appsettings.Development.json
+appsettings.Production.json
 NuGet.Config
 
 database.db
