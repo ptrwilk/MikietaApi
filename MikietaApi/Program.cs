@@ -151,8 +151,14 @@ var challengeFilePath = Path.Combine(Directory.GetCurrentDirectory(), "challenge
 app.MapGet("/.well-known/acme-challenge/{fileName}", async context =>
 {
     var fileName = context.Request.RouteValues["fileName"] as string;
-    var filePath = Path.Combine(challengeFilePath, fileName);
+    var filePath = Path.Combine(challengeFilePath, $"{fileName}.txt");
 
+    Directory.CreateDirectory(challengeFilePath);
+    using (var fileSteera = File.Create(filePath))
+    {
+        
+    }
+    
     if (System.IO.File.Exists(filePath))
     {
         var fileContent = await System.IO.File.ReadAllTextAsync(filePath);
