@@ -19,3 +19,5 @@ services:
     environment:
       Jwt_Key: ${Jwt_Key}
       ASPNETCORE_URLS: http://+:80
+    volumes:
+      - /etc/ssl/certs:/etc/ssl/certs
