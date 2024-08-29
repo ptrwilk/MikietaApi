@@ -16,3 +16,5 @@ services:
     container_name : mikietaapi
     networks:
       - mikieta-dev
+    environment:
+      Jwt_Key: ${Jwt_Key}
