@@ -1,0 +1,40 @@
+version: '3.4'
+name: mikieta
+
+networks:
+  mikieta-dev:
+    driver: bridge 
+
+services:
+
+  portfolio:
+    image: portfolio:latest  
+    build:
+      context: CONTEXT # example ../../2024/portfolio
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    container_name: portfolio
+    networks:
+      - mikieta-dev
+    environment:
+      REACT_APP_API_URL: REACT_APP_API_URL
+
+  mikietaapi:
+    image: mikietaapi:latest  
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5102:5102"
+      - "80:80"
+      - "443:443"  # Dodanie portu 443 dla HTTPS
+    container_name : mikietaapi
+    networks:
+      - mikieta-dev
+    environment:
+      Jwt_Key: ${Jwt_Key}
+      ASPNETCORE_URLS: http://+:80;https://+:443  # Dodanie HTTPS / Zakomentować dla Development
+      ASPNETCORE_ENVIRONMENT: ASPNETCORE_ENVIRONMENT # Production / Development
+    volumes:
+      - /etc/ssl/certs:/etc/ssl/certs
