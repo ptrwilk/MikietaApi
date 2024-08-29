@@ -12,7 +12,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "80:80"
+      - "5105:5105"
     container_name : mikietaapi
     networks:
       - mikieta-dev
