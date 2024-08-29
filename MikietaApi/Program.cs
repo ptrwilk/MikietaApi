@@ -20,6 +20,7 @@ using MikietaApi.Stripe;
 using MikietaApi.Validators;
 using Serilog;
 using Stripe;
+using File = System.IO.File;
 
 var builder = WebApplication.CreateBuilder(args);
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -144,6 +145,26 @@ app.MapGet("", () =>
 
     return Results.Ok("GOOD");
 });
+
+var challengeFilePath = Path.Combine(Directory.GetCurrentDirectory(), "challengeFiles");
+
+app.MapGet("/.well-known/acme-challenge/{fileName}", async context =>
+{
+    var fileName = context.Request.RouteValues["fileName"] as string;
+    var filePath = Path.Combine(challengeFilePath, fileName);
+
+    if (System.IO.File.Exists(filePath))
+    {
+        var fileContent = await System.IO.File.ReadAllTextAsync(filePath);
+        context.Response.ContentType = "text/plain";
+        await context.Response.WriteAsync(fileContent);
+    }
+    else
+    {
+        context.Response.StatusCode = 404;
+    }
+});
+
 ProductsRoute.RegisterEndpoints(app);
 OrderRoute.RegisterEndpoints(app);
 ReservationRoute.RegisterEndpoints(app);
