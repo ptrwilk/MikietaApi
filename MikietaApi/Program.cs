@@ -147,19 +147,30 @@ app.MapGet("", () =>
 });
 
 var challengeFilePath = Path.Combine(Directory.GetCurrentDirectory(), "challengeFiles");
+var FILENAME = "KOZA.txt";
 
-app.MapGet("/.well-known/acme-challenge/{fileName}", async context =>
+
+app.MapGet("save/{text}", (string text) =>
 {
-    var fileName = context.Request.RouteValues["fileName"] as string;
-    var filePath = Path.Combine(challengeFilePath, $"{fileName}.txt");
-
     Directory.CreateDirectory(challengeFilePath);
-    using (var fileSteera = File.Create(filePath))
+    using (var fileSteera = File.Create(FILENAME))
     {
         
     }
     
-    File.WriteAllText(filePath, "fG1nuM9V4OkBRt_G4RHoTwgCsC16YOb5ZKs7Lmz6HuE.qjA7v2MR2PznpD23i63x5AAVIRcNQS2To7TFUOOm67w");
+    var filePath = Path.Combine(challengeFilePath, FILENAME);
+    
+    File.WriteAllText(filePath, text);
+
+    return Results.Ok();
+    //4pfTHzSAcwZ4TZaAc1LkfHp1whfYhpAc-rDKflZjFu8.qjA7v2MR2PznpD23i63x5AAVIRcNQS2To7TFUOOm67w
+});
+
+app.MapGet("/.well-known/acme-challenge/{fileName}", async context =>
+{
+    var filePath = Path.Combine(challengeFilePath, FILENAME);
+
+
     
     if (System.IO.File.Exists(filePath))
     {
