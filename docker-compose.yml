@@ -13,11 +13,12 @@ services:
       dockerfile: Dockerfile
     ports:
       - "80:80"
+      - "443:443"  # Dodanie portu 443 dla HTTPS
     container_name : mikietaapi
     networks:
       - mikieta-dev
     environment:
       Jwt_Key: ${Jwt_Key}
-      ASPNETCORE_URLS: http://+:80
+      ASPNETCORE_URLS: http://+:80;https://+:443  # Dodanie HTTPS
     volumes:
       - /etc/ssl/certs:/etc/ssl/certs
