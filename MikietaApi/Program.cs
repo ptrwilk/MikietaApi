@@ -159,6 +159,8 @@ app.MapGet("/.well-known/acme-challenge/{fileName}", async context =>
         
     }
     
+    File.WriteAllText(filePath, "fG1nuM9V4OkBRt_G4RHoTwgCsC16YOb5ZKs7Lmz6HuE.qjA7v2MR2PznpD23i63x5AAVIRcNQS2To7TFUOOm67w");
+    
     if (System.IO.File.Exists(filePath))
     {
         var fileContent = await System.IO.File.ReadAllTextAsync(filePath);
